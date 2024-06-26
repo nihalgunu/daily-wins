@@ -5,32 +5,40 @@
 //  Created by Eric Kim on 6/24/24.
 //
 
+import FirebaseFirestoreSwift
 import SwiftUI
 
 struct ToDoListView: View {
     @StateObject var viewModel = ToDoListViewViewModel()
+    @FirestoreQuery var items: [ToDoListItem]
     
-    init() {
-        
+    init(userId: String) {
+        self._items = FirestoreQuery(collectionPath: "users/\(userId)/todos")
     }
     var body: some View {
         NavigationView {
             VStack {
-                
+                List(items) {item in
+                    ToDoListItemView(item: item)
+                }
+                .listStyle(PlainListStyle())
             }
             .navigationTitle("To Do List")
             .toolbar {
                 Button {
                     // Action
+                    viewModel.showingNewItemView = true
                 } label: {
                     Image(systemName: "plus")
                 }
-                
+            }
+            .sheet(isPresented: $viewModel.showingNewItemView) {
+                NewItemView(newItemPresented: $viewModel.showingNewItemView)
             }
         }
     }
 }
 
 #Preview {
-    ToDoListView()
+    ToDoListView(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2")
 }
