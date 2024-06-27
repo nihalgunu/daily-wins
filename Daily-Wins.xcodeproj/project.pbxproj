@@ -208,8 +208,8 @@
 				413430172C290AE600BD7E5B /* ContentView.swift */,
 				B4534BA32C2CACF60089A51F /* ProfileView.swift */,
 				B43D25C12C2A8C7800D867DB /* ToDoListView.swift */,
-				B43D25C92C2A8D1F00D867DB /* ToDoListItemView.swift */,
 				B43D25C52C2A8CD800D867DB /* NewItemView.swift */,
+				B43D25C92C2A8D1F00D867DB /* ToDoListItemView.swift */,
 				B43D25E22C2A8E8800D867DB /* LoginView.swift */,
 				B43D25F22C2A932C00D867DB /* HeaderView.swift */,
 				B43D25E62C2A8E9E00D867DB /* RegisterView.swift */,
@@ -225,9 +225,9 @@
 				B4534BA52C2CAD070089A51F /* ProfileViewViewModel.swift */,
 				B43D25D62C2A8DF200D867DB /* ToDoListViewViewModel.swift */,
 				B43D25DE2C2A8E2400D867DB /* NewItemViewViewModel.swift */,
+				B43D25DA2C2A8E1200D867DB /* ToDoListItemViewViewModel.swift */,
 				B43D25EA2C2A8EC400D867DB /* LoginViewViewModel.swift */,
 				B43D25EE2C2A8ECD00D867DB /* RegisterViewViewModel.swift */,
-				B43D25DA2C2A8E1200D867DB /* ToDoListItemViewViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
