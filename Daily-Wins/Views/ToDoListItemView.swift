@@ -16,9 +16,6 @@ struct ToDoListItemView: View {
             VStack {
                 Text(item.title)
                     .font(.title)
-                Text("\(Date(timeIntervalSince1970: item.dueDate).formatted(date: .abbreviated, time: .shortened))")
-                    .font(.footnote)
-                    .foregroundColor(Color(.secondaryLabel))
             }
             Spacer()
             
@@ -32,5 +29,7 @@ struct ToDoListItemView: View {
 }
 
 #Preview {
-    ToDoListItemView(item: .init(id:"123", title: "Get Milk", dueDate: Date().timeIntervalSince1970, createdDate: Date().timeIntervalSince1970, isDone: false))
+    ToDoListItemView(item: .init(id:"123", title: "Get Milk", isDone: false))
 }
+
+//dueDate: Date().timeIntervalSince1970, createdDate: Date().timeIntervalSince1970

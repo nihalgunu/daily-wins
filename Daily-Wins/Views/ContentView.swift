@@ -13,7 +13,7 @@ struct ContentView: View {
     var body: some View {
         if viewModel.isSignedIn, !viewModel.currentUserId.isEmpty {
             TabView {
-                ToDoListView(userId: viewModel.currentUserId)
+                HomePageView(userId: viewModel.currentUserId)
                     .tabItem() {
                         Label("Home", systemImage: "house")
                     }

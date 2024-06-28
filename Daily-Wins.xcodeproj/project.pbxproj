@@ -66,6 +66,9 @@
 		B4534BA62C2CAD070089A51F /* ProfileViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4534BA52C2CAD070089A51F /* ProfileViewViewModel.swift */; };
 		B4534BAA2C2CB8B90089A51F /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4534BA92C2CB8B90089A51F /* User.swift */; };
 		B4534BAC2C2CB9B80089A51F /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4534BAB2C2CB9B80089A51F /* Extentions.swift */; };
+		B48D7A0E2C2E47FF002779E1 /* HomePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48D7A0D2C2E47FF002779E1 /* HomePageView.swift */; };
+		B48D7A102C2E480D002779E1 /* HomePageViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48D7A0F2C2E480D002779E1 /* HomePageViewViewModel.swift */; };
+		B48D7A122C2E54DE002779E1 /* WeeklyCalenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48D7A112C2E54DE002779E1 /* WeeklyCalenderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +118,9 @@
 		B4534BA52C2CAD070089A51F /* ProfileViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewViewModel.swift; sourceTree = "<group>"; };
 		B4534BA92C2CB8B90089A51F /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		B4534BAB2C2CB9B80089A51F /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
+		B48D7A0D2C2E47FF002779E1 /* HomePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageView.swift; sourceTree = "<group>"; };
+		B48D7A0F2C2E480D002779E1 /* HomePageViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewViewModel.swift; sourceTree = "<group>"; };
+		B48D7A112C2E54DE002779E1 /* WeeklyCalenderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyCalenderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,6 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				413430172C290AE600BD7E5B /* ContentView.swift */,
+				B48D7A0D2C2E47FF002779E1 /* HomePageView.swift */,
 				B4534BA32C2CACF60089A51F /* ProfileView.swift */,
 				B43D25C12C2A8C7800D867DB /* ToDoListView.swift */,
 				B43D25C52C2A8CD800D867DB /* NewItemView.swift */,
@@ -214,6 +221,7 @@
 				B43D25F22C2A932C00D867DB /* HeaderView.swift */,
 				B43D25E62C2A8E9E00D867DB /* RegisterView.swift */,
 				B43D25F62C2B9E2600D867DB /* TLButton.swift */,
+				B48D7A112C2E54DE002779E1 /* WeeklyCalenderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -222,6 +230,7 @@
 			isa = PBXGroup;
 			children = (
 				B43D25D12C2A8DDB00D867DB /* ContentViewViewModel.swift */,
+				B48D7A0F2C2E480D002779E1 /* HomePageViewViewModel.swift */,
 				B4534BA52C2CAD070089A51F /* ProfileViewViewModel.swift */,
 				B43D25D62C2A8DF200D867DB /* ToDoListViewViewModel.swift */,
 				B43D25DE2C2A8E2400D867DB /* NewItemViewViewModel.swift */,
@@ -396,6 +405,7 @@
 				B43D25CA2C2A8D1F00D867DB /* ToDoListItemView.swift in Sources */,
 				B43D25DB2C2A8E1200D867DB /* ToDoListItemViewViewModel.swift in Sources */,
 				B43D25C62C2A8CD800D867DB /* NewItemView.swift in Sources */,
+				B48D7A102C2E480D002779E1 /* HomePageViewViewModel.swift in Sources */,
 				B43D25D22C2A8DDB00D867DB /* ContentViewViewModel.swift in Sources */,
 				B43D25CE2C2A8DAB00D867DB /* ToDoListItem.swift in Sources */,
 				B4534BA62C2CAD070089A51F /* ProfileViewViewModel.swift in Sources */,
@@ -411,7 +421,9 @@
 				B43D25E32C2A8E8800D867DB /* LoginView.swift in Sources */,
 				B43D25E72C2A8E9E00D867DB /* RegisterView.swift in Sources */,
 				413430162C290AE600BD7E5B /* Daily_WinsApp.swift in Sources */,
+				B48D7A122C2E54DE002779E1 /* WeeklyCalenderView.swift in Sources */,
 				B43D25D72C2A8DF200D867DB /* ToDoListViewViewModel.swift in Sources */,
+				B48D7A0E2C2E47FF002779E1 /* HomePageView.swift in Sources */,
 				B4534BAA2C2CB8B90089A51F /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
