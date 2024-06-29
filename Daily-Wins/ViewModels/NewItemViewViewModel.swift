@@ -29,6 +29,7 @@ class NewItemViewViewModel: ObservableObject{
         // Create a model
         let newId = UUID().uuidString
         let newItem = ToDoListItem(id: newId, title: title, isDone: false)
+        
         // Save the model
         let db = Firestore.firestore()
                 

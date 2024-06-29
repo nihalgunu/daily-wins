@@ -25,6 +25,15 @@ struct HomePageView: View {
                     .frame(height:50)
                 
                 WeeklyCalendarView()
+                
+                NavigationLink(destination: {
+                    FullCalenderView()
+                }, label: {
+                    Text("Expand>>")
+                        .padding(.leading, 300)
+                        .font(.system(size: 15))
+                        .foregroundColor(.gray)
+                })
 
                 Spacer()
                     .frame(height: 100)

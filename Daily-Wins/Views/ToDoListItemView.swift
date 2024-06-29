@@ -20,7 +20,7 @@ struct ToDoListItemView: View {
             Spacer()
             
             Button{
-                viewModel.toggleIsDone(item: item)
+                viewModel.deleteItem(item: item)
             } label: {
                 Image(systemName: item.isDone ? "checkmark.circle.fill" : "circle")
             }
@@ -32,4 +32,3 @@ struct ToDoListItemView: View {
     ToDoListItemView(item: .init(id:"123", title: "Get Milk", isDone: false))
 }
 
-//dueDate: Date().timeIntervalSince1970, createdDate: Date().timeIntervalSince1970
