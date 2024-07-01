@@ -11,6 +11,8 @@ import SwiftUI
 struct HomePageView: View {
     @StateObject var viewModel : HomePageViewViewModel
     @FirestoreQuery var items: [ToDoListItem]
+    @State private var currentDate = Date()
+
     
     init(userId: String) {
         self._viewModel = StateObject(wrappedValue: HomePageViewViewModel(userId: userId))
@@ -27,7 +29,7 @@ struct HomePageView: View {
                 WeeklyCalendarView()
                 
                 NavigationLink(destination: {
-                    FullCalenderView()
+                    FullCalendarView(currentDate: $currentDate)
                 }, label: {
                     Text("Expand>>")
                         .padding(.leading, 300)
