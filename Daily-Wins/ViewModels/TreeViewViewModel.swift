@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+// global variable for points
+var globalVariable: String = "This is a global variable"
+

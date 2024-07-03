@@ -17,9 +17,9 @@ struct ContentView: View {
                     .tabItem() {
                         Label("Home", systemImage: "house")
                     }
-                ProfileView()
+                TreeView()
                     .tabItem() {
-                        Label("Profile", systemImage: "person.circle")
+                        Label("Tree", systemImage: "tree")
                     }
             }
         } else {

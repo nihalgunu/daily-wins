@@ -20,9 +20,6 @@ struct NewItemView: View {
                 // Title
                 TextField("Goal", text: $viewModel.title)
                 
-                // Do by
-                DatePicker("Do by", selection: $viewModel.dueDate)
-                    .datePickerStyle(GraphicalDatePickerStyle())
                 // Button
                 TLButton(title: "Save", background: .pink) {
                     if viewModel.canSave {
@@ -35,7 +32,7 @@ struct NewItemView: View {
                 .padding()
             }
             .alert(isPresented: $viewModel.showAlert) {
-                Alert(title: Text("Error"), message: Text("Please fill in all fields and select a valid date.")
+                Alert(title: Text("Error"), message: Text("Please enter a goal")
                 )
             }
         }

@@ -20,17 +20,6 @@ class ToDoListViewViewModel: ObservableObject {
         self.userId = userId
     }
     
-    // delete to do list item
-    /*func delete(id: String) {
-        let db = Firestore.firestore()
-        
-        db.collection("users")
-            .document(userId)
-            .collection("todos")
-            .document(id)
-            .delete()
-    }*/
-    
     func deleteItem(item: ToDoListItem) {
         guard let uid = Auth.auth().currentUser?.uid else {
             return

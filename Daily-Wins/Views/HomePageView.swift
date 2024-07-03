@@ -59,6 +59,15 @@ struct HomePageView: View {
             .navigationTitle("Home")
             .navigationBarTitleDisplayMode(.inline)
             .background(Color(UIColor.systemBackground))
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: ProfileView()) {
+                        Image(systemName: "person.circle")
+                            .font(.title2)
+                            .foregroundColor(.blue)
+                    }
+                }
+            }
         }
     }
 }
