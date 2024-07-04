@@ -13,32 +13,63 @@ struct RegisterView: View {
     var body: some View {
         VStack {
             // Header
-            HeaderView(title: "Register", backgroundColor: .gray)
+            HStack {
+                Image(systemName: "tree.fill")
+                    .foregroundColor(.green)
+                Text("Register")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.black)
+            }
+            .padding()
+            .background(Color.blue.opacity(0.2))
+            .cornerRadius(10)
+            .padding(.top, 50)
+
+            Spacer()
             
-            Form {
+            // Registration Form
+            VStack(spacing: 16) {
                 TextField("Full Name", text: $viewModel.name)
-                    .textFieldStyle(DefaultTextFieldStyle())
+                    .padding()
+                    .background(Color(.secondarySystemBackground))
+                    .cornerRadius(8)
                 
                 TextField("Email Address", text: $viewModel.email)
-                    .textFieldStyle(DefaultTextFieldStyle())
+                    .padding()
+                    .background(Color(.secondarySystemBackground))
+                    .cornerRadius(8)
                     .autocapitalization(.none)
                     .autocorrectionDisabled()
                 
                 SecureField("Password", text: $viewModel.password)
-                    .textFieldStyle(DefaultTextFieldStyle())
+                    .padding()
+                    .background(Color(.secondarySystemBackground))
+                    .cornerRadius(8)
                 
                 if !viewModel.errorMsg.isEmpty {
                     Text(viewModel.errorMsg)
                         .foregroundColor(.red)
+                        .padding(.horizontal)
+                        .multilineTextAlignment(.center)
+                        .background(Color.white.opacity(0.7))
+                        .cornerRadius(8)
+                        .padding(.bottom, 10)
                 }
                 
                 TLButton(title: "Create Account", background: .green) {
                     viewModel.register()
                 }
+                .padding(.top, 20)
+                .frame(width: 200, height: 50) // Consistent button size
+                .cornerRadius(8)
             }
+            .padding(.horizontal, 32)
 
             Spacer()
         }
+        .padding()
+        .background(Color(.systemBackground).edgesIgnoringSafeArea(.all))
     }
 }
 
