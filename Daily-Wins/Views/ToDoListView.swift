@@ -19,12 +19,18 @@ struct ToDoListView: View {
     var body: some View {
         NavigationView {
             VStack {
-                List(items) {item in
-                    ToDoListItemView(item: item)
+                if items.isEmpty {
+                    Text("Tap '+' to add your first todo")
+                        .foregroundColor(.gray)
+                        .padding()
+                } else {
+                    List(items) { item in
+                        ToDoListItemView(item: item)
+                    }
+                    .listStyle(PlainListStyle())
                 }
-                .listStyle(PlainListStyle())
             }
-            .navigationTitle("To Do List")
+            .navigationTitle("To Dos")
             .toolbar {
                 Button {
                     // Action

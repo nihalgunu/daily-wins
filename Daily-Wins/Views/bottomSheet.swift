@@ -8,32 +8,39 @@
 import SwiftUI
 
 struct bottomSheet: View {
-    @State private var showingDatePicker = false
-    @Binding var selectedTime: Date
-    @Binding var showTime: Bool
+    @Binding var showSheet: Bool
+    @Binding var selectedDate: Date
+    @Binding var displaySelectedTime: Bool
+    @Binding var tentativeDate: Date
+    @Binding var reminders: [Date]
 
-    
     var body: some View {
         VStack {
             HStack {
                 Text("Select Time")
                     .bold()
                     .padding(.leading, 80)
+                
                 Spacer()
+                
                 Button {
-                    showingDatePicker.toggle()
+                    showSheet = false
                 } label: {
                     Image(systemName: "xmark")
+                        .padding()
+                        .contentShape(Rectangle())
                 }
             }
 
             DatePicker("",
-                       selection: $selectedTime,
+                       selection: $tentativeDate,
                        displayedComponents: [.hourAndMinute])
             
             TLButton(title: "Confirm", background: .blue) {
-                showingDatePicker.toggle()
-                showTime = true
+                selectedDate = tentativeDate
+                displaySelectedTime = true
+                showSheet = false
+                reminders.append(selectedDate)
             }
             .padding(.top, 20)
             .frame(width: 200, height: 50)
@@ -43,22 +50,24 @@ struct bottomSheet: View {
         .padding()
         .multilineTextAlignment(.center)
         .frame(width: 300, height: 360)
-                .background(Color.white)
-                .cornerRadius(20)
-                .shadow(radius: 20)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.gray, lineWidth: 1)
-                )
+            .background(Color.white)
+            .cornerRadius(20)
+            .shadow(radius: 20)
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(Color.gray, lineWidth: 1)
+            )
     }
 }
-
 
 struct bottomSheet_Previews: PreviewProvider {
     @State static var previewDate = Date()
     @State static var previewBool = Bool()
+    @State static var previewShowSheet = Bool()
+    @State static var previewTentativeDate = Date()
+    @State static var previewReminders: [Date] = []
 
     static var previews: some View {
-        bottomSheet(selectedTime: $previewDate, showTime: $previewBool)
+        bottomSheet(showSheet: $previewShowSheet, selectedDate: $previewDate, displaySelectedTime: $previewBool, tentativeDate: $previewTentativeDate, reminders: $previewReminders)
     }
 }

@@ -27,14 +27,14 @@ struct HomePageView: View {
                 Spacer()
 
                 HStack {
-                    Text("Dailys")
+                    Text("To Dos")
                         .font(.title2)
                         .fontWeight(.bold)
 
                     Spacer()
 
                     NavigationLink(destination: ToDoListView(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2")) {
-                        Image(systemName: "plus")
+                        Image(systemName: "arrow.up.left.and.arrow.down.right")
                             .font(.title2)
                             .foregroundColor(.blue)
                     }
@@ -56,7 +56,7 @@ struct HomePageView: View {
 
                 Spacer().frame(height: 50)
             }
-            .navigationTitle("Home")
+            .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .background(Color(UIColor.systemBackground))
             .toolbar {

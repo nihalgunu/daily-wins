@@ -10,7 +10,11 @@ import SwiftUI
 struct ReminderView: View {
     @State private var showSheet = false
     @State private var selectedDate = Date()
-    @State private var selectedBool = false
+    @State private var displaySelectedTime = false
+    @State private var tentativeDate = Date()
+    
+    @State private var reminders: [Date] = []
+
     
     @Binding var selectedOption: String
     @Binding var options: [String]
@@ -20,32 +24,24 @@ struct ReminderView: View {
             HStack {
                 Text("Reminder")
                     .fontWeight(.bold)
-                Spacer()
 
                 Button {
-                    showSheet.toggle()
+                    showSheet = true
                 } label: {
                     Image(systemName: "plus")
                 }
                                 
-                if selectedBool {
-                    Text("\(selectedDate, formatter: dateFormatter)")
-                            .padding()
+                if displaySelectedTime {
+                    ForEach(reminders, id: \.self) { item in
+                        Text("\(item, formatter: dateFormatter)")
+                                .padding()
+                    }
                 }
                 
                 Spacer()
             }
             .padding(.horizontal)
 
-            ZStack {
-                if showSheet {
-                    bottomSheet(selectedTime: $selectedDate, showTime: $selectedBool)
-                        .transition(.move(edge: .bottom))
-                }
-            }
-            .animation(.easeInOut, value: showSheet)
-
-            
             HStack {
                 Text("Seed")
                     .fontWeight(.bold)
@@ -67,6 +63,18 @@ struct ReminderView: View {
                 .pickerStyle(MenuPickerStyle())
             }
             .padding(.horizontal)
+            
+            Spacer()
+            
+            // Separate VStack for bottomSheet
+            if showSheet {
+                VStack {
+                    Spacer()
+                    bottomSheet(showSheet: $showSheet, selectedDate: $selectedDate, displaySelectedTime: $displaySelectedTime, tentativeDate: $tentativeDate, reminders: $reminders)
+                        .transition(.move(edge: .bottom))
+                        .animation(.easeInOut, value: showSheet)
+                }
+            }
         }
     }
 }
