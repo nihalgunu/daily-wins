@@ -10,58 +10,60 @@ import SwiftUI
 struct NewItemView: View {
     @StateObject var viewModel = NewItemViewViewModel()
     @Binding var newItemPresented: Bool
-    @State private var options: [String] = ["Select", "Run", "Drink Water", "Take Vitamins", "Gym", "Read", "Journal"]
+    
+    @Binding var Exercises: [String]
+    @Binding var Health: [String]
+    @Binding var Chores: [String]
+    let initialGoal: String
+    
+    //@State private var options: [String] = ["Select", "Run", "Drink Water", "Take Vitamins", "Gym", "Read", "Journal"]
+    @State private var navigateToHomePage = false
+
     @Environment(\.presentationMode) var presentationMode
-
-
+    
+    
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
-                
-                /*Text("New To Do")
-                    .font(.system(size: 30))
-                    .bold()
-                    .padding(.vertical, 50)*/
-                
-
                 Form {
                     // Title
-                    TextField("Goal", text: $viewModel.title)
-
+                    TextField("Win", text: $viewModel.title)
+                        .onAppear {
+                            viewModel.title = initialGoal
+                        }
+                    
                     // Reminder
-                    ReminderView(selectedOption: $viewModel.title, options: $options)
-
+                    ReminderView()
+                    
                     // Button
                     TLButton(title: "Save", background: .pink) {
                         if viewModel.canSave {
                             viewModel.save()
-                            newItemPresented = false
                         } else {
                             viewModel.showAlert = true
                         }
                     }
-                    .padding()
                 }
+                .padding()
+                .frame(width: 450)
+                
                 .alert(isPresented: $viewModel.showAlert) {
                     Alert(title: Text("Error"), message: Text("Please enter a goal"))
                 }
             }
-            .navigationBarItems(leading: Button(action: {
-                            presentationMode.wrappedValue.dismiss()
-                        }) {
-                            HStack {
-                                Image(systemName: "chevron.left")
-                            }
-                        })
-                        .navigationBarTitle("New To Do", displayMode: .inline)
         }
     }
 }
 
+
+
 struct NewItemView_Previews: PreviewProvider {
     @State static var previewNewItemPresented = false
+    @State static var previewExercises: [String] = []
+    @State static var previewHealth: [String] = []
+    @State static var previewChores: [String] = []
 
     static var previews: some View {
-        NewItemView(newItemPresented: $previewNewItemPresented)
+        NewItemView(newItemPresented: $previewNewItemPresented, Exercises: $previewExercises, Health:$previewHealth, Chores: $previewChores, initialGoal: "test")
     }
 }

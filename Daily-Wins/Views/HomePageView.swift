@@ -27,27 +27,45 @@ struct HomePageView: View {
                 Spacer()
 
                 HStack {
-                    Text("To Dos")
+                    Text("Wins")
                         .font(.title2)
                         .fontWeight(.bold)
 
                     Spacer()
 
-                    NavigationLink(destination: ToDoListView(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2")) {
-                        Image(systemName: "arrow.up.left.and.arrow.down.right")
+                    /*NavigationLink(destination: ToDoListView(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2")) {
+                        Image(systemName: "plus")
+                            .font(.title2)
+                            .foregroundColor(.blue)
+                    }*/
+                    
+                    NavigationLink(destination: PresetView()) {
+                        Image(systemName: "plus")
                             .font(.title2)
                             .foregroundColor(.blue)
                     }
                 }
                .padding(.horizontal)
-
-
+                /*HStack {
+                    if items.isEmpty {
+                        Text("Tap '+' to add your first todo")
+                            .foregroundColor(.gray)
+                            .padding()
+                    }
+                }*/
+                
                 ScrollView {
                     VStack(spacing: 10) {
-                        ForEach(items) { item in
-                            ToDoListItemView(item: item)
-                                .cornerRadius(10)
-                                .shadow(color: .gray, radius: 1, x: 0, y: 1)
+                        if items.isEmpty {
+                            Text("Tap '+' to add your first todo")
+                                .foregroundColor(.gray)
+                                .padding(.vertical, 150)
+                        } else {
+                            ForEach(items) { item in
+                                ToDoListItemView(item: item)
+                                    .cornerRadius(10)
+                                    .shadow(color: .gray, radius: 1, x: 0, y: 1)
+                            }
                         }
                     }
                     .padding(.vertical, 5) // Adjust vertical spacing between items
