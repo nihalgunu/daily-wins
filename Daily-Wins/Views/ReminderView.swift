@@ -8,16 +8,8 @@
 import SwiftUI
 
 struct ReminderView: View {
-    @State private var showSheet = false
-    @State private var selectedDate = Date()
-    @State private var displaySelectedTime = false
-    @State private var tentativeDate = Date()
     
     @State private var reminders: [Date] = []
-    
-    
-    //@Binding var selectedOption: String
-    //@Binding var options: [String]
     
     @State private var currentTime = Date()
     @State private var dates: [Date] = []
@@ -38,11 +30,20 @@ struct ReminderView: View {
             }
             
             ScrollView {
-                VStack(alignment: .leading) {
-                    ForEach(dates, id: \.self) { item in
-                        DatePicker("", selection: $currentTime, displayedComponents: .hourAndMinute)
+                HStack {
+                    ForEach(dates.indices, id: \.self) { index in
+                        
+                        Button(action: {
+                            dates.remove(at: index)
+                        }) {
+                            Image(systemName: "minus.circle")
+                                .foregroundColor(.red)
+                        }
+                        
+                        DatePicker("", selection: $dates[index], displayedComponents: .hourAndMinute)
                             .frame(height: 50)
                             .labelsHidden()
+                        
                     }
                 }
             }
