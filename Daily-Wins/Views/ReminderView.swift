@@ -5,14 +5,14 @@
 //  Created by Eric Kim on 7/8/24.
 //
 
+
+//@State private var dates: [Date] = []
+
 import SwiftUI
 
 struct ReminderView: View {
     
-    @State private var reminders: [Date] = []
-    
-    @State private var currentTime = Date()
-    @State private var dates: [Date] = []
+    @StateObject var viewModel = ReminderViewViewModel()
     
     var body: some View {
         VStack {
@@ -22,7 +22,7 @@ struct ReminderView: View {
                     .padding()
                 
                 Button {
-                    dates.append(Date())
+                    viewModel.reminders.append(Date())
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -31,16 +31,16 @@ struct ReminderView: View {
             
             ScrollView {
                 HStack {
-                    ForEach(dates.indices, id: \.self) { index in
+                    ForEach(viewModel.reminders.indices, id: \.self) { index in
                         
                         Button(action: {
-                            dates.remove(at: index)
+                            viewModel.reminders.remove(at: index)
                         }) {
                             Image(systemName: "minus.circle")
                                 .foregroundColor(.red)
                         }
                         
-                        DatePicker("", selection: $dates[index], displayedComponents: .hourAndMinute)
+                        DatePicker("", selection: $viewModel.reminders[index], displayedComponents: .hourAndMinute)
                             .frame(height: 50)
                             .labelsHidden()
                         
@@ -49,9 +49,14 @@ struct ReminderView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
+            
+            //MoreInfoView(reminderModel: viewModel) // Directly passing the view model
+                //.padding()
         }
     }
 }
+
+
 
 
 private let dateFormatter: DateFormatter = {
@@ -63,37 +68,3 @@ private let dateFormatter: DateFormatter = {
 #Preview {
     ReminderView()
 }
-
-
-/*if displaySelectedTime {
-    ForEach(reminders, id: \.self) { item in
-        Text("\(item, formatter: dateFormatter)")
-                .padding()
-    }
-}
-            
-// Dropdown
-HStack {
-    Text("Options")
-        .fontWeight(.bold)
-    Spacer()
-    Picker("", selection: $selectedOption) {
-        ForEach(options, id: \.self) { option in
-            Text(option).tag(option)
-        }
-    }
-    .pickerStyle(MenuPickerStyle())
-}
-.padding(.horizontal)
-
-Spacer()*/
-
-// Separate VStack for bottomSheet
-/*if showSheet {
-    VStack {
-        Spacer()
-        bottomSheet(showSheet: $showSheet, selectedDate: $selectedDate, displaySelectedTime: $displaySelectedTime, tentativeDate: $tentativeDate, reminders: $reminders)
-            .transition(.move(edge: .bottom))
-            .animation(.easeInOut, value: showSheet)
-    }
-}*/

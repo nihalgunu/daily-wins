@@ -6,3 +6,16 @@
 //
 
 import Foundation
+
+struct Preset {
+    var name: String
+    var type: PresetType
+}
+
+enum PresetType: String, CaseIterable {
+    case distance
+    case volume
+    case count
+}
+
+

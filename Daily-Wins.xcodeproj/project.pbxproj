@@ -65,6 +65,7 @@
 		B43D25F42C2A932C00D867DB /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43D25F22C2A932C00D867DB /* HeaderView.swift */; };
 		B43D25F52C2A932C00D867DB /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43D25F22C2A932C00D867DB /* HeaderView.swift */; };
 		B43D25F72C2B9E2700D867DB /* TLButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43D25F62C2B9E2600D867DB /* TLButton.swift */; };
+		B44279CC2C4B155B00FA8BF6 /* ReminderViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44279CB2C4B155B00FA8BF6 /* ReminderViewViewModel.swift */; };
 		B4534BA42C2CACF60089A51F /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4534BA32C2CACF60089A51F /* ProfileView.swift */; };
 		B4534BA62C2CAD070089A51F /* ProfileViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4534BA52C2CAD070089A51F /* ProfileViewViewModel.swift */; };
 		B4534BAA2C2CB8B90089A51F /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4534BA92C2CB8B90089A51F /* User.swift */; };
@@ -73,10 +74,10 @@
 		B48D7A102C2E480D002779E1 /* HomePageViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48D7A0F2C2E480D002779E1 /* HomePageViewViewModel.swift */; };
 		B48D7A122C2E54DE002779E1 /* WeeklyCalenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48D7A112C2E54DE002779E1 /* WeeklyCalenderView.swift */; };
 		B499B92A2C3C92790072BCFD /* ReminderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B499B9292C3C92790072BCFD /* ReminderView.swift */; };
-		B499B92C2C3C92870072BCFD /* ReminderViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B499B92B2C3C92870072BCFD /* ReminderViewViewModel.swift */; };
 		B499B92E2C3CB8980072BCFD /* bottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B499B92D2C3CB8980072BCFD /* bottomSheet.swift */; };
 		B4B6623D2C3351850044373A /* FullCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B6623C2C3351850044373A /* FullCalendarView.swift */; };
 		B4B6623F2C33554B0044373A /* DateValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B6623E2C33554B0044373A /* DateValue.swift */; };
+		B4C6B0142C4B39270086F9AE /* Preset.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C6B0132C4B39270086F9AE /* Preset.swift */; };
 		B4F158CC2C47624400A20CCF /* MoreInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F158CB2C47624400A20CCF /* MoreInfoView.swift */; };
 /* End PBXBuildFile section */
 
@@ -126,6 +127,7 @@
 		B43D25EE2C2A8ECD00D867DB /* RegisterViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewViewModel.swift; sourceTree = "<group>"; };
 		B43D25F22C2A932C00D867DB /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		B43D25F62C2B9E2600D867DB /* TLButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TLButton.swift; sourceTree = "<group>"; };
+		B44279CB2C4B155B00FA8BF6 /* ReminderViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderViewViewModel.swift; sourceTree = "<group>"; };
 		B4534BA32C2CACF60089A51F /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		B4534BA52C2CAD070089A51F /* ProfileViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewViewModel.swift; sourceTree = "<group>"; };
 		B4534BA92C2CB8B90089A51F /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -134,10 +136,10 @@
 		B48D7A0F2C2E480D002779E1 /* HomePageViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewViewModel.swift; sourceTree = "<group>"; };
 		B48D7A112C2E54DE002779E1 /* WeeklyCalenderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyCalenderView.swift; sourceTree = "<group>"; };
 		B499B9292C3C92790072BCFD /* ReminderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderView.swift; sourceTree = "<group>"; };
-		B499B92B2C3C92870072BCFD /* ReminderViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderViewViewModel.swift; sourceTree = "<group>"; };
 		B499B92D2C3CB8980072BCFD /* bottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bottomSheet.swift; sourceTree = "<group>"; };
 		B4B6623C2C3351850044373A /* FullCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullCalendarView.swift; sourceTree = "<group>"; };
 		B4B6623E2C33554B0044373A /* DateValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateValue.swift; sourceTree = "<group>"; };
+		B4C6B0132C4B39270086F9AE /* Preset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preset.swift; sourceTree = "<group>"; };
 		B4F158CB2C47624400A20CCF /* MoreInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreInfoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -262,7 +264,7 @@
 				B43D25EA2C2A8EC400D867DB /* LoginViewViewModel.swift */,
 				B43D25EE2C2A8ECD00D867DB /* RegisterViewViewModel.swift */,
 				B42696312C35AF4600DDEC36 /* TreeViewViewModel.swift */,
-				B499B92B2C3C92870072BCFD /* ReminderViewViewModel.swift */,
+				B44279CB2C4B155B00FA8BF6 /* ReminderViewViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -270,6 +272,7 @@
 		B43D25BD2C2A8ACA00D867DB /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				B4C6B0132C4B39270086F9AE /* Preset.swift */,
 				B43D25CD2C2A8DAB00D867DB /* ToDoListItem.swift */,
 				B4534BA92C2CB8B90089A51F /* User.swift */,
 				B4B6623E2C33554B0044373A /* DateValue.swift */,
@@ -448,6 +451,8 @@
 				B4534BA42C2CACF60089A51F /* ProfileView.swift in Sources */,
 				B43D25C22C2A8C7800D867DB /* ToDoListView.swift in Sources */,
 				B4534BAC2C2CB9B80089A51F /* Extentions.swift in Sources */,
+				B4C6B0142C4B39270086F9AE /* Preset.swift in Sources */,
+				B44279CC2C4B155B00FA8BF6 /* ReminderViewViewModel.swift in Sources */,
 				B43D25DF2C2A8E2400D867DB /* NewItemViewViewModel.swift in Sources */,
 				B43D25F32C2A932C00D867DB /* HeaderView.swift in Sources */,
 				B43D25E32C2A8E8800D867DB /* LoginView.swift in Sources */,
@@ -456,7 +461,6 @@
 				B43D25E72C2A8E9E00D867DB /* RegisterView.swift in Sources */,
 				B4B6623F2C33554B0044373A /* DateValue.swift in Sources */,
 				413430162C290AE600BD7E5B /* Daily_WinsApp.swift in Sources */,
-				B499B92C2C3C92870072BCFD /* ReminderViewViewModel.swift in Sources */,
 				B48D7A122C2E54DE002779E1 /* WeeklyCalenderView.swift in Sources */,
 				B43D25D72C2A8DF200D867DB /* ToDoListViewViewModel.swift in Sources */,
 				B48D7A0E2C2E47FF002779E1 /* HomePageView.swift in Sources */,

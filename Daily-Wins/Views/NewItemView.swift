@@ -15,8 +15,7 @@ struct NewItemView: View {
     @Binding var Health: [String]
     @Binding var Chores: [String]
     let initialGoal: String
-    
-    //@State private var options: [String] = ["Select", "Run", "Drink Water", "Take Vitamins", "Gym", "Read", "Journal"]
+
     @State private var navigateToHomePage = false
 
     @Environment(\.presentationMode) var presentationMode
