@@ -19,7 +19,7 @@ struct ContentView: View {
                     }
                 TreeView()
                     .tabItem() {
-                        Label("Tree", systemImage: "tree")
+                        Label("YourPet", systemImage: "pet")
                     }
             }
         } else {
