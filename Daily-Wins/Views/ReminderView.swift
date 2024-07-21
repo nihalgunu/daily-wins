@@ -19,15 +19,18 @@ struct ReminderView: View {
             HStack {
                 Text("Reminder")
                     .fontWeight(.bold)
-                    .padding()
                 
                 Button {
                     viewModel.reminders.append(Date())
                 } label: {
                     Image(systemName: "plus")
                 }
-                .padding()
+                Spacer()
             }
+            .padding(.trailing, 20)
+
+            
+            
             
             ScrollView {
                 HStack {

@@ -15,10 +15,22 @@ struct NewItemView: View {
     @Binding var Health: [String]
     @Binding var Chores: [String]
     let initialGoal: String
-
+    
     @State private var navigateToHomePage = false
-
+    @State private var goalValue: Int? = nil
+    @State private var unit = ""
+    @State private var distance = ["steps", "meters", "kilometers", "miles"]
+    @State private var time = ["seconds", "minutes", "hours"]
+    @State private var volume = ["mililiters", "liters", "ounces", "miligrams","grams"]
+    @State private var customOption: [String] = []
+    
     @Environment(\.presentationMode) var presentationMode
+    
+    private var numberFormatter: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        return formatter
+    }
     
     
     var body: some View {
@@ -34,6 +46,48 @@ struct NewItemView: View {
                     // Reminder
                     ReminderView()
                     
+                    VStack {
+                        Text("Tracking")
+                            .fontWeight(.bold)
+                            .padding(.trailing, 240)
+                        
+                        HStack {
+                            TextField("Goal Value", value: $goalValue, formatter: numberFormatter)
+                                .padding()
+
+                            Picker("", selection: $unit) {
+                                Section {
+                                    Text("count")
+                                }
+                                Section {
+                                    ForEach(distance, id: \.self) { item in
+                                        Text(item)
+                                    }
+                                } header: {
+                                    Text("Distance")
+                                }
+                                Section {
+                                    ForEach(time, id: \.self) { item in
+                                        Text(item)
+                                    }
+                                } header: {
+                                    Text("Time")
+                                }
+                                Section {
+                                    ForEach(volume, id: \.self) { item in
+                                        Text(item)
+                                    }
+                                } header: {
+                                    Text("Amount")
+                                }
+                                Section {
+                                    //
+                                } header: {
+                                    Text("Custom")
+                                }
+                            }
+                        }
+                    }
                     // Button
                     TLButton(title: "Save", background: .pink) {
                         if viewModel.canSave {
@@ -42,26 +96,25 @@ struct NewItemView: View {
                             viewModel.showAlert = true
                         }
                     }
-                }
-                .padding()
-                .frame(width: 450)
-                
-                .alert(isPresented: $viewModel.showAlert) {
-                    Alert(title: Text("Error"), message: Text("Please enter a goal"))
+                    .padding()
+                    .frame(width: 450)
+                    .alert(isPresented: $viewModel.showAlert) {
+                        Alert(title: Text("Error"), message: Text("Please enter a goal"))
+                    }
                 }
             }
         }
     }
 }
-
-
-
+    
+    
+    
 struct NewItemView_Previews: PreviewProvider {
     @State static var previewNewItemPresented = false
     @State static var previewExercises: [String] = []
     @State static var previewHealth: [String] = []
     @State static var previewChores: [String] = []
-
+    
     static var previews: some View {
         NewItemView(newItemPresented: $previewNewItemPresented, Exercises: $previewExercises, Health:$previewHealth, Chores: $previewChores, initialGoal: "test")
     }
