@@ -10,7 +10,7 @@ struct ToDoListItemView: View {
     
     var body: some View {
         NavigationStack {
-            NavigationLink(destination: MoreInfoView()) {
+            NavigationLink(destination: MoreInfoView(item: $item)) {
                 HStack {
                     VStack(alignment: .leading, spacing: 5) {
                         Text(item.title)

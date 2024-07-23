@@ -5,18 +5,17 @@
 //  Created by Eric Kim on 7/16/24.
 //
 
-//@StateObject var todoModel = ToDoListItemViewViewModel()
-
 import SwiftUI
 
 struct MoreInfoView: View {
     @ObservedObject var reminderModel = ReminderViewViewModel()
     
-    //@Binding var item: ToDoListItem
+    @StateObject var todoModel = ToDoListItemViewViewModel()
+    @Binding var item: ToDoListItem
 
     var body: some View {
         VStack {
-            //Text(item.title)
+            Text(item.title)
             
             HStack {
                 ForEach(reminderModel.reminders.indices, id: \.self) { index in
@@ -27,8 +26,7 @@ struct MoreInfoView: View {
             
             Button(action: {
                 withAnimation {
-                    //todoModel.deleteItem(item: item)
-                    print("button pressed")
+                    todoModel.deleteItem(item: item)
                 }
             }) {
                 Image(systemName: "trash")
@@ -49,7 +47,7 @@ struct MoreInfoView: View {
 }
 
 #Preview {
-    //@State var previewItem = ToDoListItem(id: "1", title: "Sample Task", isDone: false)
-    //return MoreInfoView(item: $previewItem)
-    MoreInfoView()
-}
+    @State var previewItem = ToDoListItem(id: "1", title: "Sample Task", isDone: false)
+    
+    return MoreInfoView(item: $previewItem)
+    }
