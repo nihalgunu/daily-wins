@@ -15,10 +15,10 @@ struct ReminderView: View {
     @StateObject var viewModel = ReminderViewViewModel()
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             HStack {
                 Text("Reminder")
-                    .fontWeight(.bold)
+                    .font(.headline)
                 
                 Button {
                     viewModel.reminders.append(Date())

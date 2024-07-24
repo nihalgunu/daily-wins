@@ -20,9 +20,10 @@ struct NewItemView: View {
     
     let initialGoal: String
     
-    @State private var navigateToHomePage = false
     @State private var goalValue: Int? = nil
     @State private var unit = ""
+    @State private var description = ""
+    
     var distance = ["steps", "meters", "kilometers", "miles"]
     var time = ["seconds", "minutes", "hours"]
     var amount = ["mililiters", "liters", "ounces", "miligrams","grams"]
@@ -34,7 +35,9 @@ struct NewItemView: View {
 
     }
     
-    @Environment(\.presentationMode) var presentationMode
+    @Binding var navigationPath: NavigationPath
+    
+    //@Environment(\.presentationMode) var presentationMode
     
     private var numberFormatter: NumberFormatter {
         let formatter = NumberFormatter()
@@ -48,18 +51,28 @@ struct NewItemView: View {
             VStack {
                 Form {
                     // Title
-                    TextField("Win", text: $viewModel.title)
-                        .onAppear {
-                            viewModel.title = initialGoal
-                        }
+                    VStack(alignment: .leading) {
+                        Text("Name")
+                            .font(.headline)
+                        TextField("Win", text: $viewModel.title)
+                            .onAppear {
+                                viewModel.title = initialGoal
+                            }
+                    }
+                    VStack(alignment: .leading) {
+                        Text("Description")
+                            .font(.headline)
+                        TextField("Optional", text: $description)
+                    }
                     
+                   
                     // Reminder
                     ReminderView()
                     
-                    VStack {
+                    VStack(alignment: .leading) {
                         Text("Tracking")
-                            .fontWeight(.bold)
-                            .padding(.trailing, 240)
+                            .font(.headline)
+                            //.padding(.trailing, 240)
                         
                         HStack {
                             TextField("Goal Value", value: $goalValue, formatter: numberFormatter)
@@ -88,6 +101,7 @@ struct NewItemView: View {
                     TLButton(title: "Save", background: .pink) {
                         if viewModel.canSave {
                             viewModel.save()
+                            navigationPath.removeLast(navigationPath.count)
                         } else {
                             viewModel.showAlert = true
                         }
@@ -113,10 +127,11 @@ struct NewItemView_Previews: PreviewProvider {
     @State static var previewProductivity: [String] = []
     @State static var previewHealth2: [String] = []
     @State static var previewScreenTime: [String] = []
-    
+    @State static var previewNavigationPath = NavigationPath()
+
     
     static var previews: some View {
-        NewItemView(newItemPresented: $previewNewItemPresented, Exercises: $previewExercises, Health:$previewHealth, Chores: $previewChores, Productivity: $previewProductivity, Health2: $previewHealth2, ScreenTime: $previewScreenTime, initialGoal: "test")
+        NewItemView(newItemPresented: $previewNewItemPresented, Exercises: $previewExercises, Health:$previewHealth, Chores: $previewChores, Productivity: $previewProductivity, Health2: $previewHealth2, ScreenTime: $previewScreenTime, initialGoal: "test",             navigationPath: $previewNavigationPath)
     }
 }
 

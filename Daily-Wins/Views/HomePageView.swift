@@ -5,6 +5,8 @@ struct HomePageView: View {
     @StateObject var viewModel: HomePageViewViewModel
     @FirestoreQuery var items: [ToDoListItem]
     @State private var currentDate = Date()
+    @State private var navigationPath = NavigationPath()
+
 
     init(userId: String) {
         self._viewModel = StateObject(wrappedValue: HomePageViewViewModel(userId: userId))
@@ -12,7 +14,7 @@ struct HomePageView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             VStack(spacing: 10) {
                 Spacer().frame(height: 10)
 
@@ -39,7 +41,7 @@ struct HomePageView: View {
                             .foregroundColor(.blue)
                     }*/
                     
-                    NavigationLink(destination: PresetView()) {
+                    NavigationLink(destination: PresetView(navigationPath: $navigationPath)) {
                         Image(systemName: "plus")
                             .font(.title2)
                             .foregroundColor(.blue)
