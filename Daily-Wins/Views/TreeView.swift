@@ -5,6 +5,9 @@ struct TreeView: View {
     @State private var likeYouMeter = 0 // Initial value for "like you" meter
     @State private var hungerMeter = 0 // Initial value for hunger meter
     @State private var dogPosition = CGSize.zero // Position for animation
+    @State private var coins = 100 // Initial coins
+    @State private var showStore = false // State to show store view
+    @State private var showFood = false // State to show food view
     
     var body: some View {
         ZStack {
@@ -29,9 +32,15 @@ struct TreeView: View {
                 .animation(.spring()) // Animation for dog's position
             
             VStack {
-                // Meters at the top
+                // Meters and coins at the top
                 HStack {
                     VStack {
+                        Text("Coins: \(coins)")
+                            .padding()
+                            .background(Color.yellow.opacity(0.7))
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                        
                         Text("Like You: \(likeYouMeter)")
                             .padding()
                             .background(Color.gray.opacity(0.7))
@@ -62,7 +71,7 @@ struct TreeView: View {
                 // Buttons at the bottom
                 HStack {
                     Button(action: {
-                        feedDog()
+                        showFood.toggle()
                     }) {
                         Text("Food")
                             .padding()
@@ -71,11 +80,15 @@ struct TreeView: View {
                             .cornerRadius(8)
                     }
                     .padding([.bottom, .leading])
+                    .sheet(isPresented: $showFood) {
+                        FoodView()
+                            .presentationDetents([.height(UIScreen.main.bounds.height / 3)])
+                    }
                     
                     Spacer()
                     
                     Button(action: {
-                        navigateToStore()
+                        showStore.toggle()
                     }) {
                         Text("Store")
                             .padding()
@@ -84,6 +97,10 @@ struct TreeView: View {
                             .cornerRadius(8)
                     }
                     .padding([.bottom, .trailing])
+                    .sheet(isPresented: $showStore) {
+                        StoreView()
+                            .presentationDetents([.height(UIScreen.main.bounds.height / 3)])
+                    }
                 }
             }
         }
@@ -91,20 +108,15 @@ struct TreeView: View {
     
     // Function to increase the "like you" meter when the dog is fed
     private func feedDog() {
-        likeYouMeter += 1
-        hungerMeter -= 1 // Decrease hunger when fed
+        hungerMeter -= 1
         // Trigger some animation or change in the dog image
         // Example: dogImage = "dog_happy"
     }
-    
-    // Function to navigate to the store view
-    private func navigateToStore() {
-        // Navigate to the store view code
-    }
-    
-    // Function to navigate to the food view
-    private func navigateToFood() {
-        // Navigate to the food view code
+    // Function to increase the "like you" meter when the dog is given toy
+    private func playDog() {
+        likeYouMeter += 1
+        // Trigger some animation or change in the dog image
+        // Example: dogImage = "dog_happy"
     }
 }
 
