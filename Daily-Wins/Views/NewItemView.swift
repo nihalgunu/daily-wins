@@ -27,24 +27,21 @@ struct NewItemView: View {
     var distance = ["steps", "meters", "kilometers", "miles"]
     var time = ["seconds", "minutes", "hours"]
     var amount = ["mililiters", "liters", "ounces", "miligrams","grams"]
-    //@State private var customOption: [String] = []
     
     var pickerSections = ["Distance", "Time", "Amount", "Custom"]
     var sectionItems: [[String]] {
         return [distance, time, amount]
-
     }
     
     @Binding var navigationPath: NavigationPath
     
-    //@Environment(\.presentationMode) var presentationMode
+    @Environment(\.presentationMode) var presentationMode
     
     private var numberFormatter: NumberFormatter {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         return formatter
     }
-    
     
     var body: some View {
         NavigationStack {
@@ -65,14 +62,12 @@ struct NewItemView: View {
                         TextField("Optional", text: $description)
                     }
                     
-                   
                     // Reminder
                     ReminderView()
                     
                     VStack(alignment: .leading) {
                         Text("Tracking")
                             .font(.headline)
-                            //.padding(.trailing, 240)
                         
                         HStack {
                             TextField("Goal Value", value: $goalValue, formatter: numberFormatter)
@@ -97,11 +92,16 @@ struct NewItemView: View {
                             }
                         }
                     }
+                    
                     // Button
                     TLButton(title: "Save", background: .pink) {
                         if viewModel.canSave {
                             viewModel.save()
-                            navigationPath.removeLast(navigationPath.count)
+                            presentationMode.wrappedValue.dismiss()
+                            // Append the HomePageView to the navigation path
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                navigationPath.removeLast(navigationPath.count)
+                            }
                         } else {
                             viewModel.showAlert = true
                         }
@@ -116,9 +116,7 @@ struct NewItemView: View {
         }
     }
 }
-    
-    
-    
+
 struct NewItemView_Previews: PreviewProvider {
     @State static var previewNewItemPresented = false
     @State static var previewExercises: [String] = []
@@ -128,40 +126,8 @@ struct NewItemView_Previews: PreviewProvider {
     @State static var previewHealth2: [String] = []
     @State static var previewScreenTime: [String] = []
     @State static var previewNavigationPath = NavigationPath()
-
     
     static var previews: some View {
-        NewItemView(newItemPresented: $previewNewItemPresented, Exercises: $previewExercises, Health:$previewHealth, Chores: $previewChores, Productivity: $previewProductivity, Health2: $previewHealth2, ScreenTime: $previewScreenTime, initialGoal: "test",             navigationPath: $previewNavigationPath)
+        NewItemView(newItemPresented: $previewNewItemPresented, Exercises: $previewExercises, Health:$previewHealth, Chores: $previewChores, Productivity: $previewProductivity, Health2: $previewHealth2, ScreenTime: $previewScreenTime, initialGoal: "test", navigationPath: $previewNavigationPath)
     }
 }
-
-
-/*Section {
- Text("count")
- }
- Section {
- ForEach(distance, id: \.self) { item in
- Text(item)
- }
- } header: {
- Text("Distance")
- }
- Section {
- ForEach(time, id: \.self) { item in
- Text(item)
- }
- } header: {
- Text("Time")
- }
- Section {
- ForEach(volume, id: \.self) { item in
- Text(item)
- }
- } header: {
- Text("Amount")
- }
- Section {
- //
- } header: {
- Text("Custom")
- }*/
