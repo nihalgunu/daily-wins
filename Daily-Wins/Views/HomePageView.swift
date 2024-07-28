@@ -6,11 +6,15 @@ struct HomePageView: View {
     @FirestoreQuery var items: [ToDoListItem]
     @State private var currentDate = Date()
     @State private var navigationPath = NavigationPath()
-
+    
+   // @Binding var description: String
+    
+    //description: Binding<String>
 
     init(userId: String) {
         self._viewModel = StateObject(wrappedValue: HomePageViewViewModel(userId: userId))
         self._items = FirestoreQuery(collectionPath: "users/\(userId)/todos")
+        //self._description = description
     }
 
     var body: some View {
@@ -92,8 +96,8 @@ struct HomePageView: View {
     }
 }
 
-struct HomePageView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomePageView(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2")
-    }
+#Preview {
+    // @State var previewDescription = String()
+    
+    return HomePageView(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2")
 }

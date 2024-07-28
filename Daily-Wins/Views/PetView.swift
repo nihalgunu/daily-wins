@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct TreeView: View {
+struct PetView: View {
     @State private var dogImage = "dog" // Placeholder for dog's image
     @State private var likeYouMeter = 0 // Initial value for "like you" meter
     @State private var hungerMeter = 0 // Initial value for hunger meter
@@ -121,5 +121,5 @@ struct TreeView: View {
 }
 
 #Preview {
-    TreeView()
+    PetView()
 }

@@ -10,6 +10,8 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var viewModel = ContentViewViewModel()
     
+    //@Binding var description: String
+    
     var body: some View {
         if viewModel.isSignedIn, !viewModel.currentUserId.isEmpty {
             TabView {
@@ -17,7 +19,7 @@ struct ContentView: View {
                     .tabItem() {
                         Label("Home", systemImage: "house")
                     }
-                TreeView()
+                PetView()
                     .tabItem() {
                         Label("YourPet", systemImage: "pet")
                     }
@@ -29,5 +31,7 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    //@State var previewDescription = String()
+
+    return ContentView()
 }

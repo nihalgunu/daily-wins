@@ -3,7 +3,8 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyDKVXz1wXiPxVjqumlxm-E75bnZUvvr__o</string>
+	<string>AIzaSyDq66u1qbjmDeMb8NLy-uFpXK18oeUP3j8
+</string>
 	<key>GCM_SENDER_ID</key>
 	<string>178903074786</string>
 	<key>PLIST_VERSION</key>
@@ -15,15 +16,15 @@
 	<key>STORAGE_BUCKET</key>
 	<string>dailywins-3bd07.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_GCM_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:178903074786:ios:37694680958a1e55035bbb</string>
 </dict>

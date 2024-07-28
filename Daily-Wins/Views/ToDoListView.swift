@@ -5,7 +5,7 @@
 //  Created by Eric Kim on 6/24/24.
 //
 
-import FirebaseFirestoreSwift
+/*import FirebaseFirestoreSwift
 import SwiftUI
 
 struct ToDoListView: View {
@@ -25,7 +25,7 @@ struct ToDoListView: View {
                         .padding()
                 } else {
                     List(items) { item in
-                        ToDoListItemView(item: item)
+                        ToDoListItemView(item: item, description)
                     }
                     .listStyle(PlainListStyle())
                 }
@@ -48,4 +48,4 @@ struct ToDoListView: View {
 
 #Preview {
     ToDoListView(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2")
-}
+}*/

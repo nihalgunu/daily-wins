@@ -9,33 +9,42 @@ import SwiftUI
 
 struct MoreInfoView: View {
     @ObservedObject var reminderModel = ReminderViewViewModel()
-    
     @StateObject var todoModel = ToDoListItemViewViewModel()
+    
     @Binding var item: ToDoListItem
+    @Binding var description: String
 
     var body: some View {
-        VStack {
-            Text(item.title)
-            
-            HStack {
-                ForEach(reminderModel.reminders.indices, id: \.self) { index in
-                    Text(dateToString(reminderModel.reminders[index]))
+        NavigationStack {
+            VStack {
+                HStack {
+                    ForEach(reminderModel.reminders.indices, id: \.self) { index in
+                        Text(dateToString(reminderModel.reminders[index]))
+                    }
                 }
                 
-            }
-            
-            Button(action: {
-                withAnimation {
-                    todoModel.deleteItem(item: item)
+                HStack {
+                    Text(description)
+                        .padding()
                 }
-            }) {
-                Image(systemName: "trash")
-                    .font(.system(size: 24))
-                    .foregroundColor(.red)
+                
+                Button(action: {
+                    withAnimation {
+                        todoModel.deleteItem(item: item)
+                    }
+                }) {
+                    Text("Delete")
+                        .font(.system(size: 24))
+                        .foregroundColor(.red)
+                    /*Image(systemName: "trash")
+                        .font(.system(size: 24))
+                        .foregroundColor(.red)*/
+                }
+                .buttonStyle(PlainButtonStyle())
             }
-            .buttonStyle(PlainButtonStyle())
-
+            .navigationTitle(item.title)
         }
+
     }
     // Helper function to format Date to String
     func dateToString(_ date: Date) -> String {
@@ -43,11 +52,11 @@ struct MoreInfoView: View {
         formatter.timeStyle = .short
         return formatter.string(from: date)
     }
-
 }
 
 #Preview {
     @State var previewItem = ToDoListItem(id: "1", title: "Sample Task", isDone: false)
+    @State var previewDescription = String()
     
-    return MoreInfoView(item: $previewItem)
-    }
+    return MoreInfoView(item: $previewItem, description: $previewDescription)
+}

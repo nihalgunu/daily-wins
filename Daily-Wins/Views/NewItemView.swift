@@ -22,7 +22,7 @@ struct NewItemView: View {
     
     @State private var goalValue: Int? = nil
     @State private var unit = ""
-    @State private var description = ""
+    @State private var description: String = ""
     
     var distance = ["steps", "meters", "kilometers", "miles"]
     var time = ["seconds", "minutes", "hours"]
@@ -72,7 +72,7 @@ struct NewItemView: View {
                         HStack {
                             TextField("Goal Value", value: $goalValue, formatter: numberFormatter)
                                 .padding()
-                            
+                                                        
                             Picker("", selection: $unit) {
                                 Section {
                                     Text("count")
@@ -126,6 +126,7 @@ struct NewItemView_Previews: PreviewProvider {
     @State static var previewHealth2: [String] = []
     @State static var previewScreenTime: [String] = []
     @State static var previewNavigationPath = NavigationPath()
+    @State static var previewDescription = String()
     
     static var previews: some View {
         NewItemView(newItemPresented: $previewNewItemPresented, Exercises: $previewExercises, Health:$previewHealth, Chores: $previewChores, Productivity: $previewProductivity, Health2: $previewHealth2, ScreenTime: $previewScreenTime, initialGoal: "test", navigationPath: $previewNavigationPath)

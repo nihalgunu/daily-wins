@@ -34,7 +34,7 @@ struct PresetView: View {
                     if selectedSegment == 0 {
                         CategoryView(categoryName: "Exercise", items: $Exercises, Exercises: $Exercises, Health: $Health, Chores: $Chores, Productivity: $Productivity, Health2: $Health2, ScreenTime: $ScreenTime, navigationPath: $navigationPath)
                         CategoryView(categoryName: "Health", items: $Health, Exercises: $Exercises, Health: $Health, Chores: $Chores, Productivity: $Productivity, Health2: $Health2, ScreenTime: $ScreenTime, navigationPath: $navigationPath)
-                        CategoryView(categoryName: "Chores", items: $Chores, Exercises: $Exercises, Health: $Health, Chores: $Chores, Productivity: $Productivity, Health2: $Health2, ScreenTime: $ScreenTime, navigationPath: $navigationPath)
+                        CategoryView(categoryName: "Cleaning", items: $Chores, Exercises: $Exercises, Health: $Health, Chores: $Chores, Productivity: $Productivity, Health2: $Health2, ScreenTime: $ScreenTime, navigationPath: $navigationPath)
                         CategoryView(categoryName: "Productivity", items: $Productivity, Exercises: $Exercises, Health: $Health, Chores: $Chores, Productivity: $Productivity, Health2: $Health2, ScreenTime: $ScreenTime, navigationPath: $navigationPath)
                     }
                     else {
