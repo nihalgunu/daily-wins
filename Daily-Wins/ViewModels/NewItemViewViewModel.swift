@@ -9,9 +9,12 @@ import FirebaseFirestore
 import Foundation
 
 class NewItemViewViewModel: ObservableObject{
-    @Published var title = ""
-    @Published var dueDate = Date()
-    @Published var showAlert = false
+    @Published var title: String = ""
+    @Published var description: String = ""
+    @Published var tracking = Int()
+    @Published var reminder: [Date] = []
+    @Published var showAlert: Bool = false
+    
     init() {
         
     }
@@ -28,7 +31,7 @@ class NewItemViewViewModel: ObservableObject{
         
         // Create a model
         let newId = UUID().uuidString
-        let newItem = ToDoListItem(id: newId, title: title, isDone: false)
+        let newItem = ToDoListItem(id: newId, title: title, description: description, tracking: tracking, reminder: reminder, isDone: false)
         
         // Save the model
         let db = Firestore.firestore()
@@ -37,7 +40,13 @@ class NewItemViewViewModel: ObservableObject{
             .document(uId)
             .collection("todos")
             .document(newId)
-            .setData(newItem.asDictionary())
+            .setData(newItem.asDictionary()){ error in
+                if let error = error {
+                    print("Error saving item to Firestore: \(error.localizedDescription)")
+                } else {
+                    print("Item saved successfully: \(newItem)")
+                }
+            }
     }
     
     var canSave: Bool {
@@ -45,9 +54,9 @@ class NewItemViewViewModel: ObservableObject{
             return false
         }
         
-        guard dueDate >= Date().addingTimeInterval(-86400) else {
+        /*guard dueDate >= Date().addingTimeInterval(-86400) else {
             return false
-        }
+        }*/
         return true
     }
 }

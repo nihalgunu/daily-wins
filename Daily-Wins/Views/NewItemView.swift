@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NewItemView: View {
     @StateObject var viewModel = NewItemViewViewModel()
+    @Binding var item: ToDoListItem
     @Binding var newItemPresented: Bool
     
     @Binding var Exercises: [String]
@@ -59,18 +60,19 @@ struct NewItemView: View {
                     VStack(alignment: .leading) {
                         Text("Description")
                             .font(.headline)
-                        TextField("Optional", text: $description)
+                        TextField("Optional", text: $viewModel.description)
                     }
                     
                     // Reminder
                     ReminderView()
+                        .environmentObject(viewModel)
                     
                     VStack(alignment: .leading) {
                         Text("Tracking")
                             .font(.headline)
                         
                         HStack {
-                            TextField("Goal Value", value: $goalValue, formatter: numberFormatter)
+                            TextField("Goal Value", value: $viewModel.tracking, formatter: numberFormatter)
                                 .padding()
                                                         
                             Picker("", selection: $unit) {
@@ -98,10 +100,14 @@ struct NewItemView: View {
                         if viewModel.canSave {
                             viewModel.save()
                             presentationMode.wrappedValue.dismiss()
+                            print("Saving item with reminders: \(viewModel.reminder)")
+                            item.reminder = viewModel.reminder
                             // Append the HomePageView to the navigation path
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                navigationPath.removeLast(navigationPath.count)
-                            }
+//                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                                navigationPath.removeLast(navigationPath.count)
+//                            }
+                            //print("\(viewModel.reminder.count)")
+                            print("Saved item reminders: \(item.reminder)")
                         } else {
                             viewModel.showAlert = true
                         }
@@ -127,8 +133,9 @@ struct NewItemView_Previews: PreviewProvider {
     @State static var previewScreenTime: [String] = []
     @State static var previewNavigationPath = NavigationPath()
     @State static var previewDescription = String()
+    @State static var previewItem = ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [Date()], isDone: false)
     
     static var previews: some View {
-        NewItemView(newItemPresented: $previewNewItemPresented, Exercises: $previewExercises, Health:$previewHealth, Chores: $previewChores, Productivity: $previewProductivity, Health2: $previewHealth2, ScreenTime: $previewScreenTime, initialGoal: "test", navigationPath: $previewNavigationPath)
+        NewItemView(item: $previewItem, newItemPresented: $previewNewItemPresented, Exercises: $previewExercises, Health:$previewHealth, Chores: $previewChores, Productivity: $previewProductivity, Health2: $previewHealth2, ScreenTime: $previewScreenTime, initialGoal: "test", navigationPath: $previewNavigationPath)
     }
 }

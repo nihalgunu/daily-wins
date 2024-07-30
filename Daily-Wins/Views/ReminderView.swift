@@ -11,8 +11,9 @@
 import SwiftUI
 
 struct ReminderView: View {
-    
-    @StateObject var viewModel = ReminderViewViewModel()
+    //@StateObject var reminderModel = ReminderViewViewModel()
+    //@Binding var item: ToDoListItem
+    @EnvironmentObject var viewModel: NewItemViewViewModel
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -21,7 +22,8 @@ struct ReminderView: View {
                     .font(.headline)
                 
                 Button {
-                    viewModel.reminders.append(Date())
+                    viewModel.reminder.append(Date())
+                    print("Added reminder, total reminders: \(viewModel.reminder.count)")
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -29,38 +31,29 @@ struct ReminderView: View {
             }
             .padding(.trailing, 20)
 
-            
-            
-            
             ScrollView {
                 HStack {
-                    ForEach(viewModel.reminders.indices, id: \.self) { index in
-                        
+                    ForEach(viewModel.reminder.indices, id: \.self) { index in
                         Button(action: {
-                            viewModel.reminders.remove(at: index)
+                            viewModel.reminder.remove(at: index)
+                            print("Removed reminder, total reminders: \(viewModel.reminder.count)")
+
                         }) {
                             Image(systemName: "minus.circle")
                                 .foregroundColor(.red)
                         }
                         
-                        DatePicker("", selection: $viewModel.reminders[index], displayedComponents: .hourAndMinute)
+                        DatePicker("", selection: $viewModel.reminder[index], displayedComponents: .hourAndMinute)
                             .frame(height: 50)
                             .labelsHidden()
-                        
                     }
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
-            
-            //MoreInfoView(reminderModel: viewModel) // Directly passing the view model
-                //.padding()
         }
     }
 }
-
-
-
 
 private let dateFormatter: DateFormatter = {
     let formatter = DateFormatter()

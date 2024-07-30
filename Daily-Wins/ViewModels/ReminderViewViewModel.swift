@@ -8,5 +8,5 @@
 import Foundation
 
 class ReminderViewViewModel: ObservableObject {
-    @Published var reminders: [Date] = []
+    //@Published var reminders: [Date] = []
 }

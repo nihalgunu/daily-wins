@@ -8,23 +8,35 @@
 import SwiftUI
 
 struct MoreInfoView: View {
-    @ObservedObject var reminderModel = ReminderViewViewModel()
+    //@StateObject var viewModel = NewItemViewViewModel()
     @StateObject var todoModel = ToDoListItemViewViewModel()
-    
     @Binding var item: ToDoListItem
-    @Binding var description: String
-
+    
     var body: some View {
         NavigationStack {
             VStack {
+                
                 HStack {
-                    ForEach(reminderModel.reminders.indices, id: \.self) { index in
-                        Text(dateToString(reminderModel.reminders[index]))
+                    Text(item.description)
+                        .padding()
+                }
+                
+//                HStack {
+//                    ForEach(item.reminder, id: \.self) { reminder in
+//                        Text(dateToString(reminder))
+//                    }
+//                }
+                
+                HStack {
+                    ForEach(item.reminder.indices, id: \.self) { index in
+                        DatePicker("", selection: $item.reminder[index], displayedComponents: .hourAndMinute)
+                            .frame(height: 50)
+                            .labelsHidden()
                     }
                 }
                 
                 HStack {
-                    Text(description)
+                    Text("\(item.tracking)")
                         .padding()
                 }
                 
@@ -55,8 +67,6 @@ struct MoreInfoView: View {
 }
 
 #Preview {
-    @State var previewItem = ToDoListItem(id: "1", title: "Sample Task", isDone: false)
-    @State var previewDescription = String()
-    
-    return MoreInfoView(item: $previewItem, description: $previewDescription)
+    @State var previewItem = ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [Date()], isDone: false)
+    return MoreInfoView(item: $previewItem)
 }

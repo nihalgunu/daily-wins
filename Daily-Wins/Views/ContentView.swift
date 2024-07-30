@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var viewModel = ContentViewViewModel()
-    
-    //@Binding var description: String
+    @StateObject var viewModel = ContentViewViewModel()    
     
     var body: some View {
         if viewModel.isSignedIn, !viewModel.currentUserId.isEmpty {
@@ -31,7 +29,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    //@State var previewDescription = String()
-
     return ContentView()
 }
