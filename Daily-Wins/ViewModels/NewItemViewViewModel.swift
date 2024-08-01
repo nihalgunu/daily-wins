@@ -8,16 +8,15 @@ import FirebaseAuth
 import FirebaseFirestore
 import Foundation
 
-class NewItemViewViewModel: ObservableObject{
+class NewItemViewViewModel: ObservableObject {
     @Published var title: String = ""
     @Published var description: String = ""
     @Published var tracking = Int()
-    @Published var reminder: [Date] = []
+    @Published var reminder: [TimeInterval] = []
+    @Published var isDone: Bool = false
     @Published var showAlert: Bool = false
     
-    init() {
-        
-    }
+    init() {}
     
     func save() {
         guard canSave else {
@@ -35,12 +34,12 @@ class NewItemViewViewModel: ObservableObject{
         
         // Save the model
         let db = Firestore.firestore()
-                
+        
         db.collection("users")
             .document(uId)
             .collection("todos")
             .document(newId)
-            .setData(newItem.asDictionary()){ error in
+            .setData(newItem.asDictionary()) { error in
                 if let error = error {
                     print("Error saving item to Firestore: \(error.localizedDescription)")
                 } else {
@@ -50,13 +49,6 @@ class NewItemViewViewModel: ObservableObject{
     }
     
     var canSave: Bool {
-        guard !title.trimmingCharacters(in: .whitespaces).isEmpty else {
-            return false
-        }
-        
-        /*guard dueDate >= Date().addingTimeInterval(-86400) else {
-            return false
-        }*/
-        return true
+        return !title.trimmingCharacters(in: .whitespaces).isEmpty
     }
 }

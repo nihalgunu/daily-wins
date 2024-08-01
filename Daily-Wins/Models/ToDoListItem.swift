@@ -9,10 +9,10 @@ import Foundation
 
 struct ToDoListItem: Codable, Identifiable {
     let id: String
-    let title:String
-    let description: String
-    let tracking: Int
-    var reminder: [Date]
+    var title:String
+    var description: String
+    var tracking: Int
+    var reminder: [TimeInterval] = []
     //let dueDate: TimeInterval
     //let createdDate: TimeInterval
     var isDone: Bool

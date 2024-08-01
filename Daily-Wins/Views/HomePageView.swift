@@ -6,13 +6,12 @@ struct HomePageView: View {
     @FirestoreQuery var items: [ToDoListItem]
     @State private var currentDate = Date()
     @State private var navigationPath = NavigationPath()
-    
     @State private var item: ToDoListItem
 
     init(userId: String) {
         self._viewModel = StateObject(wrappedValue: HomePageViewViewModel(userId: userId))
         self._items = FirestoreQuery(collectionPath: "users/\(userId)/todos")
-        self._item = State(initialValue: ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [Date()], isDone: false))
+        self._item = State(initialValue: ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [], isDone: false))
     }
 
     var body: some View {
@@ -36,12 +35,6 @@ struct HomePageView: View {
                         .fontWeight(.bold)
 
                     Spacer()
-
-                    /*NavigationLink(destination: ToDoListView(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2")) {
-                        Image(systemName: "plus")
-                            .font(.title2)
-                            .foregroundColor(.blue)
-                    }*/
                     
                     NavigationLink(destination: PresetView(item: $item, navigationPath: $navigationPath)) {
                         Image(systemName: "plus")
@@ -50,13 +43,6 @@ struct HomePageView: View {
                     }
                 }
                .padding(.horizontal)
-                /*HStack {
-                    if items.isEmpty {
-                        Text("Tap '+' to add your first todo")
-                            .foregroundColor(.gray)
-                            .padding()
-                    }
-                }*/
                 
                 ScrollView {
                     VStack(spacing: 10) {
@@ -72,7 +58,7 @@ struct HomePageView: View {
                             }
                         }
                     }
-                    .padding(.vertical, 5) // Adjust vertical spacing between items
+                    .padding(.vertical, 5)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
@@ -95,7 +81,5 @@ struct HomePageView: View {
 }
 
 #Preview {
-    // @State var previewDescription = String()
-    
-    return HomePageView(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2")
+    HomePageView(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2")
 }

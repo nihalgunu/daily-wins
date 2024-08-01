@@ -5,7 +5,7 @@ struct ToDoListItemView: View {
     @Binding var item: ToDoListItem
     
     init(item: Binding<ToDoListItem>) {
-            self._item = item
+        self._item = item
     }
     
     var body: some View {
@@ -25,11 +25,6 @@ struct ToDoListItemView: View {
                         .font(.caption)
                         .foregroundColor(.orange)
                 }
-                ForEach(item.reminder, id: \.self) { reminder in
-                   Text("Reminder: \(reminder, formatter: dateFormatter)")
-                       .font(.caption)
-                       .foregroundColor(.blue)
-               }
             }
             Spacer()
             
@@ -63,16 +58,8 @@ struct ToDoListItemView: View {
     
 }
 
-private let dateFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .short
-    return formatter
-}()
-
-
 #Preview {
-    @State var previewItem = ToDoListItem(id: "123", title: "Get Milk", description: "", tracking: 0, reminder: [Date()], isDone: false)
+    @State var previewItem = ToDoListItem(id: "123", title: "Get Milk", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false)
 
     return ToDoListItemView(item: $previewItem)
 }

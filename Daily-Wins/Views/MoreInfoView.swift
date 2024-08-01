@@ -15,29 +15,28 @@ struct MoreInfoView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                
                 HStack {
                     Text(item.description)
                         .padding()
                 }
                 
-//                HStack {
-//                    ForEach(item.reminder, id: \.self) { reminder in
-//                        Text(dateToString(reminder))
-//                    }
-//                }
-                
                 HStack {
-                    ForEach(item.reminder.indices, id: \.self) { index in
-                        DatePicker("", selection: $item.reminder[index], displayedComponents: .hourAndMinute)
-                            .frame(height: 50)
-                            .labelsHidden()
+                    VStack {
+                        Text("Reminders: ")
+                        ForEach(item.reminder.indices, id: \.self) { index in
+                            Text("\(formattedDate(from: item.reminder[index]))")
+                                .font(.caption)
+                                .foregroundColor(.blue)
+                        }
                     }
                 }
-                
-                HStack {
-                    Text("\(item.tracking)")
-                        .padding()
+                Spacer()
+                VStack {
+                    Text("Tracking")
+                    HStack {
+                        Text("\(item.tracking)")
+                            .padding()
+                    }
                 }
                 
                 Button(action: {
@@ -64,9 +63,20 @@ struct MoreInfoView: View {
         formatter.timeStyle = .short
         return formatter.string(from: date)
     }
+    
+    private func formattedDate(from timeInterval: TimeInterval) -> String {
+            let date = Date(timeIntervalSince1970: timeInterval)
+            return dateFormatter.string(from: date)
+        }
+
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        return formatter
+    }()
 }
 
 #Preview {
-    @State var previewItem = ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [Date()], isDone: false)
+    @State var previewItem = ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false)
     return MoreInfoView(item: $previewItem)
 }

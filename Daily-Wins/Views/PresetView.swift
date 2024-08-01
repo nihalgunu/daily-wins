@@ -91,7 +91,7 @@ struct CategoryView: View {
 }
 
 #Preview {
-   @State var previewItem = ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [Date()], isDone: false)
+   @State var previewItem = ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false)
     
     return PresetView(item: $previewItem, navigationPath: .constant(NavigationPath()))
 }

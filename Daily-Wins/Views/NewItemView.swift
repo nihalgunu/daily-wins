@@ -67,6 +67,7 @@ struct NewItemView: View {
                     ReminderView()
                         .environmentObject(viewModel)
                     
+                    
                     VStack(alignment: .leading) {
                         Text("Tracking")
                             .font(.headline)
@@ -100,14 +101,15 @@ struct NewItemView: View {
                         if viewModel.canSave {
                             viewModel.save()
                             presentationMode.wrappedValue.dismiss()
-                            print("Saving item with reminders: \(viewModel.reminder)")
+                            item.title = viewModel.title
+                            item.description = viewModel.description
+                            item.tracking = viewModel.tracking
                             item.reminder = viewModel.reminder
+                            item.isDone = viewModel.isDone
                             // Append the HomePageView to the navigation path
-//                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-//                                navigationPath.removeLast(navigationPath.count)
-//                            }
-                            //print("\(viewModel.reminder.count)")
-                            print("Saved item reminders: \(item.reminder)")
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                navigationPath.removeLast(navigationPath.count)
+                            }
                         } else {
                             viewModel.showAlert = true
                         }
@@ -123,6 +125,12 @@ struct NewItemView: View {
     }
 }
 
+private let dateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.timeStyle = .short
+    return formatter
+}()
+
 struct NewItemView_Previews: PreviewProvider {
     @State static var previewNewItemPresented = false
     @State static var previewExercises: [String] = []
@@ -133,7 +141,7 @@ struct NewItemView_Previews: PreviewProvider {
     @State static var previewScreenTime: [String] = []
     @State static var previewNavigationPath = NavigationPath()
     @State static var previewDescription = String()
-    @State static var previewItem = ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [Date()], isDone: false)
+    @State static var previewItem = ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [], isDone: false)
     
     static var previews: some View {
         NewItemView(item: $previewItem, newItemPresented: $previewNewItemPresented, Exercises: $previewExercises, Health:$previewHealth, Chores: $previewChores, Productivity: $previewProductivity, Health2: $previewHealth2, ScreenTime: $previewScreenTime, initialGoal: "test", navigationPath: $previewNavigationPath)

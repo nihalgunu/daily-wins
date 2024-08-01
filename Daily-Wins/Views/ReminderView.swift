@@ -22,28 +22,27 @@ struct ReminderView: View {
                     .font(.headline)
                 
                 Button {
-                    viewModel.reminder.append(Date())
-                    print("Added reminder, total reminders: \(viewModel.reminder.count)")
+                    viewModel.reminder.append(Date().timeIntervalSince1970)
                 } label: {
                     Image(systemName: "plus")
                 }
                 Spacer()
             }
             .padding(.trailing, 20)
-
+            
             ScrollView {
                 HStack {
                     ForEach(viewModel.reminder.indices, id: \.self) { index in
+                        
                         Button(action: {
                             viewModel.reminder.remove(at: index)
-                            print("Removed reminder, total reminders: \(viewModel.reminder.count)")
-
+                            
                         }) {
                             Image(systemName: "minus.circle")
                                 .foregroundColor(.red)
                         }
                         
-                        DatePicker("", selection: $viewModel.reminder[index], displayedComponents: .hourAndMinute)
+                        DatePicker("", selection: .constant(Date(timeIntervalSince1970: viewModel.reminder[index])), displayedComponents: .hourAndMinute)
                             .frame(height: 50)
                             .labelsHidden()
                     }
@@ -63,4 +62,5 @@ private let dateFormatter: DateFormatter = {
 
 #Preview {
     ReminderView()
+        .environmentObject(NewItemViewViewModel())
 }
