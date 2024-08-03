@@ -13,7 +13,7 @@ class NewItemViewViewModel: ObservableObject {
     @Published var description: String = ""
     @Published var tracking = Int()
     @Published var reminder: [TimeInterval] = []
-    @Published var isDone: Bool = false
+    //@Published var isDone: Bool = false
     @Published var showAlert: Bool = false
     
     init() {}
@@ -49,6 +49,13 @@ class NewItemViewViewModel: ObservableObject {
     }
     
     var canSave: Bool {
-        return !title.trimmingCharacters(in: .whitespaces).isEmpty
+        guard !title.trimmingCharacters(in: .whitespaces).isEmpty else {
+            return false
+        }
+        
+        /*guard dueDate >= Date().addingTimeInterval(-86400) else {
+            return false
+        }*/
+        return true
     }
 }

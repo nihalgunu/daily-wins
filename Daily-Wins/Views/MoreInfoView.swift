@@ -28,9 +28,9 @@ struct MoreInfoView: View {
                                 .font(.caption)
                                 .foregroundColor(.blue)
                         }
+                        .padding()
                     }
                 }
-                Spacer()
                 VStack {
                     Text("Tracking")
                     HStack {
@@ -38,6 +38,7 @@ struct MoreInfoView: View {
                             .padding()
                     }
                 }
+                
                 
                 Button(action: {
                     withAnimation {
@@ -47,9 +48,6 @@ struct MoreInfoView: View {
                     Text("Delete")
                         .font(.system(size: 24))
                         .foregroundColor(.red)
-                    /*Image(systemName: "trash")
-                        .font(.system(size: 24))
-                        .foregroundColor(.red)*/
                 }
                 .buttonStyle(PlainButtonStyle())
             }

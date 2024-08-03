@@ -105,7 +105,7 @@ struct NewItemView: View {
                             item.description = viewModel.description
                             item.tracking = viewModel.tracking
                             item.reminder = viewModel.reminder
-                            item.isDone = viewModel.isDone
+                            print(item.isDone)
                             // Append the HomePageView to the navigation path
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                 navigationPath.removeLast(navigationPath.count)
