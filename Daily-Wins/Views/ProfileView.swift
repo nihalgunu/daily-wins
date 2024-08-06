@@ -1,22 +1,49 @@
 import SwiftUI
+import PhotosUI
 
 struct ProfileView: View {
     @StateObject var viewModel = ProfileViewViewModel()
+    @State private var avatarImage: Image?
+    @State private var photosPickerItem: PhotosPickerItem?
 
     var body: some View {
         NavigationView {
             VStack {
                 if let user = viewModel.user {
                     // Avatar
-                    Image(systemName: "person.circle.fill")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 150, height: 150)
-                        .clipShape(Circle())
-                        .overlay(Circle().stroke(Color.blue, lineWidth: 4))
-                        .shadow(radius: 10)
-                        .padding(.top, 50)
-                    
+                    VStack {
+                        PhotosPicker(selection: $photosPickerItem, matching: .images) {
+                            if let avatarImage = avatarImage {
+                                avatarImage
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 150, height: 150)
+                                    .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color.blue, lineWidth: 4))
+                                    .shadow(radius: 10)
+                                    .padding(.top, 50)
+                            } else {
+                                Image(systemName: "person.circle")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 150, height: 150)
+                                    .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color.blue, lineWidth: 4))
+                                    .shadow(radius: 10)
+                                    .padding(.top, 50)
+                            }
+
+                        }
+                    }
+                    .onChange(of: photosPickerItem) {
+                        Task {
+                            if let loaded = try? await photosPickerItem?.loadTransferable(type: Image.self) {
+                                avatarImage = loaded
+                            } else {
+                                print("Failed")
+                            }
+                        }
+                    }
                     // Info: Name, email, Member since
                     VStack(alignment: .leading, spacing: 10) {
                         HStack {
@@ -84,3 +111,4 @@ struct ProfileView: View {
 #Preview {
     ProfileView()
 }
+

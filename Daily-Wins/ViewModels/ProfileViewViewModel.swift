@@ -45,10 +45,6 @@ class ProfileViewViewModel: ObservableObject {
             print(error)
         }
     }
-    
-    
-    
-    
 }
 
 
