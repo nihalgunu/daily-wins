@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NewItemView: View {
     @StateObject var viewModel = NewItemViewViewModel()
-    @Binding var item: ToDoListItem
+    //@Binding var item: ToDoListItem
     @Binding var newItemPresented: Bool
     
     @Binding var Exercises: [String]
@@ -101,11 +101,11 @@ struct NewItemView: View {
                         if viewModel.canSave {
                             viewModel.save()
                             presentationMode.wrappedValue.dismiss()
-                            item.title = viewModel.title
-                            item.description = viewModel.description
-                            item.tracking = viewModel.tracking
-                            item.reminder = viewModel.reminder
-                            print(item.isDone)
+//                            item.title = viewModel.title
+//                            item.description = viewModel.description
+//                            item.tracking = viewModel.tracking
+//                            item.reminder = viewModel.reminder
+//                            print(item.isDone)
                             // Append the HomePageView to the navigation path
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                 navigationPath.removeLast(navigationPath.count)
@@ -144,6 +144,6 @@ struct NewItemView_Previews: PreviewProvider {
     @State static var previewItem = ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [], isDone: false)
     
     static var previews: some View {
-        NewItemView(item: $previewItem, newItemPresented: $previewNewItemPresented, Exercises: $previewExercises, Health:$previewHealth, Chores: $previewChores, Productivity: $previewProductivity, Health2: $previewHealth2, ScreenTime: $previewScreenTime, initialGoal: "test", navigationPath: $previewNavigationPath)
+        NewItemView(/*item: $previewItem, */newItemPresented: $previewNewItemPresented, Exercises: $previewExercises, Health:$previewHealth, Chores: $previewChores, Productivity: $previewProductivity, Health2: $previewHealth2, ScreenTime: $previewScreenTime, initialGoal: "test", navigationPath: $previewNavigationPath)
     }
 }

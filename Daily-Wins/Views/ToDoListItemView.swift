@@ -1,12 +1,13 @@
 import SwiftUI
 
 struct ToDoListItemView: View {
+    @StateObject var viewModel = ToDoListItemViewViewModel()
     @State private var showSheet = false
-    @Binding var item: ToDoListItem
+    var item: ToDoListItem
     
-    init(item: Binding<ToDoListItem>) {
-        self._item = item
-    }
+//    init(item: Binding<ToDoListItem>) {
+//        self._item = item
+//    }
     
     var body: some View {
         HStack {
@@ -30,7 +31,7 @@ struct ToDoListItemView: View {
             
             Button(action: {
                 withAnimation {
-                    item.isDone.toggle()
+                    viewModel.toggleIsDone(item: item)
                     print("Toggled isDone to \(item.isDone)")
                 }
             }) {
@@ -52,14 +53,14 @@ struct ToDoListItemView: View {
         .sheet(isPresented: $showSheet) {
             
         } content: {
-            MoreInfoView(item: $item)
+            MoreInfoView(item: /*$*/item)
         }
     }
     
 }
 
 #Preview {
-    @State var previewItem = ToDoListItem(id: "123", title: "Get Milk", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false)
+//    @State var previewItem = ToDoListItem(id: "123", title: "Get Milk", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false)
 
-    return ToDoListItemView(item: $previewItem)
+    ToDoListItemView(item: ToDoListItem(id: "123", title: "Get Milk", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false))
 }

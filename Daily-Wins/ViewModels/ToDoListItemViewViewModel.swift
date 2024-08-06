@@ -13,7 +13,10 @@ import Foundation
 class ToDoListItemViewViewModel: ObservableObject {
     init() {}
     
-    func deleteItem(item: ToDoListItem) {
+    func toggleIsDone(item: ToDoListItem) {
+        var itemCopy = item
+        itemCopy.setDone(!item.isDone)
+        
         guard let uid = Auth.auth().currentUser?.uid else {
             return
         }
@@ -22,8 +25,7 @@ class ToDoListItemViewViewModel: ObservableObject {
         db.collection("users")
             .document(uid)
             .collection("todos")
-            .document(item.id)
-            .delete()
+            .document(itemCopy.id)
+            .setData(itemCopy.asDictionary())
     }
-
 }

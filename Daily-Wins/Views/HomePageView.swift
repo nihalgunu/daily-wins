@@ -6,12 +6,12 @@ struct HomePageView: View {
     @FirestoreQuery var items: [ToDoListItem]
     @State private var currentDate = Date()
     @State private var navigationPath = NavigationPath()
-    @State private var item: ToDoListItem
+    //@State private var item: ToDoListItem
 
     init(userId: String) {
         self._viewModel = StateObject(wrappedValue: HomePageViewViewModel(userId: userId))
         self._items = FirestoreQuery(collectionPath: "users/\(userId)/todos")
-        self._item = State(initialValue: ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [], isDone: false))
+//        self._item = State(initialValue: ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [], isDone: false))
     }
 
     var body: some View {
@@ -36,7 +36,7 @@ struct HomePageView: View {
 
                     Spacer()
                     
-                    NavigationLink(destination: PresetView(item: $item, navigationPath: $navigationPath)) {
+                    NavigationLink(destination: PresetView(/*item: $item,*/navigationPath: $navigationPath)) {
                         Image(systemName: "plus")
                             .font(.title2)
                             .foregroundColor(.blue)
@@ -52,7 +52,7 @@ struct HomePageView: View {
                                 .padding(.vertical, 150)
                         } else {
                             ForEach(items) { item in
-                                ToDoListItemView(item: .constant(item))
+                                ToDoListItemView(item: item)
                                     .cornerRadius(10)
                                     .shadow(color: .gray, radius: 1, x: 0, y: 1)
                             }

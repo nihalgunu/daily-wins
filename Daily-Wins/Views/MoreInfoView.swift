@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct MoreInfoView: View {
-    //@StateObject var viewModel = NewItemViewViewModel()
-    @StateObject var todoModel = ToDoListItemViewViewModel()
-    @Binding var item: ToDoListItem
+    @StateObject var todoModel = HomePageViewViewModel(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2")
+    var item: ToDoListItem
+    //@Binding var item: ToDoListItem
     
     var body: some View {
         NavigationStack {
@@ -42,7 +42,7 @@ struct MoreInfoView: View {
                 
                 Button(action: {
                     withAnimation {
-                        todoModel.deleteItem(item: item)
+                        todoModel.delete(id: item.id)
                     }
                 }) {
                     Text("Delete")
@@ -75,6 +75,6 @@ struct MoreInfoView: View {
 }
 
 #Preview {
-    @State var previewItem = ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false)
-    return MoreInfoView(item: $previewItem)
+//    @State var previewItem = ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false)
+    MoreInfoView(item: ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false))
 }
