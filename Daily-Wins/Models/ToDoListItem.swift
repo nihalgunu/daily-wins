@@ -13,9 +13,8 @@ struct ToDoListItem: Codable, Identifiable {
     var description: String
     var tracking: Int
     var reminder: [TimeInterval] = []
-    //let dueDate: TimeInterval
-    //let createdDate: TimeInterval
     var isDone: Bool
+    var unit: String
     
     mutating func setDone(_ state: Bool) {
         isDone = state

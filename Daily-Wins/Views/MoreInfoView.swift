@@ -15,7 +15,9 @@ struct MoreInfoView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                HStack {
+                VStack {
+                    Text("Description: ")
+                        .bold()
                     Text(item.description)
                         .padding()
                 }
@@ -23,6 +25,7 @@ struct MoreInfoView: View {
                 HStack {
                     VStack {
                         Text("Reminders: ")
+                            .bold()
                         ForEach(item.reminder.indices, id: \.self) { index in
                             Text("\(formattedDate(from: item.reminder[index]))")
                                 .font(.caption)
@@ -31,12 +34,12 @@ struct MoreInfoView: View {
                         .padding()
                     }
                 }
+                
                 VStack {
-                    Text("Tracking")
-                    HStack {
-                        Text("\(item.tracking)")
-                            .padding()
-                    }
+                    Text("Tracking: ")
+                        .bold()
+                    Text("\(item.tracking) \(item.unit)")
+                        .padding()
                 }
                 
                 
@@ -70,5 +73,5 @@ struct MoreInfoView: View {
 
 #Preview {
 //    @State var previewItem = ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false)
-    MoreInfoView(item: ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false))
+    MoreInfoView(item: ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false, unit: "count"))
 }

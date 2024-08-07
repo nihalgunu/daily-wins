@@ -13,8 +13,11 @@ class NewItemViewViewModel: ObservableObject {
     @Published var description: String = ""
     @Published var tracking = Int()
     @Published var reminder: [TimeInterval] = []
-    //@Published var isDone: Bool = false
     @Published var showAlert: Bool = false
+    @Published var selectedUnit: String = "count"
+    @Published var customUnit: String = ""
+    @Published var useCustomUnit: Bool = false
+    
     
     init() {}
     
@@ -30,7 +33,8 @@ class NewItemViewViewModel: ObservableObject {
         
         // Create a model
         let newId = UUID().uuidString
-        let newItem = ToDoListItem(id: newId, title: title, description: description, tracking: tracking, reminder: reminder, isDone: false)
+        let finalUnit = useCustomUnit ? customUnit : selectedUnit
+        let newItem = ToDoListItem(id: newId, title: title, description: description, tracking: tracking, reminder: reminder, isDone: false, unit: finalUnit)
         
         // Save the model
         let db = Firestore.firestore()
@@ -61,7 +65,7 @@ class NewItemViewViewModel: ObservableObject {
     }
     
     private func scheduleNotifications(for item: ToDoListItem) {
-        for timeInterval in item.reminder {
+        for TimeInterval in item.reminder {
             let reminderDate = Date()
             NotificationManager.shared.scheduleNotification(
                 title: "Habit Reminder",

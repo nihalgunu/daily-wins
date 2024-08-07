@@ -76,7 +76,7 @@ struct NewItemView: View {
                             TextField("Goal Value", value: $viewModel.tracking, formatter: numberFormatter)
                                 .padding()
                                                         
-                            Picker("", selection: $unit) {
+                            Picker("", selection: $viewModel.selectedUnit) {
                                 Section {
                                     Text("count")
                                 } header: {
@@ -92,7 +92,19 @@ struct NewItemView: View {
                                         Text(pickerSections[i])
                                     }
                                 }
+                                Section {
+                                    Text("custom").tag("custom")
+                                } header: {
+                                    Text("custom")
+                                }
                             }
+                            .onChange(of: viewModel.selectedUnit) { oldValue, newValue in
+                                viewModel.useCustomUnit = (newValue == "custom")
+                            }
+                        }
+                        if viewModel.useCustomUnit {
+                            TextField("Enter custom unit", text: $viewModel.customUnit)
+                                .padding()
                         }
                     }
                     
@@ -109,7 +121,6 @@ struct NewItemView: View {
                                     date: Date(timeIntervalSince1970: viewModel.reminder[index])
                                 )
                             }
-                            // Append the HomePageView to the navigation path
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                 navigationPath.removeLast(navigationPath.count)
                             }
@@ -150,7 +161,7 @@ struct NewItemView_Previews: PreviewProvider {
     @State static var previewScreenTime: [String] = []
     @State static var previewNavigationPath = NavigationPath()
     @State static var previewDescription = String()
-    @State static var previewItem = ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [], isDone: false)
+    @State static var previewItem = ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [], isDone: false, unit: "count")
     
     static var previews: some View {
         NewItemView(/*item: $previewItem, */newItemPresented: $previewNewItemPresented, Exercises: $previewExercises, Health:$previewHealth, Chores: $previewChores, Productivity: $previewProductivity, Health2: $previewHealth2, ScreenTime: $previewScreenTime, initialGoal: "test", navigationPath: $previewNavigationPath)

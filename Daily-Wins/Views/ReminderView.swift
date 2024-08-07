@@ -41,9 +41,20 @@ struct ReminderView: View {
                                 .foregroundColor(.red)
                         }
                         
-                        DatePicker("", selection: .constant(Date(timeIntervalSince1970: viewModel.reminder[index])), displayedComponents: .hourAndMinute)
-                            .frame(height: 50)
-                            .labelsHidden()
+//                        DatePicker("", selection: .constant(Date(timeIntervalSince1970: viewModel.reminder[index])), displayedComponents: .hourAndMinute)
+//                            .frame(height: 50)
+//                            .labelsHidden()
+                        
+                        DatePicker("", selection: Binding(
+                            get: {
+                                Date(timeIntervalSince1970: viewModel.reminder[index])
+                            },
+                            set: { newValue in
+                                viewModel.reminder[index] = newValue.timeIntervalSince1970
+                            }
+                        ), displayedComponents: .hourAndMinute)
+                        .frame(height: 50)
+                        .labelsHidden()
                     }
                 }
             }

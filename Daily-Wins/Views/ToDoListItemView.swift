@@ -63,7 +63,7 @@ struct ToDoListItemView: View {
 #Preview {
 //    @State var previewItem = ToDoListItem(id: "123", title: "Get Milk", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false)
 
-    ToDoListItemView(item: ToDoListItem(id: "123", title: "Get Milk", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false))
+    ToDoListItemView(item: ToDoListItem(id: "123", title: "Get Milk", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false, unit: "count"))
         .environmentObject(SharedData())
 
 }
