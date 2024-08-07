@@ -3,6 +3,7 @@ import SwiftUI
 
 struct HomePageView: View {
     @StateObject var viewModel: HomePageViewViewModel
+    @StateObject private var parentViewModel = HomePageViewViewModel(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2")
     @FirestoreQuery var items: [ToDoListItem]
     @State private var currentDate = Date()
     @State private var navigationPath = NavigationPath()
@@ -69,7 +70,7 @@ struct HomePageView: View {
             .background(Color(UIColor.systemBackground))
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: ProfileView()) {
+                    NavigationLink(destination: ProfileView(viewModel: parentViewModel.profileViewModel)) {
                         Image(systemName: "person.circle")
                             .font(.title2)
                             .foregroundColor(.blue)

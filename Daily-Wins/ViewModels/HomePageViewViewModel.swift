@@ -9,6 +9,7 @@ import FirebaseFirestore
 import Foundation
 
 class HomePageViewViewModel: ObservableObject {
+    @Published var profileViewModel = ProfileViewViewModel()
 
     private let userId: String
     

@@ -7,14 +7,42 @@
 
 import FirebaseAuth
 import FirebaseFirestore
+import FirebaseStorage
 import Foundation
 
+
 class ProfileViewViewModel: ObservableObject {
-    init() {
-        
+    @Published var user: User? = nil
+    //@Published var selectedImage: UIImage? = nil
+    @Published var selectedImage: UIImage? {
+        didSet {
+            saveImage()
+        }
     }
     
-    @Published var user: User? = nil
+    static let shared = ProfileViewViewModel()
+    
+    init() {
+        loadImage()
+    }
+    
+    private func saveImage() {
+            guard let image = selectedImage else {
+                UserDefaults.standard.removeObject(forKey: "profileImage")
+                return
+            }
+            
+            if let data = image.pngData() {
+                UserDefaults.standard.set(data, forKey: "profileImage")
+            }
+        }
+        
+    private func loadImage() {
+        if let data = UserDefaults.standard.data(forKey: "profileImage"),
+           let image = UIImage(data: data) {
+            self.selectedImage = image
+        }
+    }
     
     func fetchUser() {
         guard let userId = Auth.auth().currentUser?.uid else {

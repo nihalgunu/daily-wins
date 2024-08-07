@@ -2,9 +2,10 @@ import SwiftUI
 import PhotosUI
 
 struct ProfileView: View {
-    @StateObject var viewModel = ProfileViewViewModel()
+    @ObservedObject var viewModel = ProfileViewViewModel.shared
     @State private var avatarImage: Image?
-    @State private var photosPickerItem: PhotosPickerItem?
+    @State private var selectedItem: PhotosPickerItem? = nil
+    @State private var showingImagePicker = false
 
     var body: some View {
         NavigationView {
@@ -12,38 +13,42 @@ struct ProfileView: View {
                 if let user = viewModel.user {
                     // Avatar
                     VStack {
-                        PhotosPicker(selection: $photosPickerItem, matching: .images) {
-                            if let avatarImage = avatarImage {
-                                avatarImage
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 150, height: 150)
-                                    .clipShape(Circle())
-                                    .overlay(Circle().stroke(Color.blue, lineWidth: 4))
-                                    .shadow(radius: 10)
-                                    .padding(.top, 50)
-                            } else {
-                                Image(systemName: "person.circle")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 150, height: 150)
-                                    .clipShape(Circle())
-                                    .overlay(Circle().stroke(Color.blue, lineWidth: 4))
-                                    .shadow(radius: 10)
-                                    .padding(.top, 50)
+                        if let image = viewModel.selectedImage {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 100, height: 100)
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(Color.gray, lineWidth: 2))
+                        } else {
+                            Image(systemName: "person.circle")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 100, height: 100)
+                                .foregroundColor(.gray)
+                                .onTapGesture {
+                                    showingImagePicker = true
+                                }
+                        }
+                        
+                        PhotosPicker(
+                            selection: $selectedItem,
+                            matching: .images,
+                            photoLibrary: .shared()
+                        ) {
+                            Text("Profile Image")
+                        }
+                        .onChange(of: selectedItem) {
+                            Task {
+                                if let data = try? await selectedItem?.loadTransferable(type: Data.self),
+                                   let uiImage = UIImage(data: data) {
+                                    viewModel.selectedImage = uiImage
+                                }
                             }
+                        }
+                    }
+                    .padding()
 
-                        }
-                    }
-                    .onChange(of: photosPickerItem) {
-                        Task {
-                            if let loaded = try? await photosPickerItem?.loadTransferable(type: Image.self) {
-                                avatarImage = loaded
-                            } else {
-                                print("Failed")
-                            }
-                        }
-                    }
                     // Info: Name, email, Member since
                     VStack(alignment: .leading, spacing: 10) {
                         HStack {
@@ -109,6 +114,39 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView()
+    ProfileView(/*viewModel: ProfileViewViewModel()*/)
 }
 
+//                    VStack {
+//                        PhotosPicker(selection: $photosPickerItem, matching: .images) {
+//                            if let avatarImage = avatarImage {
+//                                avatarImage
+//                                    .resizable()
+//                                    .aspectRatio(contentMode: .fill)
+//                                    .frame(width: 150, height: 150)
+//                                    .clipShape(Circle())
+//                                    .overlay(Circle().stroke(Color.blue, lineWidth: 4))
+//                                    .shadow(radius: 10)
+//                                    .padding(.top, 50)
+//                            } else {
+//                                Image(systemName: "person.circle")
+//                                    .resizable()
+//                                    .aspectRatio(contentMode: .fill)
+//                                    .frame(width: 150, height: 150)
+//                                    .clipShape(Circle())
+//                                    .overlay(Circle().stroke(Color.blue, lineWidth: 4))
+//                                    .shadow(radius: 10)
+//                                    .padding(.top, 50)
+//                            }
+//
+//                        }
+//                    }
+//                    .onChange(of: photosPickerItem) {
+//                        Task {
+//                            if let loaded = try? await photosPickerItem?.loadTransferable(type: Image.self) {
+//                                avatarImage = loaded
+//                            } else {
+//                                print("Failed")
+//                            }
+//                        }
+//                    }
