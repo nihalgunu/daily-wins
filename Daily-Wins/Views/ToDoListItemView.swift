@@ -1,13 +1,10 @@
 import SwiftUI
 
 struct ToDoListItemView: View {
+    @EnvironmentObject var sharedData: SharedData
     @StateObject var viewModel = ToDoListItemViewViewModel()
     @State private var showSheet = false
     var item: ToDoListItem
-    
-//    init(item: Binding<ToDoListItem>) {
-//        self._item = item
-//    }
     
     var body: some View {
         HStack {
@@ -32,7 +29,11 @@ struct ToDoListItemView: View {
             Button(action: {
                 withAnimation {
                     viewModel.toggleIsDone(item: item)
-                    print("Toggled isDone to \(item.isDone)")
+                    if item.isDone {
+                        sharedData.coins -= 10 // Update shared coins
+                    } else {
+                        sharedData.coins += 10
+                    }
                 }
             }) {
                 Image(systemName: item.isDone ? "checkmark.circle.fill" : "circle")
@@ -63,4 +64,6 @@ struct ToDoListItemView: View {
 //    @State var previewItem = ToDoListItem(id: "123", title: "Get Milk", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false)
 
     ToDoListItemView(item: ToDoListItem(id: "123", title: "Get Milk", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false))
+        .environmentObject(SharedData())
+
 }

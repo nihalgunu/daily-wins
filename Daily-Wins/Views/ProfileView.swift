@@ -3,7 +3,6 @@ import PhotosUI
 
 struct ProfileView: View {
     @ObservedObject var viewModel = ProfileViewViewModel.shared
-    @State private var avatarImage: Image?
     @State private var selectedItem: PhotosPickerItem? = nil
     @State private var showingImagePicker = false
 

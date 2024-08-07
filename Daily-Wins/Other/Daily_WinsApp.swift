@@ -18,6 +18,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 @main
 struct YourApp: App {
+
+    init() {
+        NotificationManager.shared.requestAuthorization()
+    }
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     

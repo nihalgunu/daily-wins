@@ -9,7 +9,7 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
 import Foundation
-
+import FirebaseStorage
 
 class ProfileViewViewModel: ObservableObject {
     @Published var user: User? = nil
@@ -74,5 +74,4 @@ class ProfileViewViewModel: ObservableObject {
         }
     }
 }
-
 

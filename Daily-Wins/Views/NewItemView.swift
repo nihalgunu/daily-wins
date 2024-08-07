@@ -33,7 +33,7 @@ struct NewItemView: View {
     var sectionItems: [[String]] {
         return [distance, time, amount]
     }
-    
+
     @Binding var navigationPath: NavigationPath
     
     @Environment(\.presentationMode) var presentationMode
@@ -101,15 +101,19 @@ struct NewItemView: View {
                         if viewModel.canSave {
                             viewModel.save()
                             presentationMode.wrappedValue.dismiss()
-//                            item.title = viewModel.title
-//                            item.description = viewModel.description
-//                            item.tracking = viewModel.tracking
-//                            item.reminder = viewModel.reminder
-//                            print(item.isDone)
+                            
+                            for index in 0..<viewModel.reminder.count {
+                                NotificationManager.shared.scheduleNotification(
+                                    title: "Daily Wins",
+                                    body: "Complete your win!",
+                                    date: Date(timeIntervalSince1970: viewModel.reminder[index])
+                                )
+                            }
                             // Append the HomePageView to the navigation path
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                 navigationPath.removeLast(navigationPath.count)
                             }
+                            
                         } else {
                             viewModel.showAlert = true
                         }
@@ -124,6 +128,11 @@ struct NewItemView: View {
         }
     }
 }
+
+private func formattedDate(from timeInterval: TimeInterval) -> String {
+        let date = Date(timeIntervalSince1970: timeInterval)
+        return dateFormatter.string(from: date)
+    }
 
 private let dateFormatter: DateFormatter = {
     let formatter = DateFormatter()

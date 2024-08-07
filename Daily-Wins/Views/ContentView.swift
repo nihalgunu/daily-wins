@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var viewModel = ContentViewViewModel()    
+    @StateObject var viewModel = ContentViewViewModel()   
+    @StateObject var sharedData = SharedData() // Create the shared data model
     
     var body: some View {
         if viewModel.isSignedIn, !viewModel.currentUserId.isEmpty {
@@ -21,7 +22,10 @@ struct ContentView: View {
                     .tabItem() {
                         Label("YourPet", systemImage: "pet")
                     }
+                    .environmentObject(sharedData)
             }
+            .environmentObject(sharedData)
+
         } else {
             LoginView()
         }

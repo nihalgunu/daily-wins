@@ -21,7 +21,7 @@ struct ReminderView: View {
                 Text("Reminder")
                     .font(.headline)
                 
-                Button {
+                Button {  
                     viewModel.reminder.append(Date().timeIntervalSince1970)
                 } label: {
                     Image(systemName: "plus")
@@ -36,7 +36,6 @@ struct ReminderView: View {
                         
                         Button(action: {
                             viewModel.reminder.remove(at: index)
-                            
                         }) {
                             Image(systemName: "minus.circle")
                                 .foregroundColor(.red)

@@ -4,15 +4,14 @@ import SwiftUI
 struct HomePageView: View {
     @StateObject var viewModel: HomePageViewViewModel
     @StateObject private var parentViewModel = HomePageViewViewModel(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2")
+    @EnvironmentObject var sharedData: SharedData
     @FirestoreQuery var items: [ToDoListItem]
     @State private var currentDate = Date()
     @State private var navigationPath = NavigationPath()
-    //@State private var item: ToDoListItem
 
     init(userId: String) {
         self._viewModel = StateObject(wrappedValue: HomePageViewViewModel(userId: userId))
         self._items = FirestoreQuery(collectionPath: "users/\(userId)/todos")
-//        self._item = State(initialValue: ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [], isDone: false))
     }
 
     var body: some View {

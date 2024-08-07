@@ -44,6 +44,7 @@ class NewItemViewViewModel: ObservableObject {
                     print("Error saving item to Firestore: \(error.localizedDescription)")
                 } else {
                     print("Item saved successfully: \(newItem)")
+                    self.scheduleNotifications(for: newItem)
                 }
             }
     }
@@ -58,4 +59,16 @@ class NewItemViewViewModel: ObservableObject {
         }*/
         return true
     }
+    
+    private func scheduleNotifications(for item: ToDoListItem) {
+        for timeInterval in item.reminder {
+            let reminderDate = Date()
+            NotificationManager.shared.scheduleNotification(
+                title: "Habit Reminder",
+                body: "Time to complete your habit: \(item.title)",
+                date: reminderDate
+            )
+        }
+    }
+
 }

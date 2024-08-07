@@ -55,12 +55,6 @@ struct MoreInfoView: View {
         }
 
     }
-    // Helper function to format Date to String
-    func dateToString(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
-    }
     
     private func formattedDate(from timeInterval: TimeInterval) -> String {
             let date = Date(timeIntervalSince1970: timeInterval)

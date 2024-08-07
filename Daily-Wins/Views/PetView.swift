@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct PetView: View {
+    @EnvironmentObject var sharedData: SharedData // Use the shared data model
+    
     @State private var dogImage = "dog" // Placeholder for dog's image
     @State private var likeYouMeter = 0 // Initial value for "like you" meter
     @State private var hungerMeter = 0 // Initial value for hunger meter
@@ -35,7 +37,7 @@ struct PetView: View {
                 // Meters and coins at the top
                 HStack {
                     VStack {
-                        Text("Coins: \(coins)")
+                        Text("Coins: \(sharedData.coins)")
                             .padding()
                             .background(Color.yellow.opacity(0.7))
                             .foregroundColor(.white)
@@ -122,4 +124,6 @@ struct PetView: View {
 
 #Preview {
     PetView()
+        //.environmentObject(SharedData())
+
 }

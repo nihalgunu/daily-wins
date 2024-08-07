@@ -14,6 +14,7 @@ class RegisterViewViewModel: ObservableObject {
     @Published var email = ""
     @Published var password = ""
     @Published var errorMsg = ""
+    @Published var profileImageUrl = ""
     
     init() {
         
