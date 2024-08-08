@@ -7,7 +7,6 @@ struct PetView: View {
     @State private var likeYouMeter = 0 // Initial value for "like you" meter
     @State private var hungerMeter = 0 // Initial value for hunger meter
     @State private var dogPosition = CGSize.zero // Position for animation
-    @State private var coins = 100 // Initial coins
     @State private var showStore = false // State to show store view
     @State private var showFood = false // State to show food view
     
@@ -35,35 +34,38 @@ struct PetView: View {
             
             VStack {
                 // Meters and coins at the top
-                HStack {
-                    VStack {
-                        Text("Coins: \(sharedData.coins)")
-                            .padding()
-                            .background(Color.yellow.opacity(0.7))
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                        
-                        Text("Like You: \(likeYouMeter)")
-                            .padding()
-                            .background(Color.gray.opacity(0.7))
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                        
-                        ProgressView(value: Double(likeYouMeter), total: 10)
-                            .progressViewStyle(LinearProgressViewStyle(tint: .blue))
-                            .padding(.horizontal)
-                    }
+                VStack {
+                    Text("Coins: \(sharedData.coins)")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.yellow.opacity(0.7))
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
                     
-                    VStack {
-                        Text("Hunger: \(hungerMeter)")
-                            .padding()
-                            .background(Color.gray.opacity(0.7))
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
+                    HStack {
+                        VStack {
+                            Text("Hunger: \(hungerMeter)")
+                                .padding()
+                                .background(Color.brown.opacity(0.7))
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                            
+                            ProgressView(value: Double(hungerMeter), total: 10)
+                                .progressViewStyle(LinearProgressViewStyle(tint: .brown))
+                                .padding(.horizontal)
+                        }
                         
-                        ProgressView(value: Double(hungerMeter), total: 10)
-                            .progressViewStyle(LinearProgressViewStyle(tint: .red))
-                            .padding(.horizontal)
+                        VStack {
+                            Text("Like You: \(likeYouMeter)")
+                                .padding()
+                                .background(Color.red.opacity(0.7))
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                            
+                            ProgressView(value: Double(likeYouMeter), total: 10)
+                                .progressViewStyle(LinearProgressViewStyle(tint: .red))
+                                .padding(.horizontal)
+                        }
                     }
                 }
                 .padding([.top])
@@ -76,6 +78,7 @@ struct PetView: View {
                         showFood.toggle()
                     }) {
                         Text("Food")
+                            .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.blue)
                             .foregroundColor(.white)
@@ -87,12 +90,11 @@ struct PetView: View {
                             .presentationDetents([.height(UIScreen.main.bounds.height / 3)])
                     }
                     
-                    Spacer()
-                    
                     Button(action: {
                         showStore.toggle()
                     }) {
                         Text("Store")
+                            .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.green)
                             .foregroundColor(.white)
@@ -124,6 +126,5 @@ struct PetView: View {
 
 #Preview {
     PetView()
-        //.environmentObject(SharedData())
-
+        .environmentObject(SharedData())
 }

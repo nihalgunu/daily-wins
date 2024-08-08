@@ -52,7 +52,7 @@ struct HomePageView: View {
                                 .padding(.vertical, 150)
                         } else {
                             ForEach(items) { item in
-                                ToDoListItemView(item: item)
+                                ToDoListItemView(viewModel: ToDoListItemViewViewModel(sharedData: sharedData), item: item)
                                     .cornerRadius(10)
                                     .shadow(color: .gray, radius: 1, x: 0, y: 1)
                             }

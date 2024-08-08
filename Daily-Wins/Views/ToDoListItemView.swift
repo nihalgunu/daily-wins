@@ -2,11 +2,13 @@ import SwiftUI
 
 struct ToDoListItemView: View {
     @EnvironmentObject var sharedData: SharedData
-    @StateObject var viewModel = ToDoListItemViewViewModel()
-    @State private var showSheet = false
+    @StateObject  var viewModel: ToDoListItemViewViewModel
+    @State  var showSheet = false
     var item: ToDoListItem
     
+    
     var body: some View {
+        let viewModel = ToDoListItemViewViewModel(sharedData: sharedData)
         HStack {
             VStack(alignment: .leading, spacing: 5) {
                 Text(item.title)
@@ -58,12 +60,4 @@ struct ToDoListItemView: View {
         }
     }
     
-}
-
-#Preview {
-//    @State var previewItem = ToDoListItem(id: "123", title: "Get Milk", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false)
-
-    ToDoListItemView(item: ToDoListItem(id: "123", title: "Get Milk", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false, unit: "count"))
-        .environmentObject(SharedData())
-
 }

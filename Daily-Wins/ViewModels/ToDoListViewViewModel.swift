@@ -30,6 +30,7 @@ class ToDoListViewViewModel: ObservableObject {
             .document(uid)
             .collection("todos")
             .document(item.id)
+
             .delete()
     }
 }

@@ -10,4 +10,8 @@ import Foundation
 
 class SharedData: ObservableObject {
     @Published var coins: Int = 100
+    
+    func addCoins(_ amount: Int) {
+            coins += amount
+    }
 }

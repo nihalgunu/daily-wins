@@ -1,17 +1,14 @@
-//
-//  ToDoListItemViewViewModel.swift
-//  Daily-Wins
-//
-//  Created by Eric Kim on 6/24/24.
-//
-
 import FirebaseAuth
-import FirebaseFirestore 
+import FirebaseFirestore
 import Foundation
 
 // ViewModel for a single to do list item view (each row in items list)
 class ToDoListItemViewViewModel: ObservableObject {
-    init() {}
+    @Published var sharedData: SharedData
+    
+    init(sharedData: SharedData) {
+        self.sharedData = sharedData
+    }
     
     func toggleIsDone(item: ToDoListItem) {
         var itemCopy = item
@@ -26,6 +23,13 @@ class ToDoListItemViewViewModel: ObservableObject {
             .document(uid)
             .collection("todos")
             .document(itemCopy.id)
-            .setData(itemCopy.asDictionary())
+            .setData(itemCopy.asDictionary()) { [weak self] error in
+                if error == nil {
+                    // Increase the coins by 10 when the item is marked as done
+                    if itemCopy.isDone {
+                        self?.sharedData.addCoins(10)
+                    }
+                }
+            }
     }
 }
