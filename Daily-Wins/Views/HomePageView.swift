@@ -7,6 +7,8 @@ struct HomePageView: View {
     @FirestoreQuery var items: [ToDoListItem]
     @State private var currentDate = Date()
     @State private var navigationPath = NavigationPath()
+    @State var completedTasks = 5
+    @State var totalTasks = 10
 
     init(userId: String) {
         self._viewModel = StateObject(wrappedValue: HomePageViewViewModel(userId: userId))
@@ -20,8 +22,8 @@ struct HomePageView: View {
 
                 NavigationLink(destination: FullCalendarView(currentDate: $currentDate)) {
                     WeeklyCalendarView()
-                        .background(Color(red: 0.8627, green: 0.9392, blue: 1.0))
-                        .cornerRadius(10)
+                        .background(Color(UIColor.white)
+                        .cornerRadius(10))
                 }
                 .padding(.horizontal)
                 Spacer()
@@ -63,7 +65,7 @@ struct HomePageView: View {
             }
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
-            .background(Color(red: 0.8627, green: 0.9392, blue: 1.0))
+            .background(Color(red: 0.95, green: 0.95, blue: 0.95))
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink(destination: ProfileView(viewModel: viewModel.profileViewModel)) {

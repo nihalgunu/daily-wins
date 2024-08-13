@@ -43,7 +43,7 @@ struct ToDoListItemView: View {
                 .buttonStyle(PlainButtonStyle())
         }
         .padding()
-        .background(Color(UIColor.systemGray6))
+        .background(Color(UIColor.white))
         .cornerRadius(10)
         .shadow(color: .gray, radius: 1, x: 0, y: 1)
         .padding(.horizontal)
