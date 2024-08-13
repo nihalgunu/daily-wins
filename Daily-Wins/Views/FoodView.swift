@@ -1,14 +1,22 @@
 import SwiftUI
 
+struct FoodItem: Identifiable {
+    let id = UUID()
+    let name: String
+    let price: Int
+    let satiation: Int
+}
+
 struct FoodView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var foodItems = [
-        "Food 1",
-        "Food 2",
-        "Food 3",
-        "Food 4",
-        "Food 5"
+        FoodItem(name: "Food 1", price: 10, satiation: 2),
+        FoodItem(name: "Food 2", price: 15, satiation: 3),
+        FoodItem(name: "Food 3", price: 20, satiation: 5),
+        FoodItem(name: "Food 4", price: 25, satiation: 7),
+        FoodItem(name: "Food 5", price: 30, satiation: 10)
     ]
+    @EnvironmentObject var sharedData: SharedData // Access shared data
     
     var body: some View {
         VStack {
@@ -28,8 +36,17 @@ struct FoodView: View {
                 .font(.headline)
                 .padding(.top, 10)
             
-            List(foodItems, id: \.self) { item in
-                Text(item)
+            List(foodItems) { item in
+                HStack {
+                    Text(item.name)
+                    Spacer()
+                    Text("Price: \(item.price) coins")
+                    Text("Satiation: \(item.satiation)")
+                }
+                .onDrag {
+                    // Drag the food item as an object
+                    return NSItemProvider(object: String(item.id.uuidString) as NSString)
+                }
             }
         }
         .padding()
@@ -40,5 +57,5 @@ struct FoodView: View {
 }
 
 #Preview {
-    FoodView()
+    FoodView().environmentObject(SharedData())
 }
