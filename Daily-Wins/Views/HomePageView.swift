@@ -20,10 +20,8 @@ struct HomePageView: View {
 
                 NavigationLink(destination: FullCalendarView(currentDate: $currentDate)) {
                     WeeklyCalendarView()
-                        .background(Color(UIColor.systemGray6))
+                        .background(Color(red: 0.8627, green: 0.9392, blue: 1.0))
                         .cornerRadius(10)
-                        .shadow(color: .gray, radius: 1, x: 0, y: 1)
-                        .border(Color.clear, width: 0)
                 }
                 .padding(.horizontal)
                 Spacer()
@@ -47,13 +45,13 @@ struct HomePageView: View {
                     VStack(spacing: 10) {
                         if items.isEmpty {
                             Text("Tap '+' to add your first todo")
-                                .foregroundColor(.gray)
+                                .foregroundColor(.white)
                                 .padding(.vertical, 150)
                         } else {
                             ForEach(items) { item in
                                 ToDoListItemView(viewModel: ToDoListItemViewViewModel(sharedData: sharedData), viewModel2: viewModel, item: item)
                                     .cornerRadius(10)
-                                    .shadow(color: .gray, radius: 1, x: 0, y: 1)
+                                    .shadow(color: .white, radius: 1, x: 0, y: 1)
                             }
                         }
                     }
@@ -65,7 +63,7 @@ struct HomePageView: View {
             }
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
-            .background(Color(UIColor.systemBackground))
+            .background(Color(red: 0.8627, green: 0.9392, blue: 1.0))
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink(destination: ProfileView(viewModel: viewModel.profileViewModel)) {
