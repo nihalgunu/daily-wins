@@ -17,10 +17,7 @@ struct PresetView: View {
     @State private var Health2 = ["Less Alchohol", "Less Sugar", "Less Junk Food", "Less Smoking", "Less Caffeine"]
     @State private var ScreenTime = ["Less Video Games", "Less Social Media", "Less TV"]
     @State private var selectedSegment = 0
-    
-    //@Binding var item: ToDoListItem
-    @Binding var navigationPath: NavigationPath
-    
+        
     var body: some View {
         NavigationView {
             ScrollView {
@@ -32,14 +29,14 @@ struct PresetView: View {
                                     .pickerStyle(SegmentedPickerStyle())
                                     .padding()
                     if selectedSegment == 0 {
-                        CategoryView(categoryName: "Exercise", items: $Exercises/*, item: $item*/, Exercises: $Exercises, Health: $Health, Chores: $Chores, Productivity: $Productivity, Health2: $Health2, ScreenTime: $ScreenTime, navigationPath: $navigationPath)
-                        CategoryView(categoryName: "Health", items: $Health/*, item: $item*/, Exercises: $Exercises, Health: $Health, Chores: $Chores, Productivity: $Productivity, Health2: $Health2, ScreenTime: $ScreenTime, navigationPath: $navigationPath)
-                         CategoryView(categoryName: "Cleaning", items: $Chores/*, item: $item*/, Exercises: $Exercises, Health: $Health, Chores: $Chores, Productivity: $Productivity, Health2: $Health2, ScreenTime: $ScreenTime, navigationPath: $navigationPath)
-                        CategoryView(categoryName: "Productivity", items: $Productivity/*, item: $item*/, Exercises: $Exercises, Health: $Health, Chores: $Chores, Productivity: $Productivity, Health2: $Health2, ScreenTime: $ScreenTime, navigationPath: $navigationPath)
+                        CategoryView(categoryName: "Exercise", items: $Exercises)
+                        CategoryView(categoryName: "Health", items: $Health)
+                         CategoryView(categoryName: "Cleaning", items: $Chores)
+                        CategoryView(categoryName: "Productivity", items: $Productivity)
                     }
                     else {
-                        CategoryView(categoryName: "Health", items: $Health2/*, item: $item*/, Exercises: $Exercises, Health: $Health, Chores: $Chores, Productivity: $Productivity, Health2: $Health2, ScreenTime: $ScreenTime, navigationPath: $navigationPath)
-                        CategoryView(categoryName: "Screen Time", items: $ScreenTime/*, item: $item*/, Exercises: $Exercises, Health: $Health, Chores: $Chores, Productivity: $Productivity, Health2: $Health2, ScreenTime: $ScreenTime, navigationPath: $navigationPath)
+                        CategoryView(categoryName: "Health", items: $Health2)
+                        CategoryView(categoryName: "Screen Time", items: $ScreenTime)
                     }
                 }
                 .padding()
@@ -48,7 +45,7 @@ struct PresetView: View {
             .navigationTitle("Daily Wins")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: NewItemView(/*item: $item,*/ newItemPresented: .constant(false), Exercises: $Exercises, Health: $Health, Chores: $Chores, Productivity: $Productivity, Health2: $Health2, ScreenTime: $ScreenTime, initialGoal: "", navigationPath: $navigationPath)) {
+                    NavigationLink(destination: NewItemView(initialGoal: "")) {
                         Image(systemName: "plus.circle")
                             .imageScale(.large)
                             .foregroundColor(.blue)
@@ -62,14 +59,6 @@ struct PresetView: View {
 struct CategoryView: View {
     var categoryName: String
     @Binding var items: [String]
-    //@Binding var item: ToDoListItem
-    @Binding var Exercises: [String]
-    @Binding var Health: [String]
-    @Binding var Chores: [String]
-    @Binding var Productivity: [String]
-    @Binding var Health2: [String]
-    @Binding var ScreenTime: [String]
-    @Binding var navigationPath: NavigationPath
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -77,7 +66,7 @@ struct CategoryView: View {
                 .font(.title2)
                 .bold()
             ForEach(items, id: \.self) { i in
-                NavigationLink(destination: NewItemView(/*item: $item,*/ newItemPresented: .constant(false), Exercises: $Exercises, Health: $Health, Chores: $Chores, Productivity: $Productivity, Health2: $Health2, ScreenTime: $ScreenTime, initialGoal: i, navigationPath: $navigationPath)) {
+                NavigationLink(destination: NewItemView(initialGoal: i)) {
                     Text(i)
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -93,5 +82,5 @@ struct CategoryView: View {
 #Preview {
     @State var previewItem = ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false, unit: "count")
     
-    return PresetView(/*item: $previewItem, */navigationPath: .constant(NavigationPath()))
+    return PresetView()
 }

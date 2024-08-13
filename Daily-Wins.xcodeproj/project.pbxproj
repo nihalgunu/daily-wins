@@ -65,6 +65,7 @@
 		B43D25F52C2A932C00D867DB /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43D25F22C2A932C00D867DB /* HeaderView.swift */; };
 		B43D25F72C2B9E2700D867DB /* TLButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43D25F62C2B9E2600D867DB /* TLButton.swift */; };
 		B44279CC2C4B155B00FA8BF6 /* ReminderViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44279CB2C4B155B00FA8BF6 /* ReminderViewViewModel.swift */; };
+		B44D3D572C6ADE3500AA9148 /* EditItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44D3D562C6ADE3500AA9148 /* EditItemView.swift */; };
 		B4534BA42C2CACF60089A51F /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4534BA32C2CACF60089A51F /* ProfileView.swift */; };
 		B4534BA62C2CAD070089A51F /* ProfileViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4534BA52C2CAD070089A51F /* ProfileViewViewModel.swift */; };
 		B4534BAA2C2CB8B90089A51F /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4534BA92C2CB8B90089A51F /* User.swift */; };
@@ -131,6 +132,7 @@
 		B43D25F22C2A932C00D867DB /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		B43D25F62C2B9E2600D867DB /* TLButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TLButton.swift; sourceTree = "<group>"; };
 		B44279CB2C4B155B00FA8BF6 /* ReminderViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderViewViewModel.swift; sourceTree = "<group>"; };
+		B44D3D562C6ADE3500AA9148 /* EditItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItemView.swift; sourceTree = "<group>"; };
 		B4534BA32C2CACF60089A51F /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		B4534BA52C2CAD070089A51F /* ProfileViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewViewModel.swift; sourceTree = "<group>"; };
 		B4534BA92C2CB8B90089A51F /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -243,6 +245,7 @@
 				B4534BA32C2CACF60089A51F /* ProfileView.swift */,
 				B43395482C4086200018830A /* PresetView.swift */,
 				B43D25C52C2A8CD800D867DB /* NewItemView.swift */,
+				B44D3D562C6ADE3500AA9148 /* EditItemView.swift */,
 				B43D25C92C2A8D1F00D867DB /* ToDoListItemView.swift */,
 				B4F158CB2C47624400A20CCF /* MoreInfoView.swift */,
 				B43D25E22C2A8E8800D867DB /* LoginView.swift */,
@@ -459,6 +462,7 @@
 				B43D25D22C2A8DDB00D867DB /* ContentViewViewModel.swift in Sources */,
 				B43D25CE2C2A8DAB00D867DB /* ToDoListItem.swift in Sources */,
 				B42696342C35AF6500DDEC36 /* PetView.swift in Sources */,
+				B44D3D572C6ADE3500AA9148 /* EditItemView.swift in Sources */,
 				B4F158CC2C47624400A20CCF /* MoreInfoView.swift in Sources */,
 				B4534BA62C2CAD070089A51F /* ProfileViewViewModel.swift in Sources */,
 				B43D25F72C2B9E2700D867DB /* TLButton.swift in Sources */,

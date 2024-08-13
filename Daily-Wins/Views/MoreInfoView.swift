@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct MoreInfoView: View {
-    @StateObject var todoModel = HomePageViewViewModel(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2")
+    @StateObject var todoModel: HomePageViewViewModel
+    @EnvironmentObject var viewModel: NewItemViewViewModel
+    @Environment(\.presentationMode) var presentationMode
     var item: ToDoListItem
     
     var body: some View {
@@ -66,8 +68,23 @@ struct MoreInfoView: View {
                 }
                 .frame(maxWidth: .infinity)
             }
-            .navigationTitle("More Info")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: EditItemView(todoModel: todoModel, initialGoal: item.title, initialDescription: item.description, initialReminder: item.reminder, item: item)) {
+                        Text("Edit")
+                            .foregroundColor(.blue)
+                    }
+                    .environmentObject(todoModel)
+                }
+            }
         }
     }
     
@@ -79,9 +96,10 @@ struct MoreInfoView: View {
     }
 }
 
-// Uncomment for preview purposes
-//struct MoreInfoView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MoreInfoView(item: ToDoListItem(id: "1", title: "Sample Task", description: "Detailed description here...", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false, unit: "count"))
-//    }
-//}
+struct MoreInfoView_Previews: PreviewProvider {
+    static var previews: some View {
+        MoreInfoView(todoModel: HomePageViewViewModel(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2"), item: ToDoListItem(id: "1", title: "Sample Task", description: "Detailed description here...", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false, unit: "count"))
+            .environmentObject(NewItemViewViewModel())
+
+    }
+}

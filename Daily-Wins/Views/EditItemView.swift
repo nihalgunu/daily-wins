@@ -1,16 +1,25 @@
 //
-//  NewItemView.swift
+//  EditItemView.swift
 //  Daily-Wins
 //
-//  Created by Eric Kim on 6/24/24.
+//  Created by Eric Kim on 8/12/24.
 //
 
 import SwiftUI
 
-struct NewItemView: View {
-    @StateObject var viewModel = NewItemViewViewModel()
+struct EditItemView: View {
+    @EnvironmentObject var viewModel: NewItemViewViewModel
+    @StateObject var todoModel: HomePageViewViewModel
 
     let initialGoal: String
+    let initialDescription: String
+    let initialReminder: [TimeInterval]
+    
+    @State private var goalValue: Int? = nil
+    @State private var unit = ""
+    @State private var description: String = ""
+    
+    var item: ToDoListItem
     
     var distance = ["steps", "meters", "kilometers", "miles"]
     var time = ["seconds", "minutes", "hours"]
@@ -46,11 +55,56 @@ struct NewItemView: View {
                         Text("Description")
                             .font(.headline)
                         TextField("Optional", text: $viewModel.description)
+                            .onAppear {
+                                viewModel.description = initialDescription
+                            }
                     }
                     
                     // Reminder
-                    ReminderView()
-                        .environmentObject(viewModel)
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text("Reminder")
+                                .font(.headline)
+                            
+                            Button {
+                                viewModel.reminder.append(Date().timeIntervalSince1970)
+                            } label: {
+                                Image(systemName: "plus")
+                            }
+                            Spacer()
+                        }
+                        .padding(.trailing, 20)
+                        
+                        ScrollView {
+                            HStack {
+                                ForEach(viewModel.reminder.indices, id: \.self) { index in
+                                    
+                                    Button(action: {
+                                        viewModel.reminder.remove(at: index)
+                                    }) {
+                                        Image(systemName: "minus.circle")
+                                            .foregroundColor(.red)
+                                    }
+                                    
+                                    DatePicker("", selection: Binding(
+                                        get: {
+                                            Date(timeIntervalSince1970: viewModel.reminder[index])
+                                        },
+                                        set: { newValue in
+                                            viewModel.reminder[index] = newValue.timeIntervalSince1970
+                                        }
+                                    ), displayedComponents: .hourAndMinute)
+                                    .frame(height: 50)
+                                    .labelsHidden()
+                                }
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                    }
+                    .onAppear {
+                        viewModel.reminder = initialReminder
+                    }
                     
                     
                     VStack(alignment: .leading) {
@@ -98,6 +152,7 @@ struct NewItemView: View {
                         if viewModel.canSave {
                             viewModel.save()
                             presentationMode.wrappedValue.dismiss()
+                            todoModel.delete(id: item.id)
                             
                             for index in 0..<viewModel.reminder.count {
                                 NotificationManager.shared.scheduleNotification(
@@ -132,7 +187,7 @@ private let dateFormatter: DateFormatter = {
     return formatter
 }()
 
-struct NewItemView_Previews: PreviewProvider {
+struct EditItemView_Previews: PreviewProvider {
     @State static var previewNewItemPresented = false
     @State static var previewNavigationPath = NavigationPath()
     

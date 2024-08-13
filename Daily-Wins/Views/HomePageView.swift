@@ -3,7 +3,6 @@ import SwiftUI
 
 struct HomePageView: View {
     @StateObject var viewModel: HomePageViewViewModel
-    @StateObject private var parentViewModel = HomePageViewViewModel(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2")
     @EnvironmentObject var sharedData: SharedData
     @FirestoreQuery var items: [ToDoListItem]
     @State private var currentDate = Date()
@@ -36,7 +35,7 @@ struct HomePageView: View {
 
                     Spacer()
                     
-                    NavigationLink(destination: PresetView(/*item: $item,*/navigationPath: $navigationPath)) {
+                    NavigationLink(destination: PresetView()) {
                         Image(systemName: "plus")
                             .font(.title2)
                             .foregroundColor(.blue)
@@ -52,7 +51,7 @@ struct HomePageView: View {
                                 .padding(.vertical, 150)
                         } else {
                             ForEach(items) { item in
-                                ToDoListItemView(viewModel: ToDoListItemViewViewModel(sharedData: sharedData), item: item)
+                                ToDoListItemView(viewModel: ToDoListItemViewViewModel(sharedData: sharedData), viewModel2: viewModel, item: item)
                                     .cornerRadius(10)
                                     .shadow(color: .gray, radius: 1, x: 0, y: 1)
                             }
@@ -69,7 +68,7 @@ struct HomePageView: View {
             .background(Color(UIColor.systemBackground))
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: ProfileView(viewModel: parentViewModel.profileViewModel)) {
+                    NavigationLink(destination: ProfileView(viewModel: viewModel.profileViewModel)) {
                         Image(systemName: "person.circle")
                             .font(.title2)
                             .foregroundColor(.blue)

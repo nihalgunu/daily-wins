@@ -18,6 +18,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 @main
 struct YourApp: App {
+    @StateObject var viewModel = NewItemViewViewModel()
 
     init() {
         NotificationManager.shared.requestAuthorization()
@@ -29,6 +30,7 @@ struct YourApp: App {
         WindowGroup {
             NavigationView {
                 ContentView()
+                    .environmentObject(viewModel)
             }
         }
     }

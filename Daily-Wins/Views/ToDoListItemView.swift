@@ -2,10 +2,10 @@ import SwiftUI
 
 struct ToDoListItemView: View {
     @EnvironmentObject var sharedData: SharedData
-    @StateObject  var viewModel: ToDoListItemViewViewModel
-    @State  var showSheet = false
+    @StateObject var viewModel: ToDoListItemViewViewModel
+    @StateObject var viewModel2: HomePageViewViewModel
+    @State var showSheet = false
     var item: ToDoListItem
-    
     
     var body: some View {
         let viewModel = ToDoListItemViewViewModel(sharedData: sharedData)
@@ -33,8 +33,6 @@ struct ToDoListItemView: View {
                     viewModel.toggleIsDone(item: item)
                     if item.isDone {
                         sharedData.coins -= 10 // Update shared coins
-                    } else {
-                        sharedData.coins += 10
                     }
                 }
             }) {
@@ -56,8 +54,7 @@ struct ToDoListItemView: View {
         .sheet(isPresented: $showSheet) {
             
         } content: {
-            MoreInfoView(item: /*$*/item)
+            MoreInfoView(todoModel: viewModel2, item: item)
         }
     }
-    
 }

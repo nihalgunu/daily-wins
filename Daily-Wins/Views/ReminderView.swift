@@ -11,9 +11,12 @@
 import SwiftUI
 
 struct ReminderView: View {
-    //@StateObject var reminderModel = ReminderViewViewModel()
-    //@Binding var item: ToDoListItem
     @EnvironmentObject var viewModel: NewItemViewViewModel
+    
+    private let columns = [
+            GridItem(.flexible()),
+            GridItem(.flexible())
+        ]
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -31,20 +34,8 @@ struct ReminderView: View {
             .padding(.trailing, 20)
             
             ScrollView {
-                HStack {
+                LazyVGrid(columns: columns) {
                     ForEach(viewModel.reminder.indices, id: \.self) { index in
-                        
-                        Button(action: {
-                            viewModel.reminder.remove(at: index)
-                        }) {
-                            Image(systemName: "minus.circle")
-                                .foregroundColor(.red)
-                        }
-                        
-//                        DatePicker("", selection: .constant(Date(timeIntervalSince1970: viewModel.reminder[index])), displayedComponents: .hourAndMinute)
-//                            .frame(height: 50)
-//                            .labelsHidden()
-                        
                         DatePicker("", selection: Binding(
                             get: {
                                 Date(timeIntervalSince1970: viewModel.reminder[index])
@@ -55,6 +46,13 @@ struct ReminderView: View {
                         ), displayedComponents: .hourAndMinute)
                         .frame(height: 50)
                         .labelsHidden()
+                        
+                        Button(action: {
+                            viewModel.reminder.remove(at: index)
+                        }) {
+                            Image(systemName: "minus.circle")
+                                .foregroundColor(.red)
+                        }
                     }
                 }
             }
