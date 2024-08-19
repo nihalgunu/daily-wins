@@ -103,6 +103,7 @@ struct InventoryView: View {
                     Text("Quantity: \(sharedData.inventory[item] ?? 0)")
                     Button(action: {
                         useItem(item)
+                        sharedData.savePetData()
                     }) {
                         Text("Use")
                             .padding(.horizontal, 10)

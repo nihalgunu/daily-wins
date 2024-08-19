@@ -39,6 +39,7 @@ struct StoreView: View {
                     Text("Likeness: \(item.likeness)")
                     Button(action: {
                         purchaseItem(item)
+                        sharedData.savePetData()
                     }) {
                         Text("Buy")
                             .padding(.horizontal, 10)

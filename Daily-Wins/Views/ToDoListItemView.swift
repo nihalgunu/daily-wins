@@ -8,7 +8,7 @@ struct ToDoListItemView: View {
     var item: ToDoListItem
     
     var body: some View {
-        let viewModel = ToDoListItemViewViewModel(sharedData: sharedData)
+        let viewModel = ToDoListItemViewViewModel(/*sharedData: sharedData*/)
         HStack {
             VStack(alignment: .leading, spacing: 5) {
                 Text(item.title)
@@ -33,6 +33,9 @@ struct ToDoListItemView: View {
                     viewModel.toggleIsDone(item: item)
                     if item.isDone {
                         sharedData.coins -= 10 // Update shared coins
+                    }
+                    else {
+                        sharedData.coins += 10
                     }
                 }
             }) {

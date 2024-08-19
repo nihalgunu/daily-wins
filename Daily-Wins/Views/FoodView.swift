@@ -39,6 +39,7 @@ struct FoodView: View {
                     Text("Satiation: \(item.satiation)")
                     Button(action: {
                         purchaseFood(item)
+                        sharedData.savePetData()
                     }) {
                         Text("Buy")
                             .padding(.horizontal, 10)
