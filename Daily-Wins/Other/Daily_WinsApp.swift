@@ -19,6 +19,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct YourApp: App {
     @StateObject var viewModel = NewItemViewViewModel()
+    @StateObject private var sharedData = SharedData()
 
     init() {
         NotificationManager.shared.requestAuthorization()
@@ -31,6 +32,8 @@ struct YourApp: App {
             NavigationView {
                 ContentView()
                     .environmentObject(viewModel)
+                PetView()
+                    .environmentObject(sharedData)
             }
         }
     }

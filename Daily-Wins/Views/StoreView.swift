@@ -1,14 +1,8 @@
 import SwiftUI
 
-struct StoreItem: Identifiable {
-    let id = UUID()
-    let name: String
-    let price: Int
-    let likeness: Int // Attribute for how much the item is liked
-}
-
 struct StoreView: View {
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var sharedData: SharedData
     @State private var storeItems = [
         StoreItem(name: "Toy 1", price: 10, likeness: 2),
         StoreItem(name: "Toy 2", price: 15, likeness: 3),
@@ -16,7 +10,8 @@ struct StoreView: View {
         StoreItem(name: "Toy 4", price: 25, likeness: 7),
         StoreItem(name: "Toy 5", price: 30, likeness: 10)
     ]
-    @EnvironmentObject var sharedData: SharedData // Access shared data
+    @State private var showAlert = false
+    @State private var alertMessage = ""
     
     var body: some View {
         VStack {
@@ -42,10 +37,16 @@ struct StoreView: View {
                     Spacer()
                     Text("Price: \(item.price) coins")
                     Text("Likeness: \(item.likeness)")
-                }
-                .onDrag {
-                    // Drag the store item as an object
-                    return NSItemProvider(object: String(item.id.uuidString) as NSString)
+                    Button(action: {
+                        purchaseItem(item)
+                    }) {
+                        Text("Buy")
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(5)
+                    }
                 }
             }
         }
@@ -53,12 +54,19 @@ struct StoreView: View {
         .background(Color.white)
         .cornerRadius(10)
         .shadow(radius: 10)
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("Purchase"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+        }
     }
-}
-
-// Preview
-struct StoreView_Previews: PreviewProvider {
-    static var previews: some View {
-        StoreView().environmentObject(SharedData())
+    
+    private func purchaseItem(_ item: StoreItem) {
+        if sharedData.coins >= item.price {
+            sharedData.coins -= item.price
+            sharedData.addToInventory(itemName: item.name)
+            alertMessage = "You purchased \(item.name) for \(item.price) coins!"
+        } else {
+            alertMessage = "Not enough coins to purchase \(item.name)!"
+        }
+        showAlert = true
     }
 }

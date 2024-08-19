@@ -14,3 +14,19 @@ struct DateValue: Identifiable {
     var day: Int
     var date: Date
 }
+
+import Foundation
+
+struct FoodItem: Identifiable {
+    let id = UUID()
+    let name: String
+    let price: Int
+    let satiation: Int
+}
+
+struct StoreItem: Identifiable {
+    let id = UUID()
+    let name: String
+    let price: Int
+    let likeness: Int
+}
