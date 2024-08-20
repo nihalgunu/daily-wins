@@ -20,7 +20,7 @@ struct ContentView: View {
                     }
                 PetView()
                     .tabItem() {
-                        Label("YourPet", systemImage: "pet")
+                        Label("YourPet", systemImage: "dog")
                     }
                     .environmentObject(sharedData)
             }

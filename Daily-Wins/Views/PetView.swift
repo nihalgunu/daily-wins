@@ -8,8 +8,10 @@ struct PetView: View {
     @State private var showStore = false
     @State private var showFood = false
     @State private var showInventory = false
-
     
+    private let calendar = Calendar.current
+    private let dateKey = "lastUpdateDate"
+
     var body: some View {
         ZStack {
             Color.white.edgesIgnoringSafeArea(.all)
@@ -42,7 +44,6 @@ struct PetView: View {
                                 self.dogPosition = .zero
                             }
                     )
-                    .animation(.spring())
                 
                 Spacer()
                 
@@ -88,6 +89,22 @@ struct PetView: View {
         .sheet(isPresented: $showInventory) {
             InventoryView()
         }
+        .onAppear {
+            checkForDailyUpdate()
+        }
+    }
+    
+    private func checkForDailyUpdate() {
+        let lastUpdateDate = UserDefaults.standard.object(forKey: dateKey) as? Date ?? Date.distantPast
+        if !calendar.isDateInToday(lastUpdateDate) {
+            // Decrease values once a day
+            sharedData.petHunger = max(0, sharedData.petHunger - 10)
+            sharedData.petLikeness = max(0, sharedData.petLikeness - 10)
+            sharedData.savePetData()
+            
+            // Update the last update date
+            UserDefaults.standard.set(Date(), forKey: dateKey)
+        }
     }
 }
 
@@ -127,7 +144,7 @@ struct InventoryView: View {
     }
     
     private func getFoodItem(name: String) -> FoodItem? {
-        // This should be replaced with actual logic to fetch food items
+        // Replace with actual logic to fetch food items
         let foodItems = [
             FoodItem(name: "Food 1", price: 10, satiation: 2),
             FoodItem(name: "Food 2", price: 15, satiation: 3),
@@ -139,7 +156,7 @@ struct InventoryView: View {
     }
     
     private func getStoreItem(name: String) -> StoreItem? {
-        // This should be replaced with actual logic to fetch store items
+        // Replace with actual logic to fetch store items
         let storeItems = [
             StoreItem(name: "Toy 1", price: 10, likeness: 2),
             StoreItem(name: "Toy 2", price: 15, likeness: 3),

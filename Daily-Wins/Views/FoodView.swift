@@ -36,7 +36,6 @@ struct FoodView: View {
                     Text(item.name)
                     Spacer()
                     Text("Price: \(item.price) coins")
-                    Text("Satiation: \(item.satiation)")
                     Button(action: {
                         purchaseFood(item)
                         sharedData.savePetData()

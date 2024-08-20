@@ -36,7 +36,6 @@ struct StoreView: View {
                     Text(item.name)
                     Spacer()
                     Text("Price: \(item.price) coins")
-                    Text("Likeness: \(item.likeness)")
                     Button(action: {
                         purchaseItem(item)
                         sharedData.savePetData()
