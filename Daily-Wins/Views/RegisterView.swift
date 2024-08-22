@@ -14,8 +14,6 @@ struct RegisterView: View {
         VStack {
             // Header
             HStack {
-                Image(systemName: "tree.fill")
-                    .foregroundColor(.green)
                 Text("Register")
                     .font(.largeTitle)
                     .fontWeight(.bold)

@@ -15,8 +15,6 @@ struct LoginView: View {
             VStack {
                 // Header
                 HStack {
-                    Image(systemName: "tree.fill")
-                        .foregroundColor(.green)
                     Text("Daily Wins")
                         .font(.largeTitle)
                         .fontWeight(.bold)
