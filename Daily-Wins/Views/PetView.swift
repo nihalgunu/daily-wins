@@ -55,16 +55,16 @@ struct PetView: View {
                 .padding()
                 
                 HStack {
-                    Button(action: {
-                        showFood.toggle()
-                    }) {
-                        Text("Food")
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                    }
+//                    Button(action: {
+//                        showFood.toggle()
+//                    }) {
+//                        Text("Food")
+//                            .frame(maxWidth: .infinity)
+//                            .padding()
+//                            .background(Color.blue)
+//                            .foregroundColor(.white)
+//                            .cornerRadius(8)
+//                    }
                     
                     Button(action: {
                         showStore.toggle()

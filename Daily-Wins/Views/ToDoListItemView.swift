@@ -4,7 +4,9 @@ struct ToDoListItemView: View {
     @EnvironmentObject var sharedData: SharedData
     @StateObject var viewModel: ToDoListItemViewViewModel
     @StateObject var viewModel2: HomePageViewViewModel
+    @StateObject var viewModel3: NewItemViewViewModel
     @State var showSheet = false
+    @State var progressNum = String()
     var item: ToDoListItem
     
     var body: some View {
@@ -21,7 +23,7 @@ struct ToDoListItemView: View {
                         .font(.caption)
                         .foregroundColor(.green)
                 } else {
-                    Text("Pending")
+                    Text("In Progress")
                         .font(.caption)
                         .foregroundColor(.orange)
                 }
@@ -57,7 +59,10 @@ struct ToDoListItemView: View {
         .sheet(isPresented: $showSheet) {
             
         } content: {
-            MoreInfoView(todoModel: viewModel2, item: item)
+            MoreInfoView(todoModel: viewModel2, initialGoal: item.title, initialDescription: item.description, initialTracking: item.tracking, initialReminder: item.reminder, item: item)
+                .onAppear {
+                    progressNum = viewModel3.progress
+                }
         }
     }
 }

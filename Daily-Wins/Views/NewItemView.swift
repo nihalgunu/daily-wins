@@ -52,7 +52,7 @@ struct NewItemView: View {
                     ReminderView()
                         .environmentObject(viewModel)
                     
-                    
+                    //Tracking
                     VStack(alignment: .leading) {
                         Text("Tracking")
                             .font(.headline)

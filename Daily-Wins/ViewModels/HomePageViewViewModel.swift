@@ -10,7 +10,7 @@ import Foundation
 
 class HomePageViewViewModel: ObservableObject {
     @Published var profileViewModel = ProfileViewViewModel()
-
+    
     private let userId: String
     
     init(userId: String) {
@@ -24,6 +24,6 @@ class HomePageViewViewModel: ObservableObject {
             .document(userId)
             .collection("todos")
             .document(id)
-            .delete()
+            .delete() 
     }
 }

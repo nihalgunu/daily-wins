@@ -13,7 +13,7 @@ struct PresetView: View {
     @State private var Exercises = ["Walk", "Run", "Swim", "Stretch", "Lift Weights"]
     @State private var Health = ["Drink Water", "Take Vitamins", "Eat Fruits"]
     @State private var Chores = ["Wash Dishes", "Make Bed"]
-    @State private var Productivity = ["Sleep", "Journal", "Read", "Study"]
+    @State private var Productivity = ["Sleep", "Journal", "Read", "Study", "Meditate"]
     @State private var Health2 = ["Less Alchohol", "Less Sugar", "Less Junk Food", "Less Smoking", "Less Caffeine"]
     @State private var ScreenTime = ["Less Video Games", "Less Social Media", "Less TV"]
     @State private var selectedSegment = 0
@@ -80,7 +80,7 @@ struct CategoryView: View {
 }
 
 #Preview {
-    @State var previewItem = ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false, unit: "count")
+    @State var previewItem = ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], progress: "", isDone: false, unit: "count")
     
     return PresetView()
 }

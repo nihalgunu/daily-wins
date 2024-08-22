@@ -3,22 +3,34 @@ import SwiftUI
 struct MoreInfoView: View {
     @StateObject var todoModel: HomePageViewViewModel
     @EnvironmentObject var viewModel: NewItemViewViewModel
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
+    
+    //State private var textFieldWidth: CGFloat = 50 // Initial width of the TextField
+    
+    let initialGoal: String
+    let initialDescription: String
+    let initialTracking: Int
+    let initialReminder: [TimeInterval]
+    
+    
     var item: ToDoListItem
     
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .center, spacing: 30) {
+                    // Title
                     Text(item.title)
                         .font(.largeTitle)
                         .bold()
                         .padding(.top, 20)
                     
+                    //Description
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Description")
                             .font(.headline).bold()
                             .foregroundColor(.primary)
+                        
                         Text(item.description)
                             .padding()
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -27,6 +39,7 @@ struct MoreInfoView: View {
                     }
                     .padding(.horizontal)
                     
+                    //Reminders
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Reminders")
                             .font(.headline).bold()
@@ -39,16 +52,27 @@ struct MoreInfoView: View {
                     }
                     .padding(.horizontal)
                     
+                    //Tracking
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Tracking")
                             .font(.headline).bold()
                             .foregroundColor(.primary)
-                        Text("\(item.tracking) \(item.unit)")
-                            .padding()
-                            .background(Color(.systemGray6))
-                            .cornerRadius(12)
+                        
+                        HStack {
+                            TextField("Enter number", text: $viewModel.progress)
+                                .keyboardType(.numberPad)
+                                .multilineTextAlignment(.trailing) // Align text to the right
+                                .frame(minWidth: 10, maxWidth: .infinity, alignment: .trailing) // Allow the TextField to expand
+                            
+                            Text("/ \(item.tracking) \(item.unit)")
+                                .lineLimit(1)
+                        }
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(12)
                     }
                     .padding(.horizontal)
+
                     
                     Button(action: {
                         withAnimation {
@@ -72,13 +96,14 @@ struct MoreInfoView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        presentationMode.wrappedValue.dismiss()
+                        //todoModel.progress = progressNum
+                        dismiss()
                     } label: {
                         Image(systemName: "chevron.left")
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: EditItemView(todoModel: todoModel, initialGoal: item.title, initialDescription: item.description, initialReminder: item.reminder, item: item)) {
+                    NavigationLink(destination: EditItemView(todoModel: todoModel, initialGoal: item.title, initialDescription: item.description, initialTracking: item.tracking, initialReminder: item.reminder, item: item)) {
                         Text("Edit")
                             .foregroundColor(.blue)
                     }
@@ -96,10 +121,17 @@ struct MoreInfoView: View {
     }
 }
 
+struct TextFieldSizePreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
 struct MoreInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        MoreInfoView(todoModel: HomePageViewViewModel(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2"), item: ToDoListItem(id: "1", title: "Sample Task", description: "Detailed description here...", tracking: 0, reminder: [Date().timeIntervalSince1970], isDone: false, unit: "count"))
+        MoreInfoView(todoModel: HomePageViewViewModel(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2"), initialGoal: "test", initialDescription: "test", initialTracking: 0, initialReminder: [],item: ToDoListItem(id: "1", title: "Sample Task", description: "Detailed description here...", tracking: 0, reminder: [Date().timeIntervalSince1970], progress: "", isDone: false, unit: "count"))
             .environmentObject(NewItemViewViewModel())
-
     }
 }

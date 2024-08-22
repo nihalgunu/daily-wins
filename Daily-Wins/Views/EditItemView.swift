@@ -13,11 +13,12 @@ struct EditItemView: View {
 
     let initialGoal: String
     let initialDescription: String
+    let initialTracking: Int
     let initialReminder: [TimeInterval]
     
-    @State private var goalValue: Int? = nil
-    @State private var unit = ""
-    @State private var description: String = ""
+//    @State private var goalValue: Int? = nil
+//    @State private var unit = ""
+//    @State private var description: String = ""
     
     var item: ToDoListItem
     
@@ -42,6 +43,7 @@ struct EditItemView: View {
         NavigationStack {
             VStack {
                 Form {
+                    
                     // Title
                     VStack(alignment: .leading) {
                         Text("Name")
@@ -51,6 +53,8 @@ struct EditItemView: View {
                                 viewModel.title = initialGoal
                             }
                     }
+                    
+                    // Description
                     VStack(alignment: .leading) {
                         Text("Description")
                             .font(.headline)
@@ -60,7 +64,8 @@ struct EditItemView: View {
                             }
                     }
                     
-                    // Reminder
+                    // Reminders
+                    
                     VStack(alignment: .leading) {
                         HStack {
                             Text("Reminder")
@@ -106,7 +111,7 @@ struct EditItemView: View {
                         viewModel.reminder = initialReminder
                     }
                     
-                    
+                    // Tracking
                     VStack(alignment: .leading) {
                         Text("Tracking")
                             .font(.headline)
@@ -114,6 +119,9 @@ struct EditItemView: View {
                         HStack {
                             TextField("Goal Value", value: $viewModel.tracking, formatter: numberFormatter)
                                 .padding()
+                                .onAppear {
+                                    viewModel.tracking = initialTracking
+                                }
                                                         
                             Picker("", selection: $viewModel.selectedUnit) {
                                 Section {
@@ -146,7 +154,7 @@ struct EditItemView: View {
                                 .padding()
                         }
                     }
-                    
+                
                     // Button
                     TLButton(title: "Save", background: .pink) {
                         if viewModel.canSave {

@@ -46,12 +46,12 @@ struct HomePageView: View {
                 ScrollView {
                     VStack(spacing: 10) {
                         if items.isEmpty {
-                            Text("Tap '+' to add your first todo")
-                                .foregroundColor(.white)
+                            Text("Tap '+' to add your first win")
+                                .foregroundColor(.gray)
                                 .padding(.vertical, 150)
                         } else {
                             ForEach(items) { item in
-                                ToDoListItemView(viewModel: ToDoListItemViewViewModel(/*sharedData: sharedData*/), viewModel2: viewModel, item: item)
+                                ToDoListItemView(viewModel: ToDoListItemViewViewModel(/*sharedData: sharedData*/), viewModel2: viewModel, viewModel3: NewItemViewViewModel(), item: item)
                                     .cornerRadius(10)
                                     .shadow(color: .white, radius: 1, x: 0, y: 1)
                             }

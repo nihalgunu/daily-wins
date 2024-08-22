@@ -13,6 +13,7 @@ struct ToDoListItem: Codable, Identifiable {
     var description: String
     var tracking: Int
     var reminder: [TimeInterval] = []
+    var progress: String
     var isDone: Bool
     var unit: String
     
