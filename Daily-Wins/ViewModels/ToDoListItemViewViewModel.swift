@@ -7,7 +7,7 @@ class ToDoListItemViewViewModel: ObservableObject {
     //@Published var sharedData: SharedData
     
     init(/*sharedData: SharedData*/) {
-        //self.sharedData = sharedData
+
     }
     
     func toggleIsDone(item: ToDoListItem) {

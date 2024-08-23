@@ -2,15 +2,17 @@ import SwiftUI
 
 struct ToDoListItemView: View {
     @EnvironmentObject var sharedData: SharedData
-    @StateObject var viewModel: ToDoListItemViewViewModel
-    @StateObject var viewModel2: HomePageViewViewModel
-    @StateObject var viewModel3: NewItemViewViewModel
+    @StateObject var ToDoListItemModel: ToDoListItemViewViewModel
+    @StateObject var HomePageModel: HomePageViewViewModel
+    @StateObject var NewItemModel: NewItemViewViewModel
     @State var showSheet = false
-    @State var progressNum = String()
+    
+
+    @State var updatedProgress = 0
     var item: ToDoListItem
     
     var body: some View {
-        let viewModel = ToDoListItemViewViewModel(/*sharedData: sharedData*/)
+        let ToDoListItemModel = ToDoListItemViewViewModel()
         HStack {
             VStack(alignment: .leading, spacing: 5) {
                 Text(item.title)
@@ -32,9 +34,9 @@ struct ToDoListItemView: View {
             
             Button(action: {
                 withAnimation {
-                    viewModel.toggleIsDone(item: item)
+                    ToDoListItemModel.toggleIsDone(item: item)
                     if item.isDone {
-                        sharedData.coins -= 10 // Update shared coins
+                        sharedData.coins -= 10
                     }
                     else {
                         sharedData.coins += 10
@@ -59,10 +61,8 @@ struct ToDoListItemView: View {
         .sheet(isPresented: $showSheet) {
             
         } content: {
-            MoreInfoView(todoModel: viewModel2, initialGoal: item.title, initialDescription: item.description, initialTracking: item.tracking, initialReminder: item.reminder, item: item)
-                .onAppear {
-                    progressNum = viewModel3.progress
-                }
+            MoreInfoView(HomePageModel: HomePageModel, initialGoal: item.title, initialDescription: item.description, initialTracking: item.tracking, initialReminder: item.reminder, initialProgress: item.progress, item: item)
+                .environmentObject(NewItemModel)
         }
     }
 }

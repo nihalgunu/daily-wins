@@ -13,11 +13,24 @@ struct ToDoListItem: Codable, Identifiable {
     var description: String
     var tracking: Int
     var reminder: [TimeInterval] = []
-    var progress: String
+    var progress: Int
     var isDone: Bool
     var unit: String
     
     mutating func setDone(_ state: Bool) {
         isDone = state
+    }
+    
+    func asDictionary() -> [String: Any] {
+        return [
+            "id": id,
+            "title": title,
+            "description": description,
+            "tracking": tracking,
+            "reminder": reminder,
+            "progress": progress,
+            "isDone": isDone,
+            "unit": unit
+        ]
     }
 }

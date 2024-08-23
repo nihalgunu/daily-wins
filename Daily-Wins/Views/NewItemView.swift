@@ -42,12 +42,13 @@ struct NewItemView: View {
                                 viewModel.title = initialGoal
                             }
                     }
+                    
+                    // Description
                     VStack(alignment: .leading) {
                         Text("Description")
                             .font(.headline)
                         TextField("Optional", text: $viewModel.description)
                     }
-                    
                     // Reminder
                     ReminderView()
                         .environmentObject(viewModel)
@@ -99,6 +100,8 @@ struct NewItemView: View {
                             viewModel.save()
                             presentationMode.wrappedValue.dismiss()
                             
+                            print(viewModel.description)
+                            
                             for index in 0..<viewModel.reminder.count {
                                 NotificationManager.shared.scheduleNotification(
                                     title: "Daily Wins",
@@ -106,6 +109,7 @@ struct NewItemView: View {
                                     date: Date(timeIntervalSince1970: viewModel.reminder[index])
                                 )
                             }
+                            
                         } else {
                             viewModel.showAlert = true
                         }

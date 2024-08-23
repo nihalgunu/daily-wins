@@ -16,10 +16,6 @@ struct EditItemView: View {
     let initialTracking: Int
     let initialReminder: [TimeInterval]
     
-//    @State private var goalValue: Int? = nil
-//    @State private var unit = ""
-//    @State private var description: String = ""
-    
     var item: ToDoListItem
     
     var distance = ["steps", "meters", "kilometers", "miles"]
@@ -43,7 +39,6 @@ struct EditItemView: View {
         NavigationStack {
             VStack {
                 Form {
-                    
                     // Title
                     VStack(alignment: .leading) {
                         Text("Name")

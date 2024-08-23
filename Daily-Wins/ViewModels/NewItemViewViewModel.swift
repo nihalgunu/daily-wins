@@ -11,9 +11,12 @@ import Foundation
 class NewItemViewViewModel: ObservableObject {
     @Published var title: String = ""
     @Published var description: String = ""
+    
     @Published var tracking = Int()
     @Published var reminder: [TimeInterval] = []
-    @Published var progress: String = ""
+    
+    @Published var progress = Int()
+    
     @Published var showAlert: Bool = false
     @Published var selectedUnit: String = "count"
     @Published var customUnit: String = ""
