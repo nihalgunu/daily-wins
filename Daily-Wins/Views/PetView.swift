@@ -105,22 +105,30 @@ struct InventoryView: View {
     @EnvironmentObject var sharedData: SharedData
     
     var body: some View {
-        List {
-            ForEach(Array(sharedData.inventory.keys), id: \.self) { item in
-                HStack {
-                    Text(item)
-                    Spacer()
-                    Text("Quantity: \(sharedData.inventory[item] ?? 0)")
-                    Button(action: {
-                        useItem(item)
-                        sharedData.savePetData()
-                    }) {
-                        Text("Use")
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 5)
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(5)
+        if sharedData.inventory.isEmpty {
+            Text("Inventory Empty, Buy Items From the Store")
+                .font(.headline)
+                .foregroundColor(.gray)
+                .padding()
+                .multilineTextAlignment(.center)
+        } else {
+            List {
+                ForEach(Array(sharedData.inventory.keys), id: \.self) { item in
+                    HStack {
+                        Text(item)
+                        Spacer()
+                        Text("Quantity: \(sharedData.inventory[item] ?? 0)")
+                        Button(action: {
+                            useItem(item)
+                            sharedData.savePetData()
+                        }) {
+                            Text("Use")
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 5)
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(5)
+                        }
                     }
                 }
             }
