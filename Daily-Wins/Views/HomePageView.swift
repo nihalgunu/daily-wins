@@ -50,7 +50,10 @@ struct HomePageView: View {
                                 .foregroundColor(.gray)
                                 .padding(.vertical, 150)
                         } else {
-                            ForEach(items) { item in
+                            // Sort the items so that "In Progress" tasks are above "Completed" tasks
+                            let sortedItems = items.sorted { !$0.isDone && $1.isDone }
+                            
+                            ForEach(sortedItems) { item in
                                 ToDoListItemView(ToDoListItemModel: ToDoListItemViewViewModel(/*sharedData: sharedData*/), HomePageModel: viewModel, NewItemModel: NewItemViewViewModel(), item: item)
                                     .cornerRadius(10)
                                     .shadow(color: .white, radius: 1, x: 0, y: 1)
