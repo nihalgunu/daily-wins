@@ -1,4 +1,5 @@
 import SwiftUI
+import AVKit
 
 struct PetView: View {
     @EnvironmentObject var sharedData: SharedData
@@ -7,6 +8,10 @@ struct PetView: View {
     @State private var dogPosition = CGSize.zero
     @State private var showStore = false
     @State private var showInventory = false
+    
+    @State private var isPlayingVideo = false
+    @State private var player: AVPlayer?
+    @State private var shouldPlayAnimation = false
     
     private let calendar = Calendar.current
     private let dateKey = "lastUpdateDate"
@@ -17,10 +22,10 @@ struct PetView: View {
             
             VStack {
                 HStack {
-                    Image(systemName: "dollarsign.circle.fill") // System image for a coin-like symbol
-                                               .resizable()
-                                               .scaledToFit()
-                                               .frame(width: 20, height: 20) // Adjust size as needed
+                    Image(systemName: "dollarsign.circle.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20, height: 20)
                     Text("Coins: \(sharedData.coins)")
                     Spacer()
                     Button(action: {
@@ -33,20 +38,28 @@ struct PetView: View {
                 
                 Spacer()
                 
-                Image(dogImage)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 200)
-                    .offset(dogPosition)
-                    .gesture(
-                        DragGesture()
-                            .onChanged { value in
-                                self.dogPosition = value.translation
-                            }
-                            .onEnded { _ in
-                                self.dogPosition = .zero
-                            }
-                    )
+                if isPlayingVideo, let player = player {
+                    VideoPlayer(player: player)
+                        .frame(height: 200)
+                        .onDisappear {
+                            player.pause()
+                        }
+                } else {
+                    Image(dogImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 200)
+                        .offset(dogPosition)
+                        .gesture(
+                            DragGesture()
+                                .onChanged { value in
+                                    self.dogPosition = value.translation
+                                }
+                                .onEnded { _ in
+                                    self.dogPosition = .zero
+                                }
+                        )
+                }
                 
                 Spacer()
                 
@@ -84,91 +97,55 @@ struct PetView: View {
             StoreView()
         }
         .sheet(isPresented: $showInventory) {
-            InventoryView()
+            InventoryView(useItemCallback: {
+                shouldPlayAnimation = true
+            })
         }
         .onAppear {
             checkForDailyUpdate()
+            if shouldPlayAnimation {
+                playAnimation()
+                shouldPlayAnimation = false
+            }
+        }
+    }
+    
+    private func playAnimation() {
+        guard let videoDataAsset = NSDataAsset(name: "animation") else {
+            print("Animation file not found in assets")
+            return
+        }
+
+        // Create a temporary URL for the video
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("tempAnimation.mp4")
+        
+        do {
+            // Write the data to a temporary file
+            try videoDataAsset.data.write(to: tempURL)
+            player = AVPlayer(url: tempURL)
+            player?.play()
+            isPlayingVideo = true
+            
+            // Remove the temporary file after playback finishes
+            NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: player?.currentItem, queue: .main) { _ in
+                self.isPlayingVideo = false
+                self.player = nil
+                try? FileManager.default.removeItem(at: tempURL)
+                print("Animation finished and temp file removed")
+            }
+            
+        } catch {
+            print("Failed to write video data to temporary file: \(error)")
         }
     }
     
     private func checkForDailyUpdate() {
         let lastUpdateDate = UserDefaults.standard.object(forKey: dateKey) as? Date ?? Date.distantPast
         if !calendar.isDateInToday(lastUpdateDate) {
-            // Decrease values once a day
             sharedData.petHunger = max(0, sharedData.petHunger - 10)
             sharedData.petLikeness = max(0, sharedData.petLikeness - 10)
             sharedData.savePetData()
-            
-            // Update the last update date
             UserDefaults.standard.set(Date(), forKey: dateKey)
         }
-    }
-}
-
-struct InventoryView: View {
-    @EnvironmentObject var sharedData: SharedData
-    
-    var body: some View {
-        if sharedData.inventory.isEmpty {
-            Text("Inventory Empty, Buy Items From the Store")
-                .font(.headline)
-                .foregroundColor(.gray)
-                .padding()
-                .multilineTextAlignment(.center)
-        } else {
-            List {
-                ForEach(Array(sharedData.inventory.keys), id: \.self) { item in
-                    HStack {
-                        Text(item)
-                        Spacer()
-                        Text("Quantity: \(sharedData.inventory[item] ?? 0)")
-                        Button(action: {
-                            useItem(item)
-                            sharedData.savePetData()
-                        }) {
-                            Text("Use")
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 5)
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(5)
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    private func useItem(_ item: String) {
-        sharedData.removeFromInventory(itemName: item)
-        if let foodItem = getFoodItem(name: item) {
-            sharedData.petHunger = min(20, sharedData.petHunger + foodItem.satiation)
-        } else if let storeItem = getStoreItem(name: item) {
-            sharedData.petLikeness = min(20, sharedData.petLikeness + storeItem.likeness)
-        }
-    }
-    
-    private func getFoodItem(name: String) -> FoodItem? {
-        // Replace with actual logic to fetch food items
-        let foodItems = [
-            FoodItem(name: "Food 1", price: 10, satiation: 2),
-            FoodItem(name: "Food 2", price: 15, satiation: 3),
-            FoodItem(name: "Food 3", price: 20, satiation: 5),
-            FoodItem(name: "Food 4", price: 25, satiation: 7),
-            FoodItem(name: "Food 5", price: 30, satiation: 10)
-        ]
-        return foodItems.first { $0.name == name }
-    }
-    
-    private func getStoreItem(name: String) -> StoreItem? {
-        // Replace with actual logic to fetch store items
-        let storeItems = [
-            StoreItem(name: "Toy 1", price: 10, likeness: 2),
-            StoreItem(name: "Toy 2", price: 15, likeness: 3),
-            StoreItem(name: "Toy 3", price: 20, likeness: 5),
-            StoreItem(name: "Toy 4", price: 25, likeness: 7),
-            StoreItem(name: "Toy 5", price: 30, likeness: 10)
-        ]
-        return storeItems.first { $0.name == name }
     }
 }
