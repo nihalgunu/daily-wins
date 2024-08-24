@@ -6,7 +6,6 @@ struct PetView: View {
     @State private var dogImage = "dog"
     @State private var dogPosition = CGSize.zero
     @State private var showStore = false
-    @State private var showFood = false
     @State private var showInventory = false
     
     private let calendar = Calendar.current
@@ -64,17 +63,6 @@ struct PetView: View {
                 
                 HStack {
                     Button(action: {
-                        showFood.toggle()
-                    }) {
-                        Text("Food")
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                    }
-                    
-                    Button(action: {
                         showStore.toggle()
                     }) {
                         Text("Store")
@@ -90,9 +78,6 @@ struct PetView: View {
         }
         .sheet(isPresented: $showStore) {
             StoreView()
-        }
-        .sheet(isPresented: $showFood) {
-            FoodView()
         }
         .sheet(isPresented: $showInventory) {
             InventoryView()
