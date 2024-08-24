@@ -47,7 +47,7 @@ struct HomePageView: View {
                     VStack(spacing: 10) {
                         if items.isEmpty {
                             Text("Tap '+' to add your first win")
-                                .foregroundColor(.gray)
+                                .foregroundColor(.black)
                                 .padding(.vertical, 150)
                         } else {
                             // Sort the items so that "In Progress" tasks are above "Completed" tasks
