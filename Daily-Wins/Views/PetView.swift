@@ -17,6 +17,10 @@ struct PetView: View {
             
             VStack {
                 HStack {
+                    Image(systemName: "dollarsign.circle.fill") // System image for a coin-like symbol
+                                               .resizable()
+                                               .scaledToFit()
+                                               .frame(width: 20, height: 20) // Adjust size as needed
                     Text("Coins: \(sharedData.coins)")
                     Spacer()
                     Button(action: {
