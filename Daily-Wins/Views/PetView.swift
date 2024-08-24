@@ -11,7 +11,7 @@ struct PetView: View {
     
     private let calendar = Calendar.current
     private let dateKey = "lastUpdateDate"
-
+    
     var body: some View {
         ZStack {
             Color.white.edgesIgnoringSafeArea(.all)
@@ -48,23 +48,31 @@ struct PetView: View {
                 Spacer()
                 
                 HStack {
-                    Text("Hunger: \(sharedData.petHunger)")
+                    VStack(alignment: .leading) {
+                        Text("Satiation: \(sharedData.petHunger)/20")
+                        ProgressView(value: Double(sharedData.petHunger), total: 20)
+                            .progressViewStyle(LinearProgressViewStyle(tint: .orange))
+                    }
                     Spacer()
-                    Text("Likeness: \(sharedData.petLikeness)")
+                    VStack(alignment: .leading) {
+                        Text("Likeness: \(sharedData.petLikeness)/20")
+                        ProgressView(value: Double(sharedData.petLikeness), total: 20)
+                            .progressViewStyle(LinearProgressViewStyle(tint: .green))
+                    }
                 }
                 .padding()
                 
                 HStack {
-//                    Button(action: {
-//                        showFood.toggle()
-//                    }) {
-//                        Text("Food")
-//                            .frame(maxWidth: .infinity)
-//                            .padding()
-//                            .background(Color.blue)
-//                            .foregroundColor(.white)
-//                            .cornerRadius(8)
-//                    }
+                    Button(action: {
+                        showFood.toggle()
+                    }) {
+                        Text("Food")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                    }
                     
                     Button(action: {
                         showStore.toggle()
@@ -137,9 +145,9 @@ struct InventoryView: View {
     private func useItem(_ item: String) {
         sharedData.removeFromInventory(itemName: item)
         if let foodItem = getFoodItem(name: item) {
-            sharedData.petHunger = max(0, sharedData.petHunger - foodItem.satiation)
+            sharedData.petHunger = min(20, sharedData.petHunger + foodItem.satiation)
         } else if let storeItem = getStoreItem(name: item) {
-            sharedData.petLikeness = min(10, sharedData.petLikeness + storeItem.likeness)
+            sharedData.petLikeness = min(20, sharedData.petLikeness + storeItem.likeness)
         }
     }
     
