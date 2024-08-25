@@ -5,10 +5,10 @@ struct ToDoListItemView: View {
     @StateObject var ToDoListItemModel: ToDoListItemViewViewModel
     @StateObject var HomePageModel: HomePageViewViewModel
     @StateObject var NewItemModel: NewItemViewViewModel
-    @State var showSheet = false
     
+    @State var showSheet = false
 
-    @State var updatedProgress = 0
+    var dailyUpdate: DailyUpdates
     var item: ToDoListItem
     
     var body: some View {
@@ -63,6 +63,13 @@ struct ToDoListItemView: View {
         } content: {
             MoreInfoView(HomePageModel: HomePageModel, initialGoal: item.title, initialDescription: item.description, initialTracking: item.tracking, initialReminder: item.reminder, initialProgress: item.progress, item: item)
                 .environmentObject(NewItemModel)
+        }
+        .onAppear {
+            // 
+            dailyUpdate.scheduleCheckMark(date: Date())
+            
+            // Immediately check if midnight has already passed today and reset if needed
+            dailyUpdate.checkIfMidnightPassed()
         }
     }
 }

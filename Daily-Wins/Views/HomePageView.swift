@@ -5,10 +5,13 @@ struct HomePageView: View {
     @StateObject var viewModel: HomePageViewViewModel
     @EnvironmentObject var sharedData: SharedData
     @FirestoreQuery var items: [ToDoListItem]
+    
     @State private var currentDate = Date()
     @State private var navigationPath = NavigationPath()
     @State var completedTasks = 5
     @State var totalTasks = 10
+    
+    
 
     init(userId: String) {
         self._viewModel = StateObject(wrappedValue: HomePageViewViewModel(userId: userId))
@@ -54,7 +57,7 @@ struct HomePageView: View {
                             let sortedItems = items.sorted { !$0.isDone && $1.isDone }
                             
                             ForEach(sortedItems) { item in
-                                ToDoListItemView(ToDoListItemModel: ToDoListItemViewViewModel(/*sharedData: sharedData*/), HomePageModel: viewModel, NewItemModel: NewItemViewViewModel(), item: item)
+                                ToDoListItemView(ToDoListItemModel: ToDoListItemViewViewModel(/*sharedData: sharedData*/), HomePageModel: viewModel, NewItemModel: NewItemViewViewModel(), dailyUpdate: DailyUpdates(item: item), item: item)
                                     .cornerRadius(10)
                                     .shadow(color: .white, radius: 1, x: 0, y: 1)
                             }

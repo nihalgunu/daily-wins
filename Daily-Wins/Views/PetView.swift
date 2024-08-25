@@ -16,6 +16,8 @@ struct PetView: View {
     private let calendar = Calendar.current
     private let dateKey = "lastUpdateDate"
     
+    let dailyUpdate: DailyUpdates
+
     var body: some View {
         ZStack {
             Color.white.edgesIgnoringSafeArea(.all)
@@ -148,4 +150,6 @@ struct PetView: View {
             UserDefaults.standard.set(Date(), forKey: dateKey)
         }
     }
+    
+    
 }
