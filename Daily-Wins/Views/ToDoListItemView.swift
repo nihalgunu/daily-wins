@@ -65,10 +65,8 @@ struct ToDoListItemView: View {
                 .environmentObject(NewItemModel)
         }
         .onAppear {
-            // 
             dailyUpdate.scheduleCheckMark(date: Date())
             
-            // Immediately check if midnight has already passed today and reset if needed
             dailyUpdate.checkIfMidnightPassed()
         }
     }
