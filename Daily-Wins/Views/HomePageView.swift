@@ -3,26 +3,51 @@ import SwiftUI
 
 struct HomePageView: View {
     @StateObject var viewModel: HomePageViewViewModel
+    @StateObject var fullCalendarViewModel = FullCalendarViewViewModel()
+
     @EnvironmentObject var sharedData: SharedData
+    @EnvironmentObject var userViewModel: UserViewModel
+    
     @FirestoreQuery var items: [ToDoListItem]
     
-    @State private var navigationPath = NavigationPath()
-    
+    @State var navigationPath = NavigationPath()
+    @State var currentDate = Date()
+    @State var currentMonth: Int = 0
+
     @State var tasksTotal = 0
     @State var tasksFinished = 0
-
+    
+    var date = Date()
+    
     init(userId: String) {
         self._viewModel = StateObject(wrappedValue: HomePageViewViewModel(userId: userId))
         self._items = FirestoreQuery(collectionPath: "users/\(userId)/todos")
     }
+    
+    var fullCalendarView: some View {
+        FullCalendarView(
+            currentMonth: $currentMonth,
+            currentDate: $currentDate,
+            tasksTotal: $tasksTotal,
+            tasksFinished: $tasksFinished,
+            extraDate: extraDate(),
+            extractDate: extractDate()
+        )
+        .environmentObject(viewModel)
+        .environmentObject(userViewModel)
+        .environmentObject(fullCalendarViewModel)
+    }
 
     var body: some View {
+        let extraDate = extraDate()
+        let extractDate = extractDate()
+        
         NavigationStack(path: $navigationPath) {
             VStack(spacing: 10) {
                 Spacer().frame(height: 10)
                 
                 // Navigate to FullCalendarView
-                NavigationLink(destination: FullCalendarView(tasksTotal: $tasksTotal, tasksFinished: $tasksFinished).environmentObject(viewModel)) {
+                NavigationLink(destination: fullCalendarView) {
                     WeeklyCalendarView()
                         .background(Color(UIColor.white)
                         .cornerRadius(10))
@@ -58,7 +83,8 @@ struct HomePageView: View {
                             let sortedItems = items.sorted { !$0.isDone && $1.isDone }
                             
                             ForEach(sortedItems) { item in
-                                ToDoListItemView(ToDoListItemModel: ToDoListItemViewViewModel(), NewItemModel: NewItemViewViewModel(), item: item)
+                                ToDoListItemView(ToDoListItemModel: ToDoListItemViewViewModel(), NewItemModel: NewItemViewViewModel(), currentDate: $currentDate, tasksTotal: $tasksTotal, tasksFinished: $tasksFinished, item: item)
+                                    .environmentObject(fullCalendarViewModel)
                                     .cornerRadius(10)
                                     .shadow(color: .white, radius: 1, x: 0, y: 1)
                                     .environmentObject(viewModel)
@@ -83,6 +109,18 @@ struct HomePageView: View {
                     }
                 }
             }
+            .onAppear {
+                viewModel.checkIfMidnightPassed()
+                checkAndUpdateDate()
+                startMidnightTimer()
+                fullCalendarViewModel.loadProgress(for: currentDate)
+                fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
+                print(currentDate)
+                print(date)
+            }
+            .onDisappear() {
+                fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
+            }
             .onChange(of: items) {
                 tasksTotal = items.count
                 tasksFinished = 0
@@ -94,6 +132,84 @@ struct HomePageView: View {
                 print("Tasks Total: \(tasksTotal)")
                 print("Tasks Finished: \(tasksFinished)")
             }
+            .onChange(of: currentMonth) {
+                currentDate = getCurrentMonth()
+                fullCalendarViewModel.loadProgress(for: currentDate)
+            }
+        }
+    }
+    
+    func startMidnightTimer() {
+        let midnight = Calendar.current.nextDate(after: Date(), matching: DateComponents(hour: 0), matchingPolicy: .nextTime)!
+        let timer = Timer(fire: midnight, interval: 86400, repeats: true) { _ in
+            fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
+            currentDate = Date()
+            fullCalendarViewModel.loadProgress(for: currentDate)
+        }
+        RunLoop.main.add(timer, forMode: .common)
+    }
+
+    func checkAndUpdateDate() {
+        let today = Date()
+        if !Calendar.current.isDate(currentDate, inSameDayAs: today) {
+            currentDate = today
+        }
+    }
+    
+    // extracting Year And Month for display
+    func extraDate() -> [String] {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy MMMM"
+        let date = formatter.string(from: currentDate)
+        return date.components(separatedBy: " ")
+    }
+    
+    func getCurrentMonth() -> Date {
+        let calendar = Calendar.current
+
+        guard let currentMonth = calendar.date(byAdding: .month, value: self.currentMonth, to: Date()) else {
+            return Date()
+        }
+        
+        return currentMonth
+    }
+    
+    func extractDate() -> [DateValue] {
+        
+        let calendar = Calendar.current
+        
+        let currentMonth = getCurrentMonth()
+        
+        var days = currentMonth.getAllDates().compactMap { date -> DateValue in
+            
+            let day = calendar.component(.day, from: date)
+            
+            return DateValue(day: day, date: date)
+            
+        }
+        let firstWeekday = calendar.component(.weekday, from: days.first?.date ?? Date())
+        
+        for _ in 0..<firstWeekday - 1 {
+            days.insert(DateValue(day: -1, date: Date()), at: 0)
+        }
+        return days
+    }
+}
+
+// Extanding Date to get Current Month Dates...
+extension Date {
+    func getAllDates() -> [Date] {
+        
+        let calendar = Calendar.current
+        
+        // getting start Date
+        let startDate = calendar.date(from: Calendar.current.dateComponents([.year, .month], from: self))!
+        let range = calendar.range(of: .day, in: .month, for: startDate)!
+        
+        // getting date
+        
+        return range.compactMap { day -> Date in
+            return calendar.date(byAdding: .day, value: day - 1, to: startDate)!
         }
     }
 }

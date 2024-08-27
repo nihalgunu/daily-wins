@@ -10,6 +10,8 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var viewModel = ContentViewViewModel()   
     @StateObject var sharedData = SharedData()
+    @StateObject var userViewModel = UserViewModel()
+
     var body: some View {
         if viewModel.isSignedIn, !viewModel.currentUserId.isEmpty {
             TabView {
@@ -17,6 +19,7 @@ struct ContentView: View {
                     .tabItem() {
                         Label("Home", systemImage: "house")
                     }
+                    .environmentObject(userViewModel)
                 PetView()
                     .tabItem() {
                         Label("YourPet", systemImage: "dog")
@@ -24,6 +27,7 @@ struct ContentView: View {
                     .environmentObject(sharedData)
             }
             .environmentObject(sharedData)
+            .environmentObject(userViewModel)
 
         } else {
             LoginView()

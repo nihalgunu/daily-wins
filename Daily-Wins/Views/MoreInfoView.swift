@@ -2,10 +2,16 @@ import SwiftUI
 
 struct MoreInfoView: View {
     @StateObject var HomePageModel: HomePageViewViewModel
+    
+    @EnvironmentObject var fullCalendarViewModel: FullCalendarViewViewModel
     @EnvironmentObject var NewItemModel: NewItemViewViewModel
     @Environment(\.dismiss) var dismiss
     
-    //@Binding var updatedProgress: Int
+    @Binding var currentDate: Date
+
+    @Binding var tasksTotal: Int
+    @Binding var tasksFinished: Int
+    
     let initialGoal: String
     let initialDescription: String
     let initialTracking: Int
@@ -99,6 +105,7 @@ struct MoreInfoView: View {
                     .onAppear {
                         NewItemModel.reminder = initialReminder
                     }
+                    
                     .padding(.horizontal)
                     .font(.body)
                     .foregroundColor(.blue)
@@ -217,13 +224,9 @@ struct MoreInfoView: View {
                         Image(systemName: "chevron.left")
                     }
                 }
-//                ToolbarItem(placement: .navigationBarTrailing) {
-//                    NavigationLink(destination: EditItemView(todoModel: HomePageModel, initialGoal: item.title, initialDescription: item.description, initialTracking: item.tracking, initialReminder: item.reminder, item: item)) {
-//                        Text("Edit")
-//                            .foregroundColor(.blue)
-//                    }
-//                    .environmentObject(HomePageModel)
-//                }
+            }
+            .onDisappear {
+                fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
             }
         }
     }

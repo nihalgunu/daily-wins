@@ -1,13 +1,20 @@
 import SwiftUI
 
 struct ToDoListItemView: View {
-    @EnvironmentObject var sharedData: SharedData
-    @StateObject var ToDoListItemModel: ToDoListItemViewViewModel
-    @EnvironmentObject var HomePageModel: HomePageViewViewModel
-    @StateObject var NewItemModel: NewItemViewViewModel
-    
     @State var showSheet = false
 
+    @StateObject var ToDoListItemModel: ToDoListItemViewViewModel
+    @StateObject var NewItemModel: NewItemViewViewModel
+
+    @EnvironmentObject var fullCalendarViewModel: FullCalendarViewViewModel
+    @EnvironmentObject var HomePageModel: HomePageViewViewModel
+    @EnvironmentObject var sharedData: SharedData
+
+    @Binding var currentDate: Date
+
+    @Binding var tasksTotal: Int
+    @Binding var tasksFinished: Int
+    
     var item: ToDoListItem
     
     var body: some View {
@@ -48,6 +55,9 @@ struct ToDoListItemView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
         }
+        .onChange(of: item.isDone) {
+            fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
+        }
         .padding()
         .background(Color(UIColor.white))
         .cornerRadius(10)
@@ -60,12 +70,10 @@ struct ToDoListItemView: View {
         .sheet(isPresented: $showSheet) {
             
         } content: {
-            MoreInfoView(HomePageModel: HomePageModel, initialGoal: item.title, initialDescription: item.description, initialTracking: item.tracking, initialReminder: item.reminder, initialProgress: item.progress, item: item)
+            MoreInfoView(HomePageModel: HomePageModel, currentDate: $currentDate, tasksTotal: $tasksTotal, tasksFinished: $tasksFinished, initialGoal: item.title, initialDescription: item.description, initialTracking: item.tracking, initialReminder: item.reminder, initialProgress: item.progress, item: item)
                 .environmentObject(NewItemModel)
                 .environmentObject(HomePageModel)
-        }
-        .onAppear {
-            HomePageModel.checkIfMidnightPassed()
+                .environmentObject(fullCalendarViewModel)
         }
     }
 }
