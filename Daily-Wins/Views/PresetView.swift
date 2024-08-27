@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct PresetView: View {
+    @EnvironmentObject var HomePageModel: HomePageViewViewModel
+
     @State private var newItemPresented = false
-    
     @State private var Exercises = ["Walk", "Run", "Swim", "Stretch", "Lift Weights"]
     @State private var Health = ["Drink Water", "Take Vitamins", "Eat Fruits"]
     @State private var Chores = ["Wash Dishes", "Make Bed"]
@@ -29,14 +30,14 @@ struct PresetView: View {
                                     .pickerStyle(SegmentedPickerStyle())
                                     .padding()
                     if selectedSegment == 0 {
-                        CategoryView(categoryName: "Exercise", items: $Exercises)
-                        CategoryView(categoryName: "Health", items: $Health)
-                         CategoryView(categoryName: "Cleaning", items: $Chores)
-                        CategoryView(categoryName: "Productivity", items: $Productivity)
+                        CategoryView(categoryName: "Exercise", items: $Exercises).environmentObject(HomePageModel)
+                        CategoryView(categoryName: "Health", items: $Health).environmentObject(HomePageModel)
+                        CategoryView(categoryName: "Cleaning", items: $Chores).environmentObject(HomePageModel)
+                        CategoryView(categoryName: "Productivity", items: $Productivity).environmentObject(HomePageModel)
                     }
                     else {
-                        CategoryView(categoryName: "Health", items: $Health2)
-                        CategoryView(categoryName: "Screen Time", items: $ScreenTime)
+                        CategoryView(categoryName: "Health", items: $Health2).environmentObject(HomePageModel)
+                        CategoryView(categoryName: "Screen Time", items: $ScreenTime).environmentObject(HomePageModel)
                     }
                 }
                 .padding()
@@ -45,7 +46,7 @@ struct PresetView: View {
             .navigationTitle("Daily Wins")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: NewItemView(initialGoal: "")) {
+                    NavigationLink(destination: NewItemView(initialGoal: "")                    .environmentObject(HomePageModel)) {
                         Image(systemName: "plus.circle")
                             .imageScale(.large)
                             .foregroundColor(.blue)
@@ -58,6 +59,8 @@ struct PresetView: View {
 
 struct CategoryView: View {
     var categoryName: String
+    @EnvironmentObject var HomePageModel: HomePageViewViewModel
+    
     @Binding var items: [String]
     
     var body: some View {
@@ -66,7 +69,7 @@ struct CategoryView: View {
                 .font(.title2)
                 .bold()
             ForEach(items, id: \.self) { i in
-                NavigationLink(destination: NewItemView(initialGoal: i)) {
+                NavigationLink(destination: NewItemView(initialGoal: i).environmentObject(HomePageModel)) {
                     Text(i)
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)

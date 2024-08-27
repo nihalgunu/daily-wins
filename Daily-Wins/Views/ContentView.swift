@@ -9,8 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var viewModel = ContentViewViewModel()   
-    @StateObject var sharedData = SharedData() // Create the shared data model
-    
+    @StateObject var sharedData = SharedData()
     var body: some View {
         if viewModel.isSignedIn, !viewModel.currentUserId.isEmpty {
             TabView {

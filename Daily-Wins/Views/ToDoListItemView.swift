@@ -3,16 +3,14 @@ import SwiftUI
 struct ToDoListItemView: View {
     @EnvironmentObject var sharedData: SharedData
     @StateObject var ToDoListItemModel: ToDoListItemViewViewModel
-    @StateObject var HomePageModel: HomePageViewViewModel
+    @EnvironmentObject var HomePageModel: HomePageViewViewModel
     @StateObject var NewItemModel: NewItemViewViewModel
     
     @State var showSheet = false
 
-    var dailyUpdate: DailyUpdates
     var item: ToDoListItem
     
     var body: some View {
-        let ToDoListItemModel = ToDoListItemViewViewModel()
         HStack {
             VStack(alignment: .leading, spacing: 5) {
                 Text(item.title)
@@ -40,6 +38,7 @@ struct ToDoListItemView: View {
                     }
                     else {
                         sharedData.coins += 10
+
                     }
                 }
             }) {
@@ -63,11 +62,10 @@ struct ToDoListItemView: View {
         } content: {
             MoreInfoView(HomePageModel: HomePageModel, initialGoal: item.title, initialDescription: item.description, initialTracking: item.tracking, initialReminder: item.reminder, initialProgress: item.progress, item: item)
                 .environmentObject(NewItemModel)
+                .environmentObject(HomePageModel)
         }
         .onAppear {
-            dailyUpdate.scheduleCheckMark(date: Date())
-            
-            dailyUpdate.checkIfMidnightPassed()
+            HomePageModel.checkIfMidnightPassed()
         }
     }
 }

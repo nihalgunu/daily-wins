@@ -190,6 +190,7 @@ struct MoreInfoView: View {
                     Button(action: {
                         withAnimation {
                             HomePageModel.delete(id: item.id)
+
                         }
                     }) {
                         Text("Delete")

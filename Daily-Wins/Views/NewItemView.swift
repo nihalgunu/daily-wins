@@ -9,7 +9,8 @@ import SwiftUI
 
 struct NewItemView: View {
     @StateObject var viewModel = NewItemViewViewModel()
-
+    @EnvironmentObject var HomePageModel: HomePageViewViewModel
+    
     let initialGoal: String
     
     var distance = ["steps", "meters", "kilometers", "miles"]
@@ -99,8 +100,6 @@ struct NewItemView: View {
                         if viewModel.canSave {
                             viewModel.save()
                             presentationMode.wrappedValue.dismiss()
-                            
-                            print(viewModel.description)
                             
                             for index in 0..<viewModel.reminder.count {
                                 NotificationManager.shared.scheduleNotification(

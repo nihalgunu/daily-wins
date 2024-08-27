@@ -22,7 +22,7 @@ struct WeeklyCalendarView: View {
                 .frame(maxWidth: .infinity)
             }
         }
-        .frame(height: 60) // Adjust the height as needed
+        .frame(height: 60)
         .padding()
         .cornerRadius(10)
     }

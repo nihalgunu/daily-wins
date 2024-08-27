@@ -6,12 +6,10 @@ struct HomePageView: View {
     @EnvironmentObject var sharedData: SharedData
     @FirestoreQuery var items: [ToDoListItem]
     
-    @State private var currentDate = Date()
     @State private var navigationPath = NavigationPath()
-    @State var completedTasks = 5
-    @State var totalTasks = 10
     
-    
+    @State var tasksTotal = 0
+    @State var tasksFinished = 0
 
     init(userId: String) {
         self._viewModel = StateObject(wrappedValue: HomePageViewViewModel(userId: userId))
@@ -22,8 +20,9 @@ struct HomePageView: View {
         NavigationStack(path: $navigationPath) {
             VStack(spacing: 10) {
                 Spacer().frame(height: 10)
-
-                NavigationLink(destination: FullCalendarView(currentDate: $currentDate)) {
+                
+                // Navigate to FullCalendarView
+                NavigationLink(destination: FullCalendarView(tasksTotal: $tasksTotal, tasksFinished: $tasksFinished).environmentObject(viewModel)) {
                     WeeklyCalendarView()
                         .background(Color(UIColor.white)
                         .cornerRadius(10))
@@ -38,7 +37,8 @@ struct HomePageView: View {
 
                     Spacer()
                     
-                    NavigationLink(destination: PresetView()) {
+                    // Navigate to PresetView
+                    NavigationLink(destination: PresetView().environmentObject(viewModel)) {
                         Image(systemName: "plus")
                             .font(.title2)
                             .foregroundColor(.blue)
@@ -46,6 +46,7 @@ struct HomePageView: View {
                 }
                .padding(.horizontal)
                 
+                // Navigate to ToDoListItemView
                 ScrollView {
                     VStack(spacing: 10) {
                         if items.isEmpty {
@@ -57,9 +58,10 @@ struct HomePageView: View {
                             let sortedItems = items.sorted { !$0.isDone && $1.isDone }
                             
                             ForEach(sortedItems) { item in
-                                ToDoListItemView(ToDoListItemModel: ToDoListItemViewViewModel(/*sharedData: sharedData*/), HomePageModel: viewModel, NewItemModel: NewItemViewViewModel(), dailyUpdate: DailyUpdates(item: item), item: item)
+                                ToDoListItemView(ToDoListItemModel: ToDoListItemViewViewModel(), NewItemModel: NewItemViewViewModel(), item: item)
                                     .cornerRadius(10)
                                     .shadow(color: .white, radius: 1, x: 0, y: 1)
+                                    .environmentObject(viewModel)
                             }
                         }
                     }
@@ -80,6 +82,17 @@ struct HomePageView: View {
                             .foregroundColor(.blue)
                     }
                 }
+            }
+            .onChange(of: items) {
+                tasksTotal = items.count
+                tasksFinished = 0
+                for item in items {
+                    if item.isDone == true {
+                        tasksFinished += 1
+                    }
+                }
+                print("Tasks Total: \(tasksTotal)")
+                print("Tasks Finished: \(tasksFinished)")
             }
         }
     }
