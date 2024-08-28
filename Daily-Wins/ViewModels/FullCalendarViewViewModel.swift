@@ -8,44 +8,50 @@
 import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import FirebaseAuth
 import SwiftUI
 
 class FullCalendarViewViewModel: ObservableObject {
     @Published var dailyProgress: [DailyProgress] = []
+//    @Published var date = Date()
+//    @Published var tasksTotal = Double()
+//    @Published var tasksFinished = Double()
     
     var userViewModel: UserViewModel = UserViewModel()
     
-    private var db = Firestore.firestore()
-
     init() {
-        print("User ID in ViewModel: \(userViewModel.userId ?? "No userId found")")
-        //loadProgress()
+        
     }
-
+    
     func saveProgress(date: Date, tasksTotal: Int, tasksFinished: Int) {
-        guard let userId = userViewModel.userId else {
-            print("User ID is not available")
-            return
-        }
-        
-        let progress = DailyProgress(date: date, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
-        
-        do {
-            let docRef = db.collection("users")
-                .document(userId)
-                .collection("dailyProgress")
-                .document(dateFormatter.string(from: date))
-            try docRef.setData(from: progress) { error in
-                if let error = error {
-                    print("Error saving progress: \(error.localizedDescription)")
-                } else {
-                    print("Progress saved successfully for \(self.dateFormatter.string(from: date))")
-                }
+            guard let userId = userViewModel.userId else {
+                print("User ID is not available")
+                return
             }
-        } catch let error {
-            print("Error writing progress to Firestore: \(error.localizedDescription)")
+        
+            let db = Firestore.firestore()
+
+    
+            let progress = DailyProgress(date: date, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
+    
+            do {
+                let docRef = db.collection("users")
+                    .document(userId)
+                    .collection("dailyProgress")
+                    .document(dateFormatter.string(from: date))
+    
+                try docRef.setData(from: progress) { error in
+                    if let error = error {
+                        print("Error saving progress: \(error.localizedDescription)")
+                    } else {
+                        print("Progress saved successfully for \(self.dateFormatter.string(from: date))")
+                    }
+                }
+            } catch let error {
+                print("Error writing progress to Firestore: \(error.localizedDescription)")
+            }
         }
-    }
+
     
     func loadProgress(for month: Date) {
         guard let userId = userViewModel.userId else {
@@ -53,6 +59,8 @@ class FullCalendarViewViewModel: ObservableObject {
             return
         }
         
+        let db = Firestore.firestore()
+
         let calendar = Calendar.current
         let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: month))!
         let endOfMonth = calendar.date(byAdding: .month, value: 1, to: startOfMonth)!
@@ -73,8 +81,7 @@ class FullCalendarViewViewModel: ObservableObject {
                 } ?? []
             }
     }
-
-
+    
     // DateFormatter for Firestore document ID
     private var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -82,5 +89,118 @@ class FullCalendarViewViewModel: ObservableObject {
         return formatter
     }()
 }
+
+    
+//    private var db = Firestore.firestore()
+//    
+//    init() {
+//        print("User ID in ViewModel: \(userViewModel.userId ?? "No userId found")")
+//        //loadProgress()
+//    }
+
+//func saveProgress() {
+//    guard let uId = Auth.auth().currentUser?.uid else {
+//        return
+//    }
+//    
+//    let db = Firestore.firestore()
+//    let progressData = DailyProgress(date: date, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
+//    
+//    db.collection("users")
+//        .document(uId)
+//        .collection("dailyProgress")
+//        .document(dateFormatter.string(from: date))
+//        .setData(progressData.asDictionary()) { error in
+//            if let error = error {
+//                print("Error saving item to Firestore: \(error.localizedDescription)")
+//            } else {
+//                print("Item saved successfully: \(progressData)")
+//            }
+//        }
+//}
+//
+//    func saveProgress(date: Date, tasksTotal: Int, tasksFinished: Int) {
+//        guard let userId = userViewModel.userId else {
+//            print("User ID is not available")
+//            return
+//        }
+//        
+//        let progress = DailyProgress(date: date, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
+//        
+//        do {
+//            let docRef = db.collection("users")
+//                .document(userId)
+//                .collection("dailyProgress")
+//                .document(dateFormatter.string(from: date))
+//            
+//            try docRef.setData(from: progress) { error in
+//                if let error = error {
+//                    print("Error saving progress: \(error.localizedDescription)")
+//                } else {
+//                    print("Progress saved successfully for \(self.dateFormatter.string(from: date))")
+//                }
+//            }
+//        } catch let error {
+//            print("Error writing progress to Firestore: \(error.localizedDescription)")
+//        }
+//    }
+//    
+//    func loadProgress() {
+//        guard let userId = userViewModel.userId else {
+//            print("User ID is not available")
+//            return
+//        }
+//
+//        db.collection("users")
+//            .document(userId)
+//            .collection("dailyProgress")
+//            .getDocuments { (snapshot, error) in
+//                if let error = error {
+//                    print("Error loading progress: \(error.localizedDescription)")
+//                    return
+//                }
+//
+//                guard let documents = snapshot?.documents else {
+//                    print("No documents found")
+//                    return
+//                }
+//
+//                self.dailyProgress = documents.compactMap { doc in
+//                    let progress = try? doc.data(as: DailyProgress.self)
+//                    print("Loaded progress for date \(doc.documentID): \(String(describing: progress))")
+//                    return progress
+//                }
+//            }
+//    }
+
+    
+//    func loadProgress(for month: Date) {
+//        guard let userId = userViewModel.userId else {
+//            print("User ID is not available")
+//            return
+//        }
+//        
+//        let calendar = Calendar.current
+//        let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: month))!
+//        let endOfMonth = calendar.date(byAdding: .month, value: 1, to: startOfMonth)!
+//
+//        db.collection("users")
+//            .document(userId)
+//            .collection("dailyProgress")
+//            .whereField("date", isGreaterThanOrEqualTo: startOfMonth)
+//            .whereField("date", isLessThan: endOfMonth)
+//            .getDocuments { (snapshot, error) in
+//                if let error = error {
+//                    print("Error loading progress: \(error.localizedDescription)")
+//                    return
+//                }
+//
+//                self.dailyProgress = snapshot?.documents.compactMap { doc in
+//                    try? doc.data(as: DailyProgress.self)
+//                } ?? []
+//            }
+//    }
+    
+
 
 

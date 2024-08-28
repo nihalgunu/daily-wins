@@ -11,11 +11,10 @@ import Foundation
 class NewItemViewViewModel: ObservableObject {
     @Published var title: String = ""
     @Published var description: String = ""
-    
     @Published var tracking = Int()
     @Published var reminder: [TimeInterval] = []
-    
     @Published var progress = Int()
+    @Published var isDone: Bool = false
     
     @Published var showAlert: Bool = false
     @Published var selectedUnit: String = "count"
@@ -37,7 +36,7 @@ class NewItemViewViewModel: ObservableObject {
         // Create a model
         let newId = UUID().uuidString
         let finalUnit = useCustomUnit ? customUnit : selectedUnit
-        let newItem = ToDoListItem(id: newId, title: title, description: description, tracking: tracking, reminder: reminder, progress: progress, isDone: false, unit: finalUnit)
+        let newItem = ToDoListItem(id: newId, title: title, description: description, tracking: tracking, reminder: reminder, progress: progress, isDone: isDone, unit: finalUnit)
         
         // Save the model
         let db = Firestore.firestore()

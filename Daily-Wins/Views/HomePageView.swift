@@ -18,9 +18,10 @@ struct HomePageView: View {
     @State var tasksFinished = 0
     
     var date = Date()
+
     
     init(userId: String) {
-        self._viewModel = StateObject(wrappedValue: HomePageViewViewModel(userId: userId))
+        self._viewModel = StateObject(wrappedValue: HomePageViewViewModel())
         self._items = FirestoreQuery(collectionPath: "users/\(userId)/todos")
     }
     
@@ -110,9 +111,8 @@ struct HomePageView: View {
                 }
             }
             .onAppear {
-                viewModel.checkIfMidnightPassed()
-                checkAndUpdateDate()
-                startMidnightTimer()
+                viewModel.checkForDailyUpdate()
+                
                 fullCalendarViewModel.loadProgress(for: currentDate)
                 fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
                 print(currentDate)
@@ -136,23 +136,6 @@ struct HomePageView: View {
                 currentDate = getCurrentMonth()
                 fullCalendarViewModel.loadProgress(for: currentDate)
             }
-        }
-    }
-    
-    func startMidnightTimer() {
-        let midnight = Calendar.current.nextDate(after: Date(), matching: DateComponents(hour: 0), matchingPolicy: .nextTime)!
-        let timer = Timer(fire: midnight, interval: 86400, repeats: true) { _ in
-            fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
-            currentDate = Date()
-            fullCalendarViewModel.loadProgress(for: currentDate)
-        }
-        RunLoop.main.add(timer, forMode: .common)
-    }
-
-    func checkAndUpdateDate() {
-        let today = Date()
-        if !Calendar.current.isDate(currentDate, inSameDayAs: today) {
-            currentDate = today
         }
     }
     
@@ -217,3 +200,20 @@ extension Date {
 #Preview {
     HomePageView(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2")
 }
+
+//    func startMidnightTimer() {
+//        let midnight = Calendar.current.nextDate(after: Date(), matching: DateComponents(hour: 0), matchingPolicy: .nextTime)!
+//        let timer = Timer(fire: midnight, interval: 86400, repeats: true) { _ in
+//            fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
+//            currentDate = Date()
+//            fullCalendarViewModel.loadProgress(for: currentDate)
+//        }
+//        RunLoop.main.add(timer, forMode: .common)
+//    }
+//
+//    func checkAndUpdateDate() {
+//        let today = Date()
+//        if !Calendar.current.isDate(currentDate, inSameDayAs: today) {
+//            currentDate = today
+//        }
+//    }

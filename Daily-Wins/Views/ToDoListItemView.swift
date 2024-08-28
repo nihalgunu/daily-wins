@@ -42,10 +42,11 @@ struct ToDoListItemView: View {
                     ToDoListItemModel.toggleIsDone(item: item)
                     if item.isDone {
                         sharedData.coins -= 10
+                        sharedData.savePetData()
                     }
                     else {
                         sharedData.coins += 10
-
+                        sharedData.savePetData()
                     }
                 }
             }) {

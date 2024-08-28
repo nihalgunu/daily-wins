@@ -48,7 +48,7 @@ struct MoreInfoView: View {
                             .font(.headline).bold()
                             .foregroundColor(.primary)
                         
-//                        Text(item.description)
+                        //Text(item.description)
                         TextField("Optional", text: $NewItemModel.description)
                             .onAppear {
                                 NewItemModel.description = initialDescription
@@ -171,6 +171,7 @@ struct MoreInfoView: View {
                     
                     TLButton(title: "Save", background: .pink) {
                         if NewItemModel.canSave {
+                            NewItemModel.isDone = item.isDone
                             NewItemModel.save()
                             dismiss()
                             HomePageModel.delete(id: item.id)
