@@ -13,9 +13,9 @@ import SwiftUI
 
 class FullCalendarViewViewModel: ObservableObject {
     @Published var dailyProgress: [DailyProgress] = []
-//    @Published var date = Date()
-//    @Published var tasksTotal = Double()
-//    @Published var tasksFinished = Double()
+    @Published var date = Date()
+    @Published var tasksTotal = Int()
+    @Published var tasksFinished = Int()
     
     var userViewModel: UserViewModel = UserViewModel()
     
@@ -31,7 +31,6 @@ class FullCalendarViewViewModel: ObservableObject {
         
             let db = Firestore.firestore()
 
-    
             let progress = DailyProgress(date: date, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
     
             do {

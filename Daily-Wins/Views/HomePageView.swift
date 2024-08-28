@@ -112,7 +112,6 @@ struct HomePageView: View {
             }
             .onAppear {
                 viewModel.checkForDailyUpdate()
-                
                 fullCalendarViewModel.loadProgress(for: currentDate)
                 fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
                 print(currentDate)

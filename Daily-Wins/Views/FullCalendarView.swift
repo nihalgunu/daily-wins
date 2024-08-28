@@ -21,6 +21,7 @@ struct FullCalendarView: View {
     var date = Date()
     var extraDate: [String]
     var extractDate: [DateValue]
+    
 
     var body: some View {
         VStack(spacing: 20) {
@@ -101,13 +102,22 @@ struct FullCalendarView: View {
                                 .foregroundColor(.blue)
 
                             // Progress Circle
-                            Circle()
-                                .trim(from: 0.0, to: Double(tasksFinished) / Double(tasksTotal))
-                                .stroke(style: StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round))
-                                .foregroundColor(Color.blue)
-                                .rotationEffect(Angle(degrees: 90.0))
-                                .animation(.linear, value: Double(tasksFinished))
-
+                            if let progress = fullCalendarViewModel.dailyProgress.first(where: { Calendar.current.isDate($0.date, inSameDayAs: value.date) }) {
+                                Circle()
+                                    .trim(from: 0.0, to: Double(progress.tasksFinished) / Double(progress.tasksTotal))
+                                    .stroke(style: StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round))
+                                    .foregroundColor(Color.blue)
+                                    .rotationEffect(Angle(degrees: 90.0))
+                                    .animation(.linear, value: Double(progress.tasksFinished))
+                            }
+                            else {
+                               // Display a placeholder or zero progress until data is loaded
+                               Circle()
+                                   .trim(from: 0.0, to: 0.0)  // Placeholder with zero progress
+                                   .stroke(style: StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round))
+                                   .foregroundColor(Color.blue)
+                                   .rotationEffect(Angle(degrees: 90.0))
+                           }
                         }
                         Text("\(value.day)")
                             .font(.body.bold())
@@ -126,6 +136,9 @@ struct FullCalendarView: View {
         }
         .padding(.vertical, 5)
         .frame(height: 50, alignment: .top)
+        .onAppear {
+            fullCalendarViewModel.loadProgress(for: currentDate)
+        }
     }
 }
 
