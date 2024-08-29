@@ -18,7 +18,6 @@ struct HomePageView: View {
     @State var tasksFinished = 0
     
     var date = Date()
-
     
     init(userId: String) {
         self._viewModel = StateObject(wrappedValue: HomePageViewViewModel())
@@ -40,103 +39,114 @@ struct HomePageView: View {
     }
 
     var body: some View {
-        let extraDate = extraDate()
-        let extractDate = extractDate()
-        
-        NavigationStack(path: $navigationPath) {
-            VStack(spacing: 10) {
-                Spacer().frame(height: 10)
-                
-                // Navigate to FullCalendarView
-                NavigationLink(destination: fullCalendarView) {
-                    WeeklyCalendarView()
-                        .background(Color(UIColor.white)
-                        .cornerRadius(10))
-                }
-                .padding(.horizontal)
-                Spacer()
-
-                HStack {
-                    Text("Wins")
-                        .font(.title2)
-                        .fontWeight(.bold)
-
-                    Spacer()
+        ZStack {
+            Color(UIColor.systemBackground)
+                    .edgesIgnoringSafeArea(.all)
+            
+            NavigationStack(path: $navigationPath) {
+                VStack(spacing: 10) {
+                    Spacer().frame(height: 10)
                     
-                    // Navigate to PresetView
-                    NavigationLink(destination: PresetView().environmentObject(viewModel)) {
-                        Image(systemName: "plus")
-                            .font(.title2)
-                            .foregroundColor(.blue)
+                    // Navigate to FullCalendarView
+                    NavigationLink(destination: fullCalendarView) {
+                        WeeklyCalendarView(currentMonth: $currentMonth,
+                                           currentDate: $currentDate,
+                                           tasksTotal: $tasksTotal,
+                                           tasksFinished: $tasksFinished,
+                                           extraDate: extraDate(),
+                                           extractDate: extractDate())
+                            .background(Color(UIColor.white)
+                            .cornerRadius(10))
                     }
-                }
-               .padding(.horizontal)
-                
-                // Navigate to ToDoListItemView
-                ScrollView {
-                    VStack(spacing: 10) {
-                        if items.isEmpty {
-                            Text("Tap '+' to add your first win")
-                                .foregroundColor(.black)
-                                .padding(.vertical, 150)
-                        } else {
-                            // Sort the items so that "In Progress" tasks are above "Completed" tasks
-                            let sortedItems = items.sorted { !$0.isDone && $1.isDone }
-                            
-                            ForEach(sortedItems) { item in
-                                ToDoListItemView(ToDoListItemModel: ToDoListItemViewViewModel(), NewItemModel: NewItemViewViewModel(), currentDate: $currentDate, tasksTotal: $tasksTotal, tasksFinished: $tasksFinished, item: item)
-                                    .environmentObject(fullCalendarViewModel)
-                                    .cornerRadius(10)
-                                    .shadow(color: .white, radius: 1, x: 0, y: 1)
-                                    .environmentObject(viewModel)
-                            }
+                    .padding(.horizontal)
+                    Spacer()
+
+                    HStack {
+                        Text("Wins")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(.primary)
+
+                        Spacer()
+                        
+                        // Navigate to PresetView
+                        NavigationLink(destination: PresetView().environmentObject(viewModel)) {
+                            Image(systemName: "plus")
+                                .font(.title2)
+                                .foregroundColor(.blue)
                         }
                     }
-                    .padding(.vertical, 5)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                   .padding(.horizontal)
+                    
+                    // Navigate to ToDoListItemView
+                    ScrollView {
+                        VStack(spacing: 10) {
+                            if items.isEmpty {
+                                Text("Tap '+' to add your first win")
+                                    .foregroundColor(.black)
+                                    .padding(.vertical, 150)
+                            } else {
+                                // Sort the items so that "In Progress" tasks are above "Completed" tasks
+                                let sortedItems = items.sorted { !$0.isDone && $1.isDone }
+                                
+                                ForEach(sortedItems) { item in
+                                    ToDoListItemView(ToDoListItemModel: ToDoListItemViewViewModel(), NewItemModel: NewItemViewViewModel(), currentDate: $currentDate, tasksTotal: $tasksTotal, tasksFinished: $tasksFinished, item: item)
+                                        .environmentObject(fullCalendarViewModel)
+                                        .cornerRadius(10)
+                                        .shadow(color: .white, radius: 1, x: 0, y: 1)
+                                        .environmentObject(viewModel)
+                                }
+                            }
+                        }
+                        .padding(.vertical, 5)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-                Spacer().frame(height: 50)
-            }
-            .navigationTitle("")
-            .navigationBarTitleDisplayMode(.inline)
-            .background(Color(red: 0.95, green: 0.95, blue: 0.95))
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: ProfileView(viewModel: viewModel.profileViewModel)) {
-                        Image(systemName: "person.circle")
-                            .font(.title2)
-                            .foregroundColor(.blue)
+                    Spacer().frame(height: 50)
+                }
+                .foregroundColor(.primary)
+                .navigationTitle("")
+                .navigationBarTitleDisplayMode(.inline)
+                .background(Color(red: 0.95, green: 0.95, blue: 0.95))
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        NavigationLink(destination: ProfileView(viewModel: viewModel.profileViewModel)) {
+                            Image(systemName: "person.circle")
+                                .font(.title2)
+                                .foregroundColor(.blue)
+                        }
                     }
                 }
-            }
-            .onAppear {
-                viewModel.checkForDailyUpdate()
-                fullCalendarViewModel.loadProgress(for: currentDate)
-                fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
-                print(currentDate)
-                print(date)
-            }
-            .onDisappear() {
-                fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
-            }
-            .onChange(of: items) {
-                tasksTotal = items.count
-                tasksFinished = 0
-                for item in items {
-                    if item.isDone == true {
-                        tasksFinished += 1
-                    }
+                .onAppear {
+                    viewModel.saveItems()
+                    viewModel.checkForDailyUpdate()
+                    
+                    fullCalendarViewModel.loadProgress(for: currentDate)
+                    fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
                 }
-                print("Tasks Total: \(tasksTotal)")
-                print("Tasks Finished: \(tasksFinished)")
-            }
-            .onChange(of: currentMonth) {
-                currentDate = getCurrentMonth()
-                fullCalendarViewModel.loadProgress(for: currentDate)
+                .onDisappear() {
+                    fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
+                }
+                .onChange(of: items) {
+                    tasksTotal = items.count
+                    tasksFinished = 0
+                    for item in items {
+                        if item.isDone == true {
+                            tasksFinished += 1
+                        }
+                    }
+                    print("Tasks Total: \(tasksTotal)")
+                    print("Tasks Finished: \(tasksFinished)")
+                }
+                .onChange(of: currentMonth) {
+                    currentDate = getCurrentMonth()
+                    fullCalendarViewModel.loadProgress(for: currentDate)
+                }
             }
         }
     }
+        
+        
     
     // extracting Year And Month for display
     func extraDate() -> [String] {
@@ -196,9 +206,11 @@ extension Date {
     }
 }
 
-#Preview {
-    HomePageView(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2")
-}
+//#Preview {
+//    HomePageView(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2")
+//        .environmentObject(SharedData())
+//        .environmentObject(HomePageViewViewModel())
+//}
 
 //    func startMidnightTimer() {
 //        let midnight = Calendar.current.nextDate(after: Date(), matching: DateComponents(hour: 0), matchingPolicy: .nextTime)!

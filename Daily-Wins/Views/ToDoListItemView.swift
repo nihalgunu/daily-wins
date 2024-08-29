@@ -24,6 +24,7 @@ struct ToDoListItemView: View {
                     .font(.title2)
                     .fontWeight(.medium)
                     .foregroundColor(item.isDone ? .gray : .primary)
+                    .foregroundColor(.primary)
 
                 if item.isDone {
                     Text("Completed")

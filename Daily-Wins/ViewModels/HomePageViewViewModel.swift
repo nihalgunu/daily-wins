@@ -14,6 +14,7 @@ import SwiftUI
 class HomePageViewViewModel: ObservableObject {
     @Published var profileViewModel = ProfileViewViewModel()
     @Published var items: [ToDoListItem] = []
+    @Published var streaks = Int()
     
     private let calendar = Calendar.current
     private let dateKey = "lastUpdateDate"
@@ -25,28 +26,28 @@ class HomePageViewViewModel: ObservableObject {
     }
     
     func saveItems() {
-            guard let uId = Auth.auth().currentUser?.uid else {
-                print("User is not authenticated")
-                return
-            }
-            
-            let db = Firestore.firestore()
-            
-            for item in items {
-                let documentId = item.id.isEmpty ? UUID().uuidString : item.id
-                db.collection("users")
-                    .document(uId)
-                    .collection("todos")
-                    .document(documentId)
-                    .setData(item.asDictionary()) { error in
-                        if let error = error {
-                            print("Error saving item \(item.title): \(error.localizedDescription)")
-                        } else {
-                            print("Item \(item.title) saved successfully!")
-                        }
-                    }
-            }
+        guard let uId = Auth.auth().currentUser?.uid else {
+            print("User is not authenticated")
+            return
         }
+        
+        let db = Firestore.firestore()
+        
+        for item in items {
+            let documentId = item.id.isEmpty ? UUID().uuidString : item.id
+            db.collection("users")
+                .document(uId)
+                .collection("todos")
+                .document(documentId)
+                .setData(item.asDictionary()) { error in
+                    if let error = error {
+                        print("Error saving item \(item.title): \(error.localizedDescription)")
+                    } else {
+                        print("Item \(item.title) saved successfully!")
+                    }
+                }
+        }
+    }
 
     func loadItems() {
         guard let uId = Auth.auth().currentUser?.uid else {
@@ -75,10 +76,17 @@ class HomePageViewViewModel: ObservableObject {
     func checkForDailyUpdate() {
         let lastUpdateDate = UserDefaults.standard.object(forKey: dateKey) as? Date ?? Date.distantPast
         if !calendar.isDateInToday(lastUpdateDate) {
+            var count = 0
             for index in items.indices {
-                items[index].isDone = false
+                if items[index].isDone == true {
+                    count += 1
+                    items[index].isDone = false
+                }
             }
-            saveItems()
+            if count ==  items.count {
+                streaks += 1
+            }
+            //saveItems()
             UserDefaults.standard.set(Date(), forKey: dateKey)
         }
     }

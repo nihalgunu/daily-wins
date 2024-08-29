@@ -12,6 +12,7 @@ struct InventoryView: View {
                 .foregroundColor(.gray)
                 .padding()
                 .multilineTextAlignment(.center)
+                .foregroundColor(.primary)
         } else {
             List {
                 ForEach(Array(sharedData.inventory.keys), id: \.self) { item in

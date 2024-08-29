@@ -12,6 +12,8 @@ struct FullCalendarView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @EnvironmentObject var HomePageModel: HomePageViewViewModel
     
+    @State private var streaks: Int = 0
+
     @Binding var currentMonth: Int
     @Binding var currentDate: Date
 
@@ -22,7 +24,6 @@ struct FullCalendarView: View {
     var extraDate: [String]
     var extractDate: [DateValue]
     
-
     var body: some View {
         VStack(spacing: 20) {
             let days: [String] = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"]
@@ -85,6 +86,14 @@ struct FullCalendarView: View {
             }
         }
         .padding(.top, -50)
+        
+        HStack() {
+            Text("Win Streak: \(streaks)")
+                .bold()
+            Image(systemName: "flame")
+                .foregroundColor(.red)
+        }
+        .padding(.top, 80)
     }
     
     @ViewBuilder
@@ -126,8 +135,9 @@ struct FullCalendarView: View {
                         // Gray indicator circle
                         if Calendar.current.isDate(value.date, inSameDayAs: Date()) {
                             Circle()
-                                .fill(Color.gray)
-                                .frame(width: 10, height: 10)
+                                //.fill(Color.gray)
+                                .foregroundColor(.primary)
+                                .frame(width: 6, height: 6)
                                 .offset(y: 30)
                         }
                     }
@@ -138,6 +148,7 @@ struct FullCalendarView: View {
         .frame(height: 50, alignment: .top)
         .onAppear {
             fullCalendarViewModel.loadProgress(for: currentDate)
+            streaks = fullCalendarViewModel.updateStreaks()
         }
     }
 }
@@ -149,14 +160,15 @@ struct FullCalendarView_Previews: PreviewProvider {
     @State static var previewCurrentMonth = 8
     @State static var previewCurrentDate = Date()
     
-    static var previewExtraDate = ["2024-08-26", "Monday"] // Example data
+    static var previewExtraDate = ["2024-08-26", "Monday"]
     static var previewExtractDate = [DateValue(day: 26, date: Date())]
 
     
     static var previews: some View {
         FullCalendarView(currentMonth: $previewCurrentMonth, currentDate: $previewCurrentDate, tasksTotal: $previewTasksTotal, tasksFinished: $previewTasksFinished, extraDate: previewExtraDate, extractDate: previewExtractDate)
             .environmentObject(HomePageViewViewModel())
-
+            .environmentObject(UserViewModel())
+            .environmentObject(FullCalendarViewViewModel())
     }
 }
 

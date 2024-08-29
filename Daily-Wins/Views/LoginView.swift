@@ -18,10 +18,10 @@ struct LoginView: View {
                     Text("Daily Wins")
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                        .foregroundColor(.black) // Changed text color to black
+                        .foregroundColor(.primary)
                 }
                 .padding()
-                .background(Color.blue.opacity(0.2))
+                .background(Color.blue.opacity(0.2).colorInvert().colorMultiply(Color.blue))
                 .cornerRadius(10)
                 .padding(.top, 50)
                 

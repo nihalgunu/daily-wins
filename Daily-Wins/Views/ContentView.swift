@@ -25,6 +25,7 @@ struct ContentView: View {
                         Label("YourPet", systemImage: "dog")
                     }
                     .environmentObject(sharedData)
+                    .foregroundColor(.primary)
             }
             .environmentObject(sharedData)
             .environmentObject(userViewModel)
@@ -37,4 +38,5 @@ struct ContentView: View {
 
 #Preview {
     return ContentView()
+        .preferredColorScheme(.dark)
 }

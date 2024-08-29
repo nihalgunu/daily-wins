@@ -18,8 +18,8 @@ struct PetView: View {
     
     var body: some View {
         ZStack {
-            Color.white.edgesIgnoringSafeArea(.all)
-            
+            Color(UIColor.systemBackground) // This automatically adapts to light or dark mode
+                    .edgesIgnoringSafeArea(.all)
             VStack {
                 HStack {
                     Image(systemName: "dollarsign.circle.fill")
@@ -27,6 +27,7 @@ struct PetView: View {
                         .scaledToFit()
                         .frame(width: 20, height: 20)
                     Text("Coins: \(sharedData.coins)")
+                        .foregroundColor(.primary)
                     Spacer()
                     Button(action: {
                         showInventory.toggle()
@@ -65,13 +66,15 @@ struct PetView: View {
                 
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("Satiation: \(sharedData.petHunger)/20")
+                        Text("Hunger: \(sharedData.petHunger)/20")
+                            .foregroundColor(.primary)
                         ProgressView(value: Double(sharedData.petHunger), total: 20)
                             .progressViewStyle(LinearProgressViewStyle(tint: .orange))
                     }
                     Spacer()
                     VStack(alignment: .leading) {
                         Text("Likeness: \(sharedData.petLikeness)/20")
+                            .foregroundColor(.primary)
                         ProgressView(value: Double(sharedData.petLikeness), total: 20)
                             .progressViewStyle(LinearProgressViewStyle(tint: .green))
                     }

@@ -13,9 +13,6 @@ import SwiftUI
 
 class FullCalendarViewViewModel: ObservableObject {
     @Published var dailyProgress: [DailyProgress] = []
-    @Published var date = Date()
-    @Published var tasksTotal = Int()
-    @Published var tasksFinished = Int()
     
     var userViewModel: UserViewModel = UserViewModel()
     
@@ -23,12 +20,29 @@ class FullCalendarViewViewModel: ObservableObject {
         
     }
     
+    func updateStreaks() -> Int {
+        // Sort the dailyProgress by date
+        let sortedProgress = dailyProgress.sorted { $0.date < $1.date }
+        var streak = 0
+        var currentStreak = 0
+
+        for progress in sortedProgress {
+            if progress.tasksTotal > 0 && progress.tasksFinished == progress.tasksTotal {
+                currentStreak += 1
+                streak = max(streak, currentStreak)
+            } else {
+                currentStreak = 0
+            }
+        }
+        return streak
+    }
+    
     func saveProgress(date: Date, tasksTotal: Int, tasksFinished: Int) {
             guard let userId = userViewModel.userId else {
                 print("User ID is not available")
                 return
             }
-        
+                
             let db = Firestore.firestore()
 
             let progress = DailyProgress(date: date, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
@@ -44,6 +58,7 @@ class FullCalendarViewViewModel: ObservableObject {
                         print("Error saving progress: \(error.localizedDescription)")
                     } else {
                         print("Progress saved successfully for \(self.dateFormatter.string(from: date))")
+                        print(self.dailyProgress.count)
                     }
                 }
             } catch let error {
