@@ -16,27 +16,47 @@ struct FullCalendarView: View {
 
     @Binding var currentMonth: Int
     @Binding var currentDate: Date
+    @Binding var finalMonth: Int
 
     @Binding var tasksTotal: Int
     @Binding var tasksFinished: Int
+    @Binding var updatedMonth: Int
+    
+    @Binding var count: Int
     
     var date = Date()
     var extraDate: [String]
     var extractDate: [DateValue]
+        
+    let months: [(name: String, number: Int)] = [
+        ("August", 0),
+        ("September", 1),
+        ("October", 2),
+        ("November", 3),
+        ("December", 4),
+        ("January", 5),
+        ("February", 6),
+        ("March", 7),
+        ("April", 8),
+        ("May", 9),
+        ("June", 10),
+        ("July", 11)
+    ]
     
     var body: some View {
         VStack(spacing: 20) {
             let days: [String] = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"]
             
+            var curr = months[updatedMonth]
+            
             HStack(spacing: 10) {
                 VStack(alignment: .leading, spacing: 5) {
-                    
                     Text(extraDate[0])
                         .font(.system(size: 12))
                         .font(.caption)
                         .fontWeight(.semibold)
                     
-                    Text(extraDate[1])
+                    Text(curr.name)
                         .font(.title3.bold())
                 }
                 
@@ -44,7 +64,11 @@ struct FullCalendarView: View {
                 
                 Button {
                     withAnimation{
-                        currentMonth -= 1
+                        if updatedMonth == 0 {
+                            updatedMonth = 11
+                        } else {
+                            updatedMonth -= 1
+                        }
                     }
                 } label: {
                     Image(systemName: "chevron.left")
@@ -53,7 +77,11 @@ struct FullCalendarView: View {
                 
                 Button {
                     withAnimation{
-                        currentMonth += 1
+                        if updatedMonth == 11 {
+                            updatedMonth = 0
+                        } else {
+                            updatedMonth += 1
+                        }
                     }
                 } label: {
                     Image(systemName: "chevron.right")
@@ -61,6 +89,7 @@ struct FullCalendarView: View {
                 }
             }
             .padding(.horizontal, 10)
+
             
             // Day View
             HStack(spacing: 5) {
@@ -87,6 +116,7 @@ struct FullCalendarView: View {
         }
         .padding(.top, -50)
         
+        
         HStack() {
             Text("Win Streak: \(streaks)")
                 .bold()
@@ -94,7 +124,11 @@ struct FullCalendarView: View {
                 .foregroundColor(.red)
         }
         .padding(.top, 80)
+        .onAppear {
+            updatedMonth = finalMonth
+        }
     }
+    
     
     @ViewBuilder
     func CardView(value: DateValue) -> some View {
@@ -151,6 +185,8 @@ struct FullCalendarView: View {
             streaks = fullCalendarViewModel.updateStreaks()
         }
     }
+    
+    
 }
 
 // Preview
@@ -165,7 +201,7 @@ struct FullCalendarView_Previews: PreviewProvider {
 
     
     static var previews: some View {
-        FullCalendarView(currentMonth: $previewCurrentMonth, currentDate: $previewCurrentDate, tasksTotal: $previewTasksTotal, tasksFinished: $previewTasksFinished, extraDate: previewExtraDate, extractDate: previewExtractDate)
+        FullCalendarView(currentMonth: $previewCurrentMonth, currentDate: $previewCurrentDate, finalMonth: $previewCurrentMonth, tasksTotal: $previewTasksTotal, tasksFinished: $previewTasksFinished, updatedMonth: $previewCurrentMonth, count: $previewTasksTotal, extraDate: previewExtraDate, extractDate: previewExtractDate)
             .environmentObject(HomePageViewViewModel())
             .environmentObject(UserViewModel())
             .environmentObject(FullCalendarViewViewModel())

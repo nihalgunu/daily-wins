@@ -83,7 +83,7 @@ class HomePageViewViewModel: ObservableObject {
                     items[index].isDone = false
                 }
             }
-            saveItems()
+            //saveItems()
             UserDefaults.standard.set(Date(), forKey: dateKey)
             print("Items successfully unchecked!")
         }

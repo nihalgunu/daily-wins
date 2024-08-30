@@ -13,9 +13,13 @@ struct HomePageView: View {
     @State var navigationPath = NavigationPath()
     @State var currentDate = Date()
     @State var currentMonth: Int = 0
+    @State var updatedMonth: Int = 0
+    @State var finalMonth: Int = 0
 
     @State var tasksTotal = 0
     @State var tasksFinished = 0
+    
+    @State var count = 0
     
     var date = Date()
     
@@ -28,8 +32,11 @@ struct HomePageView: View {
         FullCalendarView(
             currentMonth: $currentMonth,
             currentDate: $currentDate,
+            finalMonth: $finalMonth,
             tasksTotal: $tasksTotal,
             tasksFinished: $tasksFinished,
+            updatedMonth: $currentMonth,
+            count: $count,
             extraDate: extraDate(),
             extractDate: extractDate()
         )
@@ -139,7 +146,7 @@ struct HomePageView: View {
                     print("Tasks Finished: \(tasksFinished)")
                 }
                 .onChange(of: currentMonth) {
-                    currentDate = getCurrentMonth()
+                    //currentDate = getCurrentMonth()
                     fullCalendarViewModel.loadProgress(for: currentDate)
                 }
             }
@@ -162,6 +169,7 @@ struct HomePageView: View {
         }
         return currentMonth
     }
+
     
     func extractDate() -> [DateValue] {
         let calendar = Calendar.current
