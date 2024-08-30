@@ -118,7 +118,7 @@ struct HomePageView: View {
                     }
                 }
                 .onAppear {
-                    viewModel.saveItems()
+                    //viewModel.saveItems()
                     viewModel.checkForDailyUpdate()
                     
                     fullCalendarViewModel.loadProgress(for: currentDate)
@@ -146,9 +146,7 @@ struct HomePageView: View {
         }
     }
         
-        
-    
-    // extracting Year And Month for display
+    // Converts currentDate into an array of String. Ex) ["2024", "August"]
     func extraDate() -> [String] {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy MMMM"
@@ -156,31 +154,23 @@ struct HomePageView: View {
         return date.components(separatedBy: " ")
     }
     
+    // Returns currentMonth
     func getCurrentMonth() -> Date {
         let calendar = Calendar.current
-
         guard let currentMonth = calendar.date(byAdding: .month, value: self.currentMonth, to: Date()) else {
             return Date()
         }
-        
         return currentMonth
     }
     
     func extractDate() -> [DateValue] {
-        
         let calendar = Calendar.current
-        
         let currentMonth = getCurrentMonth()
-        
         var days = currentMonth.getAllDates().compactMap { date -> DateValue in
-            
             let day = calendar.component(.day, from: date)
-            
             return DateValue(day: day, date: date)
-            
         }
         let firstWeekday = calendar.component(.weekday, from: days.first?.date ?? Date())
-        
         for _ in 0..<firstWeekday - 1 {
             days.insert(DateValue(day: -1, date: Date()), at: 0)
         }
@@ -199,7 +189,6 @@ extension Date {
         let range = calendar.range(of: .day, in: .month, for: startDate)!
         
         // getting date
-        
         return range.compactMap { day -> Date in
             return calendar.date(byAdding: .day, value: day - 1, to: startDate)!
         }

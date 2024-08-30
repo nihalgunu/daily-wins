@@ -24,14 +24,15 @@ class FullCalendarViewViewModel: ObservableObject {
         // Sort the dailyProgress by date
         let sortedProgress = dailyProgress.sorted { $0.date < $1.date }
         var streak = 0
-        var currentStreak = 0
+        var count = 0
 
         for progress in sortedProgress {
             if progress.tasksTotal > 0 && progress.tasksFinished == progress.tasksTotal {
-                currentStreak += 1
-                streak = max(streak, currentStreak)
+                count += 1
+                streak = max(streak, count)
             } else {
-                currentStreak = 0
+                count = 0
+                streak = 0
             }
         }
         return streak
@@ -58,7 +59,6 @@ class FullCalendarViewViewModel: ObservableObject {
                         print("Error saving progress: \(error.localizedDescription)")
                     } else {
                         print("Progress saved successfully for \(self.dateFormatter.string(from: date))")
-                        print(self.dailyProgress.count)
                     }
                 }
             } catch let error {

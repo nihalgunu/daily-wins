@@ -33,6 +33,7 @@ class HomePageViewViewModel: ObservableObject {
         
         let db = Firestore.firestore()
         
+        print("Number of items: \(items.count)")
         for item in items {
             let documentId = item.id.isEmpty ? UUID().uuidString : item.id
             db.collection("users")
@@ -44,6 +45,7 @@ class HomePageViewViewModel: ObservableObject {
                         print("Error saving item \(item.title): \(error.localizedDescription)")
                     } else {
                         print("Item \(item.title) saved successfully!")
+                        print("Item isDone saved as: \(item.isDone)")
                     }
                 }
         }
@@ -76,18 +78,14 @@ class HomePageViewViewModel: ObservableObject {
     func checkForDailyUpdate() {
         let lastUpdateDate = UserDefaults.standard.object(forKey: dateKey) as? Date ?? Date.distantPast
         if !calendar.isDateInToday(lastUpdateDate) {
-            var count = 0
             for index in items.indices {
                 if items[index].isDone == true {
-                    count += 1
                     items[index].isDone = false
                 }
             }
-            if count ==  items.count {
-                streaks += 1
-            }
-            //saveItems()
+            saveItems()
             UserDefaults.standard.set(Date(), forKey: dateKey)
+            print("Items successfully unchecked!")
         }
     }
     
