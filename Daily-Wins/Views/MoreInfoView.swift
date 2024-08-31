@@ -168,8 +168,7 @@ struct MoreInfoView: View {
                     .cornerRadius(12)
                     
                     // Save Button
-                    
-                    TLButton(title: "Save", background: .pink) {
+                                        TLButton(title: "Save Changes", background: .pink) {
                         if NewItemModel.canSave {
                             NewItemModel.isDone = item.isDone
                             NewItemModel.save()
@@ -188,26 +187,27 @@ struct MoreInfoView: View {
                         }
                     }
                     .padding()
-                    .frame(width: 350)
+                    .font(.headline) // Adjust the font size to make the text larger
+                    .frame(width: 300, height: 80) // Slightly increase the width and height of the button
                     .alert(isPresented: $NewItemModel.showAlert) {
                         Alert(title: Text("Error"), message: Text("Please enter a goal"))
                     }
+
                     
                     // Delete Button
-                    
                     Button(action: {
                         withAnimation {
                             HomePageModel.delete(id: item.id)
-
                         }
                     }) {
-                        Text("Delete")
-                            .font(.headline)
+                        Text("Delete Task")
+                            .font(.subheadline) // Reduce the font size to make the text smaller
                             .foregroundColor(.white)
-                            .padding()
-                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 8) // Reduce vertical padding to make the button thinner
+                            .padding(.horizontal, 16) // Reduce horizontal padding to make the button narrower
+                            .frame(maxWidth: 150) // Set a maximum width to control the size of the button
                             .background(Color.red)
-                            .cornerRadius(12)
+                            .cornerRadius(8) // Adjust the corner radius to match the smaller size
                     }
                     .padding(.horizontal)
                     .padding(.bottom, 20)
