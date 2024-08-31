@@ -32,7 +32,7 @@ struct MoreInfoView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .center, spacing: 30) {
+                VStack(alignment: .center, spacing: 20) {
                     // Title
                     Text(item.title)
                         .font(.largeTitle)
@@ -42,41 +42,41 @@ struct MoreInfoView: View {
                             NewItemModel.title = item.title
                         }
                     
-                    //Description
+                    // Description
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Description")
-                            .font(.headline).bold()
+                            .font(.headline)
+                            .bold()
                             .foregroundColor(.primary)
                         
-                        //Text(item.description)
                         TextField("Optional", text: $NewItemModel.description)
                             .onAppear {
                                 NewItemModel.description = initialDescription
                             }
                             .padding()
-                            .frame(maxWidth: .infinity, alignment: .leading)
                             .background(Color(.systemGray6))
                             .cornerRadius(12)
                     }
                     .padding(.horizontal)
                     
-                    //Reminders
+                    // Reminders
                     VStack(alignment: .leading, spacing: 10) {
                         HStack {
                             Text("Reminders")
-                                .font(.headline).bold()
+                                .font(.headline)
+                                .bold()
                                 .foregroundColor(.primary)
                             Button {
                                 NewItemModel.reminder.append(Date().timeIntervalSince1970)
                             } label: {
                                 Image(systemName: "plus")
+                                    .foregroundColor(.blue)
                             }
-                            .padding()
+                            .padding(.horizontal)
                         }
-                        .padding(.trailing, 20)
                         
-                        ScrollView {
-                            HStack {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 10) {
                                 ForEach(NewItemModel.reminder.indices, id: \.self) { index in
                                     
                                     Button(action: {
@@ -94,33 +94,31 @@ struct MoreInfoView: View {
                                             NewItemModel.reminder[index] = newValue.timeIntervalSince1970
                                         }
                                     ), displayedComponents: .hourAndMinute)
-                                    .frame(height: 50)
                                     .labelsHidden()
+                                    .padding(.vertical, 5)
+                                    .background(Color(.systemGray6))
+                                    .cornerRadius(8)
                                 }
                             }
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
+                        .padding(.vertical)
                     }
-                    .onAppear {
-                        NewItemModel.reminder = initialReminder
-                    }
-                    
                     .padding(.horizontal)
-                    .font(.body)
-                    .foregroundColor(.blue)
                     
-                    //Tracking
+                    // Tracking
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Tracking")
-                            .font(.headline).bold()
+                            .font(.headline)
+                            .bold()
                             .foregroundColor(.primary)
                         
                         HStack {
                             TextField("Enter number", value: $NewItemModel.progress, formatter: numberFormatter)
                                 .keyboardType(.numberPad)
                                 .multilineTextAlignment(.trailing)
-                                .frame(minWidth: 10, maxWidth: .infinity, alignment: .trailing)
+                                .padding()
+                                .background(Color(.systemGray6))
+                                .cornerRadius(8)
                                 .onAppear {
                                     NewItemModel.progress = initialProgress
                                 }
@@ -128,6 +126,9 @@ struct MoreInfoView: View {
                             Text("/")
                             
                             TextField("Goal Value", value: $NewItemModel.tracking, formatter: numberFormatter)
+                                .padding()
+                                .background(Color(.systemGray6))
+                                .cornerRadius(8)
                                 .onAppear {
                                     NewItemModel.tracking = initialTracking
                                 }
@@ -151,9 +152,10 @@ struct MoreInfoView: View {
                                 Section {
                                     Text("custom").tag("custom")
                                 } header: {
-                                    Text("custom")
+                                    Text("Custom")
                                 }
                             }
+                            .pickerStyle(MenuPickerStyle())
                             .onChange(of: NewItemModel.selectedUnit) { oldValue, newValue in
                                 NewItemModel.useCustomUnit = (newValue == "custom")
                             }
@@ -161,14 +163,17 @@ struct MoreInfoView: View {
                         if NewItemModel.useCustomUnit {
                             TextField("Enter custom unit", text: $NewItemModel.customUnit)
                                 .padding()
+                                .background(Color(.systemGray6))
+                                .cornerRadius(8)
                         }
                     }
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color(.systemGray5))
                     .cornerRadius(12)
+                    .padding(.horizontal)
                     
                     // Save Button
-                                        TLButton(title: "Save Changes", background: .pink) {
+                    TLButton(title: "Save Changes", background: .blue) { // Changed background to blue
                         if NewItemModel.canSave {
                             NewItemModel.isDone = item.isDone
                             NewItemModel.save()
@@ -187,13 +192,16 @@ struct MoreInfoView: View {
                         }
                     }
                     .padding()
-                    .font(.headline) // Adjust the font size to make the text larger
-                    .frame(width: 300, height: 80) // Slightly increase the width and height of the button
+                    .font(.headline)
+                    .frame(width: 300, height: 60)
+                    .background(Color.clear) // Set the background to clear to remove the red background
+                    .foregroundColor(.white)
+                    .cornerRadius(12)
                     .alert(isPresented: $NewItemModel.showAlert) {
                         Alert(title: Text("Error"), message: Text("Please enter a goal"))
                     }
 
-                    
+
                     // Delete Button
                     Button(action: {
                         withAnimation {
@@ -201,13 +209,13 @@ struct MoreInfoView: View {
                         }
                     }) {
                         Text("Delete Task")
-                            .font(.subheadline) // Reduce the font size to make the text smaller
+                            .font(.subheadline)
                             .foregroundColor(.white)
-                            .padding(.vertical, 8) // Reduce vertical padding to make the button thinner
-                            .padding(.horizontal, 16) // Reduce horizontal padding to make the button narrower
-                            .frame(maxWidth: 150) // Set a maximum width to control the size of the button
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 16)
+                            .frame(maxWidth: 150)
                             .background(Color.red)
-                            .cornerRadius(8) // Adjust the corner radius to match the smaller size
+                            .cornerRadius(8)
                     }
                     .padding(.horizontal)
                     .padding(.bottom, 20)
@@ -223,6 +231,7 @@ struct MoreInfoView: View {
                         print("\(NewItemModel.progress)")
                     } label: {
                         Image(systemName: "chevron.left")
+                            .foregroundColor(.primary)
                     }
                 }
             }
@@ -245,12 +254,3 @@ struct MoreInfoView: View {
         return formatter
     }
 }
-
-
-//struct MoreInfoView_Previews: PreviewProvider {
-//    
-//    static var previews: some View {
-//        MoreInfoView(HomePageModel: HomePageViewViewModel(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2"), updatedProgress: updatedProgress, item: ToDoListItem(id: "1", title: "Sample Task", description: "Detailed description here...", tracking: 0, reminder: [Date().timeIntervalSince1970], progress: 0, isDone: false, unit: "count"))
-//            .environmentObject(NewItemViewViewModel())
-//    }
-//}
