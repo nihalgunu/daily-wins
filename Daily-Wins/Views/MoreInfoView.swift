@@ -29,6 +29,11 @@ struct MoreInfoView: View {
     
     var item: ToDoListItem
     
+    private let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -76,7 +81,7 @@ struct MoreInfoView: View {
                         }
                         
                         ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 10) {
+                            LazyVGrid(columns: columns) {
                                 ForEach(NewItemModel.reminder.indices, id: \.self) { index in
                                     
                                     Button(action: {
@@ -234,6 +239,9 @@ struct MoreInfoView: View {
                             .foregroundColor(.primary)
                     }
                 }
+            }
+            .onAppear {
+                
             }
             .onDisappear {
                 fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)

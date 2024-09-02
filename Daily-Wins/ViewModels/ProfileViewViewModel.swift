@@ -49,6 +49,21 @@ class ProfileViewViewModel: ObservableObject {
         }
         let db = Firestore.firestore()
         
+        let defaults = UserDefaults.standard
+
+        // Check if specific keys exist
+        if defaults.object(forKey: "profileImage") != nil {
+            print("Key 'profileImage' exists in UserDefaults.")
+        } else {
+            print("Key 'profileImage' does not exist in UserDefaults.")
+        }
+
+        if defaults.object(forKey: "lastUpdateDate") != nil {
+            print("Key 'lastUpdateDate' exists in UserDefaults.")
+        } else {
+            print("Key 'lastUpdateDate' does not exist in UserDefaults.")
+        }
+        
         db.collection("users").document(userId).getDocument { [weak self] snapshot, error in
             guard let data = snapshot?.data(), error == nil else {
                 return

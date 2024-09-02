@@ -14,9 +14,9 @@ struct ReminderView: View {
     @EnvironmentObject var viewModel: NewItemViewViewModel
     
     private let columns = [
-            GridItem(.flexible()),
-            GridItem(.flexible())
-        ]
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
     
     var body: some View {
         VStack(alignment: .leading) {

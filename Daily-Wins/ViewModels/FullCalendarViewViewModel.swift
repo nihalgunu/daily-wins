@@ -27,16 +27,19 @@ class FullCalendarViewViewModel: ObservableObject {
         var count = 0
 
         for progress in sortedProgress {
+            // Check if the user completed all tasks on that day
             if progress.tasksTotal > 0 && progress.tasksFinished == progress.tasksTotal {
                 count += 1
                 streak = max(streak, count)
             } else {
+                // Reset the streak if a day is missed
                 count = 0
-                streak = 0
             }
         }
+
         return streak
     }
+
     
     func saveProgress(date: Date, tasksTotal: Int, tasksFinished: Int) {
             guard let userId = userViewModel.userId else {
@@ -67,23 +70,18 @@ class FullCalendarViewViewModel: ObservableObject {
         }
 
     
-    func loadProgress(for month: Date) {
+    func loadProgress() {
         guard let userId = userViewModel.userId else {
             print("User ID is not available")
             return
         }
-        
+
         let db = Firestore.firestore()
 
-        let calendar = Calendar.current
-        let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: month))!
-        let endOfMonth = calendar.date(byAdding: .month, value: 1, to: startOfMonth)!
-
+        // Fetch all progress data
         db.collection("users")
             .document(userId)
             .collection("dailyProgress")
-            .whereField("date", isGreaterThanOrEqualTo: startOfMonth)
-            .whereField("date", isLessThan: endOfMonth)
             .getDocuments { (snapshot, error) in
                 if let error = error {
                     print("Error loading progress: \(error.localizedDescription)")
@@ -95,6 +93,7 @@ class FullCalendarViewViewModel: ObservableObject {
                 } ?? []
             }
     }
+
     
     // DateFormatter for Firestore document ID
     private var dateFormatter: DateFormatter = {

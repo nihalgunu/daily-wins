@@ -13,7 +13,6 @@ struct HomePageView: View {
     @State var navigationPath = NavigationPath()
     @State var currentDate = Date()
     @State var currentMonth: Int = 0
-    @State var updatedMonth: Int = 0
     @State var finalMonth: Int = 0
 
     @State var tasksTotal = 0
@@ -35,7 +34,6 @@ struct HomePageView: View {
             finalMonth: $finalMonth,
             tasksTotal: $tasksTotal,
             tasksFinished: $tasksFinished,
-            updatedMonth: $currentMonth,
             count: $count,
             extraDate: extraDate(),
             extractDate: extractDate()
@@ -52,16 +50,19 @@ struct HomePageView: View {
             
             NavigationStack(path: $navigationPath) {
                 VStack(spacing: 10) {
+                    
                     Spacer().frame(height: 10)
                     
                     // Navigate to FullCalendarView
                     NavigationLink(destination: fullCalendarView) {
                         WeeklyCalendarView(currentMonth: $currentMonth,
                                            currentDate: $currentDate,
+                                           finalMonth: $finalMonth,
                                            tasksTotal: $tasksTotal,
                                            tasksFinished: $tasksFinished,
                                            extraDate: extraDate(),
-                                           extractDate: extractDate())
+                                           extractDate: extractDate2())
+                            .environmentObject(fullCalendarViewModel)
                             .background(Color(UIColor.white)
                             .cornerRadius(10))
                     }
@@ -126,10 +127,13 @@ struct HomePageView: View {
                 }
                 .onAppear {
                     //viewModel.saveItems()
+                    updateTasksCount()
+                    currentDate = Date()
                     viewModel.checkForDailyUpdate()
-                    
-                    fullCalendarViewModel.loadProgress(for: currentDate)
-                    fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
+                    fullCalendarViewModel.loadProgress(/*for: currentDate*/)
+                    print("tasksTotal: ", tasksTotal)
+
+                    //fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
                 }
                 .onDisappear() {
                     fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
@@ -146,12 +150,17 @@ struct HomePageView: View {
                     print("Tasks Finished: \(tasksFinished)")
                 }
                 .onChange(of: currentMonth) {
-                    //currentDate = getCurrentMonth()
-                    fullCalendarViewModel.loadProgress(for: currentDate)
+                    currentDate = getCurrentMonth()
+                    fullCalendarViewModel.loadProgress(/*for: currentDate*/)
                 }
             }
         }
     }
+    
+    private func updateTasksCount() {
+       tasksTotal = items.count
+       tasksFinished = items.filter { $0.isDone }.count
+   }
         
     // Converts currentDate into an array of String. Ex) ["2024", "August"]
     func extraDate() -> [String] {
@@ -184,6 +193,30 @@ struct HomePageView: View {
         }
         return days
     }
+    
+    func extractDate2() -> [DateValue] {
+        let calendar = Calendar.current
+        
+        // Start of the week containing the current date
+        guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: currentDate) else {
+            return []
+        }
+        
+        let weekStartDate = weekInterval.start
+        let weekEndDate = weekInterval.end
+        
+        var days: [DateValue] = []
+        var date = weekStartDate
+        
+        while date < weekEndDate {
+            let day = calendar.component(.day, from: date)
+            days.append(DateValue(day: day, date: date))
+            date = calendar.date(byAdding: .day, value: 1, to: date)!
+        }
+        
+        return days
+    }
+
 }
 
 // Extanding Date to get Current Month Dates...

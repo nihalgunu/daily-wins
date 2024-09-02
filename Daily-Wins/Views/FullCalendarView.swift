@@ -20,35 +20,18 @@ struct FullCalendarView: View {
 
     @Binding var tasksTotal: Int
     @Binding var tasksFinished: Int
-    @Binding var updatedMonth: Int
     
     @Binding var count: Int
+    
     
     var date = Date()
     var extraDate: [String]
     var extractDate: [DateValue]
-        
-    let months: [(name: String, number: Int)] = [
-        ("August", 0),
-        ("September", 1),
-        ("October", 2),
-        ("November", 3),
-        ("December", 4),
-        ("January", 5),
-        ("February", 6),
-        ("March", 7),
-        ("April", 8),
-        ("May", 9),
-        ("June", 10),
-        ("July", 11)
-    ]
     
     var body: some View {
         VStack(spacing: 20) {
             let days: [String] = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"]
-            
-            var curr = months[updatedMonth]
-            
+                        
             HStack(spacing: 10) {
                 VStack(alignment: .leading, spacing: 5) {
                     Text(extraDate[0])
@@ -56,7 +39,7 @@ struct FullCalendarView: View {
                         .font(.caption)
                         .fontWeight(.semibold)
                     
-                    Text(curr.name)
+                    Text(extraDate[1])
                         .font(.title3.bold())
                 }
                 
@@ -64,11 +47,7 @@ struct FullCalendarView: View {
                 
                 Button {
                     withAnimation{
-                        if updatedMonth == 0 {
-                            updatedMonth = 11
-                        } else {
-                            updatedMonth -= 1
-                        }
+                        currentMonth -= 1
                     }
                 } label: {
                     Image(systemName: "chevron.left")
@@ -77,11 +56,7 @@ struct FullCalendarView: View {
                 
                 Button {
                     withAnimation{
-                        if updatedMonth == 11 {
-                            updatedMonth = 0
-                        } else {
-                            updatedMonth += 1
-                        }
+                        currentMonth += 1
                     }
                 } label: {
                     Image(systemName: "chevron.right")
@@ -125,7 +100,17 @@ struct FullCalendarView: View {
         }
         .padding(.top, 80)
         .onAppear {
-            updatedMonth = finalMonth
+            print("on appear: ", currentMonth)
+            currentMonth = finalMonth
+            fullCalendarViewModel.loadProgress(/*for: currentDate*/)
+            streaks = fullCalendarViewModel.updateStreaks()
+        }
+        .onDisappear {
+            currentMonth = finalMonth
+            print("on disappear: ",  currentMonth)
+        }
+        .onChange(of: currentMonth) {
+            print("current Month: ", currentMonth)
         }
     }
     
@@ -145,7 +130,10 @@ struct FullCalendarView: View {
                                 .foregroundColor(.blue)
 
                             // Progress Circle
-                            if let progress = fullCalendarViewModel.dailyProgress.first(where: { Calendar.current.isDate($0.date, inSameDayAs: value.date) }) {
+                            if let progress = fullCalendarViewModel.dailyProgress.first(where: {
+                                Calendar.current.isDate($0.date, inSameDayAs: value.date) &&
+                                Calendar.current.isDate($0.date, equalTo: currentDate, toGranularity: .month)
+                            }) {
                                 Circle()
                                     .trim(from: 0.0, to: Double(progress.tasksFinished) / Double(progress.tasksTotal))
                                     .stroke(style: StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round))
@@ -180,10 +168,6 @@ struct FullCalendarView: View {
         }
         .padding(.vertical, 5)
         .frame(height: 50, alignment: .top)
-        .onAppear {
-            fullCalendarViewModel.loadProgress(for: currentDate)
-            streaks = fullCalendarViewModel.updateStreaks()
-        }
     }
     
     
@@ -201,7 +185,7 @@ struct FullCalendarView_Previews: PreviewProvider {
 
     
     static var previews: some View {
-        FullCalendarView(currentMonth: $previewCurrentMonth, currentDate: $previewCurrentDate, finalMonth: $previewCurrentMonth, tasksTotal: $previewTasksTotal, tasksFinished: $previewTasksFinished, updatedMonth: $previewCurrentMonth, count: $previewTasksTotal, extraDate: previewExtraDate, extractDate: previewExtractDate)
+        FullCalendarView(currentMonth: $previewCurrentMonth, currentDate: $previewCurrentDate, finalMonth: $previewCurrentMonth, tasksTotal: $previewTasksTotal, tasksFinished: $previewTasksFinished, count: $previewTasksTotal, extraDate: previewExtraDate, extractDate: previewExtractDate)
             .environmentObject(HomePageViewViewModel())
             .environmentObject(UserViewModel())
             .environmentObject(FullCalendarViewViewModel())
@@ -219,3 +203,13 @@ struct FullCalendarView_Previews: PreviewProvider {
 //    let currentComponents = calendar.dateComponents([.year, .month], from: currentDate)
 //    return components.month == currentComponents.month && components.year == currentComponents.year
 //}
+
+
+//                            else {
+//                               // Display a placeholder or zero progress until data is loaded
+//                               Circle()
+//                                   .trim(from: 0.0, to: 0.0)  // Placeholder with zero progress
+//                                   .stroke(style: StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round))
+//                                   .foregroundColor(Color.blue)
+//                                   .rotationEffect(Angle(degrees: 90.0))
+//                           }

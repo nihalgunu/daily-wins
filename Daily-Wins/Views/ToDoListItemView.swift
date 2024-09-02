@@ -49,6 +49,9 @@ struct ToDoListItemView: View {
                         sharedData.coins += 10
                         sharedData.savePetData()
                     }
+                    fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
+                    fullCalendarViewModel.loadProgress(/*for: currentDate*/)
+
                 }
             }) {
                 Image(systemName: item.isDone ? "checkmark.circle.fill" : "circle")
