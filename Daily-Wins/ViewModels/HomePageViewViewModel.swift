@@ -10,19 +10,37 @@ import FirebaseAuth
 import Foundation
 import SwiftUI
 
-
 class HomePageViewViewModel: ObservableObject {
     @Published var profileViewModel = ProfileViewViewModel()
     @Published var items: [ToDoListItem] = []
     @Published var streaks = Int()
     
     private let calendar = Calendar.current
-    private let dateKey = "lastUpdateDate"
+    private let dateKey2 = "lastUpdateDate"
     
     //private let userId: String
 
     init() {
         loadItems()
+    }
+    
+    func getItems() {
+        print("get Items function: ", items.count)
+    }
+    
+    func checkForDailyUpdate() {
+        print("here")
+        let lastUpdateDate = UserDefaults.standard.object(forKey: dateKey2) as? Date ?? Date.distantPast
+        if !calendar.isDateInToday(lastUpdateDate) {
+            for index in items.indices {
+                if items[index].isDone == true {
+                    items[index].isDone = false
+                }
+            }
+            saveItems()
+            UserDefaults.standard.set(Date(), forKey: dateKey2)
+            print("Items successfully unchecked!")
+        }
     }
     
     func saveItems() {
@@ -73,21 +91,10 @@ class HomePageViewViewModel: ObservableObject {
                     }
                 }
             }
+        print("HomePage data loaded successfully!")
+        print("Number of Items after HomePage data is loaded: ", items.count)
     }
-    
-    func checkForDailyUpdate() {
-        let lastUpdateDate = UserDefaults.standard.object(forKey: dateKey) as? Date ?? Date.distantPast
-        if !calendar.isDateInToday(lastUpdateDate) {
-            for index in items.indices {
-                if items[index].isDone == true {
-                    items[index].isDone = false
-                }
-            }
-            //saveItems()
-            UserDefaults.standard.set(Date(), forKey: dateKey)
-            print("Items successfully unchecked!")
-        }
-    }
+
     
     func delete(id: String) {
         guard let uId = Auth.auth().currentUser?.uid else {
@@ -110,6 +117,38 @@ class HomePageViewViewModel: ObservableObject {
             }
     }
 }
+
+//    func checkForDailyUpdate() {
+//        let lastUpdateDate = UserDefaults.standard.object(forKey: dateKey2) as? Date ?? Date.distantPast
+//        let calendar = Calendar.current
+//
+//        // Define the target time (7:25 PM)
+//        var targetTimeComponents = DateComponents()
+//        targetTimeComponents.hour = 22
+//        targetTimeComponents.minute = 26
+//
+//        // Get the current date and target time today
+//        let now = Date()
+//        let today = calendar.startOfDay(for: now)
+//        guard let targetTimeToday = calendar.date(byAdding: targetTimeComponents, to: today) else {
+//            print("Error calculating target time")
+//            return
+//        }
+//        print("here")
+//
+//        // Check if last update was before today or at an earlier time today than the target time
+//        if lastUpdateDate <= targetTimeToday && now >= targetTimeToday {
+//            for index in items.indices {
+//                if items[index].isDone {
+//                    items[index].isDone = false
+//                }
+//            }
+//            saveItems()
+//            UserDefaults.standard.set(now, forKey: dateKey2)
+//            print("Items successfully unchecked at 7:25 PM!")
+//        }
+//    }
+
 
 //func checkIfMidnightPassed() {
 //    let lastResetDate = UserDefaults.standard.object(forKey: "lastResetDate") as? Date ?? Date.distantPast

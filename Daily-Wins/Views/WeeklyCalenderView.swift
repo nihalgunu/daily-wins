@@ -71,9 +71,6 @@ struct WeeklyCalendarView: View {
         .cornerRadius(10)
         .onAppear {
             currentMonth = finalMonth
-            
-            print(extractDate.count)
-            print(formattedDateString())
         }
     }
     

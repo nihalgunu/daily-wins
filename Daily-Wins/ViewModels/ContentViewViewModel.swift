@@ -18,6 +18,19 @@ class ContentViewViewModel: ObservableObject {
                 self?.currentUserId = user?.uid ?? ""
             }
         }
+        checkUser()
+    }
+    
+    public func checkUser() {
+        if let user = Auth.auth().currentUser {
+            DispatchQueue.main.async {
+                self.currentUserId = user.uid
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.currentUserId = ""
+            }
+        }
     }
     
     public var isSignedIn: Bool {

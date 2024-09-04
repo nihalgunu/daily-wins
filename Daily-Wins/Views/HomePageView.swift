@@ -2,9 +2,10 @@ import FirebaseFirestore
 import SwiftUI
 
 struct HomePageView: View {
-    @StateObject var viewModel: HomePageViewViewModel
+    //@StateObject var viewModel: HomePageViewViewModel
     @StateObject var fullCalendarViewModel = FullCalendarViewViewModel()
 
+    @EnvironmentObject var viewModel: HomePageViewViewModel
     @EnvironmentObject var sharedData: SharedData
     @EnvironmentObject var userViewModel: UserViewModel
     
@@ -23,25 +24,61 @@ struct HomePageView: View {
     var date = Date()
     
     init(userId: String) {
-        self._viewModel = StateObject(wrappedValue: HomePageViewViewModel())
+        //self._viewModel = StateObject(wrappedValue: HomePageViewViewModel())
         self._items = FirestoreQuery(collectionPath: "users/\(userId)/todos")
     }
     
     var fullCalendarView: some View {
-        FullCalendarView(
+        let extraDateArray = extraDate()
+        let extractedDates = extractDate()
+
+        return FullCalendarView(
             currentMonth: $currentMonth,
             currentDate: $currentDate,
             finalMonth: $finalMonth,
             tasksTotal: $tasksTotal,
             tasksFinished: $tasksFinished,
             count: $count,
-            extraDate: extraDate(),
-            extractDate: extractDate()
+            extraDate: extraDateArray,
+            extractDate: extractedDates
         )
         .environmentObject(viewModel)
         .environmentObject(userViewModel)
         .environmentObject(fullCalendarViewModel)
     }
+
+    var weeklyCalendarView: some View {
+        let extraDateArray = extraDate()
+        let extractedDates2 = extractDate2()
+
+        return WeeklyCalendarView(
+            currentMonth: $currentMonth,
+            currentDate: $currentDate,
+            finalMonth: $finalMonth,
+            tasksTotal: $tasksTotal,
+            tasksFinished: $tasksFinished,
+            extraDate: extraDateArray,
+            extractDate: extractedDates2
+        )
+        .environmentObject(fullCalendarViewModel)
+        .background(Color(UIColor.white).cornerRadius(10))
+    }
+    
+//    var fullCalendarView: some View {
+//        FullCalendarView(
+//            currentMonth: $currentMonth,
+//            currentDate: $currentDate,
+//            finalMonth: $finalMonth,
+//            tasksTotal: $tasksTotal,
+//            tasksFinished: $tasksFinished,
+//            count: $count,
+//            extraDate: extraDate(),
+//            extractDate: extractDate()
+//        )
+//        .environmentObject(viewModel)
+//        .environmentObject(userViewModel)
+//        .environmentObject(fullCalendarViewModel)
+//    }
 
     var body: some View {
         ZStack {
@@ -55,13 +92,14 @@ struct HomePageView: View {
                     
                     // Navigate to FullCalendarView
                     NavigationLink(destination: fullCalendarView) {
-                        WeeklyCalendarView(currentMonth: $currentMonth,
-                                           currentDate: $currentDate,
-                                           finalMonth: $finalMonth,
-                                           tasksTotal: $tasksTotal,
-                                           tasksFinished: $tasksFinished,
-                                           extraDate: extraDate(),
-                                           extractDate: extractDate2())
+//                        WeeklyCalendarView(currentMonth: $currentMonth,
+//                                           currentDate: $currentDate,
+//                                           finalMonth: $finalMonth,
+//                                           tasksTotal: $tasksTotal,
+//                                           tasksFinished: $tasksFinished,
+//                                           extraDate: extraDate(),
+//                                           extractDate: extractDate2())
+                        weeklyCalendarView
                             .environmentObject(fullCalendarViewModel)
                             .background(Color(UIColor.white)
                             .cornerRadius(10))
@@ -126,14 +164,12 @@ struct HomePageView: View {
                     }
                 }
                 .onAppear {
-                    //viewModel.saveItems()
+                    //viewModel.loadItems()
+                    viewModel.getItems()
+                    viewModel.checkForDailyUpdate()
                     updateTasksCount()
                     currentDate = Date()
-                    viewModel.checkForDailyUpdate()
-                    fullCalendarViewModel.loadProgress(/*for: currentDate*/)
-                    print("tasksTotal: ", tasksTotal)
-
-                    //fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
+                    fullCalendarViewModel.loadProgress()
                 }
                 .onDisappear() {
                     fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
@@ -151,11 +187,12 @@ struct HomePageView: View {
                 }
                 .onChange(of: currentMonth) {
                     currentDate = getCurrentMonth()
-                    fullCalendarViewModel.loadProgress(/*for: currentDate*/)
+                    fullCalendarViewModel.loadProgress()
                 }
             }
         }
     }
+
     
     private func updateTasksCount() {
        tasksTotal = items.count
@@ -235,6 +272,17 @@ extension Date {
         }
     }
 }
+
+//        .task {
+//            try? await Task.sleep(nanoseconds: 100_000_000) // Delay of 0.5 seconds
+//            viewModel.loadItems()
+//            viewModel.getItems()
+//            viewModel.checkForDailyUpdate()
+//        }
+    
+    //                    viewModel.loadItems()
+    //                    viewModel.getItems()
+    //                    viewModel.checkForDailyUpdate()
 
 //#Preview {
 //    HomePageView(userId: "FJqNlo9PyBbGfe7INZcrjlpEmaw2")
