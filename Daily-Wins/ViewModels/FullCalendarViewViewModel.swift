@@ -16,27 +16,24 @@ class FullCalendarViewViewModel: ObservableObject {
     
     var userViewModel: UserViewModel = UserViewModel()
     
-    init() {
-        
-    }
+    init() {}
     
     func updateStreaks() -> Int {
         // Sort the dailyProgress by date
-        let sortedProgress = dailyProgress.sorted { $0.date < $1.date }
+        let sortedProgress = dailyProgress
+            .filter { !Calendar.current.isDateInToday($0.date) }  // Exclude today's date
+            .sorted { $0.date < $1.date }
         var streak = 0
-        var count = 0
 
         for progress in sortedProgress {
             // Check if the user completed all tasks on that day
             if progress.tasksTotal > 0 && progress.tasksFinished == progress.tasksTotal {
-                count += 1
-                streak = max(streak, count)
+                streak += 1;
+
             } else {
-                // Reset the streak if a day is missed
-                count = 0
+                streak = 0;
             }
         }
-
         return streak
     }
 

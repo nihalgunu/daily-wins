@@ -12,7 +12,7 @@ struct FullCalendarView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @EnvironmentObject var HomePageModel: HomePageViewViewModel
     
-    @State private var streaks: Int = 0
+    @State var streaks = Int()
 
     @Binding var currentMonth: Int
     @Binding var currentDate: Date
@@ -23,7 +23,8 @@ struct FullCalendarView: View {
     
     @Binding var count: Int
     
-    
+    private let dateKey = "lastRecapDate"
+
     var date = Date()
     var extraDate: [String]
     var extractDate: [DateValue]
@@ -89,11 +90,12 @@ struct FullCalendarView: View {
                 }
             }
         }
+        .padding(.horizontal, 20)  // Add padding to the left and right
         .padding(.top, -50)
         
         
         HStack() {
-            Text("Win Streak: \(streaks)")
+            Text("Win Streak \(streaks)")
                 .bold()
             Image(systemName: "flame")
                 .foregroundColor(.red)
@@ -169,9 +171,18 @@ struct FullCalendarView: View {
         .padding(.vertical, 5)
         .frame(height: 50, alignment: .top)
     }
-    
-    
+//    func dailyUpdateStreaks() {
+//        let lastRecapDate = UserDefaults.standard.object(forKey: dateKey) as? Date ?? Date.distantPast
+//        let today = Calendar.current.startOfDay(for: Date())
+//
+//        if lastRecapDate < today {
+//            streaks = fullCalendarViewModel.updateStreaks()
+//            UserDefaults.standard.set(Date(), forKey: dateKey)
+//        }
+//    }
 }
+
+
 
 // Preview
 struct FullCalendarView_Previews: PreviewProvider {

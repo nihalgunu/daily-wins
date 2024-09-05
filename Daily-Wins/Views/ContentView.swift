@@ -15,14 +15,15 @@ struct ContentView: View {
     
     @State private var showDailyRecap = true
     
+
     var body: some View {
-        if showDailyRecap {
-            DailyRecapView(showDailyRecap: $showDailyRecap)
+        if showDailyRecap, viewModel.isSignedIn, !viewModel.currentUserId.isEmpty {
+            DailyRecapView(showDailyRecap: $showDailyRecap, userId: viewModel.currentUserId)
                 .environmentObject(viewModel)
                 .environmentObject(sharedData)
                 .environmentObject(userViewModel)
         }
-        else if viewModel.isSignedIn, !viewModel.currentUserId.isEmpty {
+        else if !showDailyRecap, viewModel.isSignedIn, !viewModel.currentUserId.isEmpty {
             TabView {
                 HomePageView(userId: viewModel.currentUserId)
                     .tabItem() {
@@ -44,7 +45,6 @@ struct ContentView: View {
             LoginView()
         }
     }
-    
 }
 
 #Preview {

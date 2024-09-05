@@ -4,7 +4,6 @@ import PhotosUI
 struct ProfileView: View {
     @ObservedObject var viewModel = ProfileViewViewModel.shared
     @State private var selectedItem: PhotosPickerItem? = nil
-    @State private var showingImagePicker = false
 
     var body: some View {
         NavigationView {
@@ -12,39 +11,6 @@ struct ProfileView: View {
                 if let user = viewModel.user {
                     // Avatar
                     VStack {
-//                        if let image = viewModel.selectedImage {
-//                            Image(uiImage: image)
-//                                .resizable()
-//                                .scaledToFill()
-//                                .frame(width: 100, height: 100)
-//                                .clipShape(Circle())
-//                                .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-//                        } else {
-//                            Image(systemName: "person.circle")
-//                                .resizable()
-//                                .scaledToFit()
-//                                .frame(width: 100, height: 100)
-//                                .foregroundColor(.gray)
-//                                .onTapGesture {
-//                                    showingImagePicker = true
-//                                }
-//                        }
-//                        
-//                        PhotosPicker(
-//                            selection: $selectedItem,
-//                            matching: .images,
-//                            photoLibrary: .shared()
-//                        ) {
-//                            Text("Profile Image")
-//                        }
-//                        .onChange(of: selectedItem) {
-//                            Task {
-//                                if let data = try? await selectedItem?.loadTransferable(type: Data.self),
-//                                   let uiImage = UIImage(data: data) {
-//                                    viewModel.selectedImage = uiImage
-//                                }
-//                            }
-//                        }
                         Image(systemName: "person.circle")
                             .resizable()
                             .scaledToFit()

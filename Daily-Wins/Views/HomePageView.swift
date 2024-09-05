@@ -20,11 +20,10 @@ struct HomePageView: View {
     @State var tasksFinished = 0
     
     @State var count = 0
-    
+        
     var date = Date()
     
     init(userId: String) {
-        //self._viewModel = StateObject(wrappedValue: HomePageViewViewModel())
         self._items = FirestoreQuery(collectionPath: "users/\(userId)/todos")
     }
     
@@ -32,7 +31,7 @@ struct HomePageView: View {
         let extraDateArray = extraDate()
         let extractedDates = extractDate()
 
-        return FullCalendarView(
+        let calendarView = FullCalendarView(
             currentMonth: $currentMonth,
             currentDate: $currentDate,
             finalMonth: $finalMonth,
@@ -42,16 +41,18 @@ struct HomePageView: View {
             extraDate: extraDateArray,
             extractDate: extractedDates
         )
-        .environmentObject(viewModel)
-        .environmentObject(userViewModel)
-        .environmentObject(fullCalendarViewModel)
+
+        return calendarView
+            .environmentObject(viewModel)
+            .environmentObject(userViewModel)
+            .environmentObject(fullCalendarViewModel)
     }
 
     var weeklyCalendarView: some View {
         let extraDateArray = extraDate()
         let extractedDates2 = extractDate2()
 
-        return WeeklyCalendarView(
+        let calendarView = WeeklyCalendarView(
             currentMonth: $currentMonth,
             currentDate: $currentDate,
             finalMonth: $finalMonth,
@@ -60,8 +61,10 @@ struct HomePageView: View {
             extraDate: extraDateArray,
             extractDate: extractedDates2
         )
-        .environmentObject(fullCalendarViewModel)
-        .background(Color(UIColor.white).cornerRadius(10))
+
+        return calendarView
+            .environmentObject(fullCalendarViewModel)
+            .background(Color(UIColor.white).cornerRadius(10))
     }
     
 //    var fullCalendarView: some View {
@@ -100,7 +103,6 @@ struct HomePageView: View {
 //                                           extraDate: extraDate(),
 //                                           extractDate: extractDate2())
                         weeklyCalendarView
-                            .environmentObject(fullCalendarViewModel)
                             .background(Color(UIColor.white)
                             .cornerRadius(10))
                     }
