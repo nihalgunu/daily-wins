@@ -47,7 +47,7 @@ struct FullCalendarView: View {
                 Spacer(minLength: 0)
                 
                 Button {
-                    withAnimation{
+                    withAnimation {
                         currentMonth -= 1
                     }
                 } label: {
@@ -56,7 +56,7 @@ struct FullCalendarView: View {
                 }
                 
                 Button {
-                    withAnimation{
+                    withAnimation {
                         currentMonth += 1
                     }
                 } label: {
@@ -65,12 +65,10 @@ struct FullCalendarView: View {
                 }
             }
             .padding(.horizontal, 10)
-
             
             // Day View
             HStack(spacing: 5) {
                 ForEach(days, id: \.self) { day in
-                    
                     Text(day)
                         .font(.caption)
                         .fontWeight(.semibold)
@@ -86,7 +84,6 @@ struct FullCalendarView: View {
                     VStack {
                         CardView(value: value)
                     }
-                    
                 }
             }
         }
@@ -111,11 +108,10 @@ struct FullCalendarView: View {
             currentMonth = finalMonth
             print("on disappear: ",  currentMonth)
         }
-        .onChange(of: currentMonth) {
+        .onChange(of: currentMonth) { newValue in
             print("current Month: ", currentMonth)
         }
     }
-    
     
     @ViewBuilder
     func CardView(value: DateValue) -> some View {
@@ -142,11 +138,10 @@ struct FullCalendarView: View {
                                     .foregroundColor(Color.blue)
                                     .rotationEffect(Angle(degrees: 90.0))
                                     .animation(.linear, value: Double(progress.tasksFinished))
-                            }
-                            else {
-                               // Display a placeholder or zero progress until data is loaded
+                            } else {
+                               // Placeholder with zero progress
                                Circle()
-                                   .trim(from: 0.0, to: 0.0)  // Placeholder with zero progress
+                                   .trim(from: 0.0, to: 0.0)
                                    .stroke(style: StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round))
                                    .foregroundColor(Color.blue)
                                    .rotationEffect(Angle(degrees: 90.0))
@@ -159,7 +154,6 @@ struct FullCalendarView: View {
                         // Gray indicator circle
                         if Calendar.current.isDate(value.date, inSameDayAs: Date()) {
                             Circle()
-                                //.fill(Color.gray)
                                 .foregroundColor(.primary)
                                 .frame(width: 6, height: 6)
                                 .offset(y: 30)
@@ -193,7 +187,6 @@ struct FullCalendarView_Previews: PreviewProvider {
     
     static var previewExtraDate = ["2024-08-26", "Monday"]
     static var previewExtractDate = [DateValue(day: 26, date: Date())]
-
     
     static var previews: some View {
         FullCalendarView(currentMonth: $previewCurrentMonth, currentDate: $previewCurrentDate, finalMonth: $previewCurrentMonth, tasksTotal: $previewTasksTotal, tasksFinished: $previewTasksFinished, count: $previewTasksTotal, extraDate: previewExtraDate, extractDate: previewExtractDate)
@@ -202,25 +195,3 @@ struct FullCalendarView_Previews: PreviewProvider {
             .environmentObject(FullCalendarViewViewModel())
     }
 }
-
-//func isToday(date: Date) -> Bool {
-//    let calendar = Calendar.current
-//    return calendar.isDate(currentDate, inSameDayAs: date)
-//}
-//
-//func isCurrentMonth(date: Date) -> Bool {
-//    let calendar = Calendar.current
-//    let components = calendar.dateComponents([.year, .month], from: date)
-//    let currentComponents = calendar.dateComponents([.year, .month], from: currentDate)
-//    return components.month == currentComponents.month && components.year == currentComponents.year
-//}
-
-
-//                            else {
-//                               // Display a placeholder or zero progress until data is loaded
-//                               Circle()
-//                                   .trim(from: 0.0, to: 0.0)  // Placeholder with zero progress
-//                                   .stroke(style: StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round))
-//                                   .foregroundColor(Color.blue)
-//                                   .rotationEffect(Angle(degrees: 90.0))
-//                           }
