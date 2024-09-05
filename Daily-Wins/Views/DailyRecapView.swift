@@ -1,10 +1,3 @@
-//
-//  DailyRecapView.swift
-//  Daily-Wins
-//
-//  Created by Eric Kim on 9/3/24.
-//
-
 import SwiftUI
 import FirebaseFirestore
 
@@ -26,48 +19,99 @@ struct DailyRecapView: View {
     }
 
     var body: some View {
-        Text("Daily Recap")
-            .font(.largeTitle)
-            .padding()
-        VStack {
-            VStack {
-                let sortedItems = items.sorted { !$0.isDone && $1.isDone }
-                let completedItems = sortedItems.filter { $0.isDone }
-                let incompleteItems = sortedItems.filter { !$0.isDone }
-                                            
-                if !completedItems.isEmpty {
-                    Text("Wins Completed")
-                    ForEach(completedItems) { item in
-                        Text("\(item.title)")
+        VStack(spacing: 10) {
+            Text("Daily Wins Recap")
+                .font(.system(size: 22, weight: .bold))
+                .foregroundColor(.primary)
+                .padding(.top, 20)
+            
+            ScrollView {
+                VStack(spacing: 15) {
+                    let sortedItems = items.sorted { !$0.isDone && $1.isDone }
+                    let completedItems = sortedItems.filter { $0.isDone }
+                    let incompleteItems = sortedItems.filter { !$0.isDone }
+                    
+                    if !completedItems.isEmpty {
+                        SectionView(title: "Yesterday's Wins", items: completedItems, isComplete: true)
+                            .padding(.vertical, 10)  // Padding added to Wins Completed section
+                    }
+                    
+                    if !incompleteItems.isEmpty {
+                        SectionView(title: "Yesterday's Misses", items: incompleteItems, isComplete: false)
                     }
                 }
-                if !incompleteItems.isEmpty {
-                    Text("Wins Incompleted")
-                    ForEach(incompleteItems) { item in
-                        Text("\(item.title)")
-                    }
+                .padding(.horizontal, 20)
+            }
+            .background(Color(.systemGroupedBackground))
+            
+            Spacer()
+
+            // Dog image at the bottom of the view
+            Image("dog")
+                .resizable()
+                .scaledToFit()
+                .frame(height: 100) // Set a fixed height
+                .padding(.bottom, 20)
+            
+            Button(action: {
+                isNavigating = true
+                showDailyRecap = false
+            }) {
+                HStack {
+                    Spacer()
+                    Text("Back to Home")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.white)
+                    Spacer()
                 }
+                .padding()
+                .background(Color.blue)
+                .cornerRadius(10)
+                .padding(.horizontal, 20)
+                .shadow(radius: 4)
+            }
+            .fullScreenCover(isPresented: $isNavigating) {
+                HomePageView(userId: contentModel.currentUserId)
+            }
+            .padding(.bottom, 20)
+        }
+        .background(Color(.systemBackground).ignoresSafeArea())
+    }
+}
+
+struct SectionView: View {
+    let title: String
+    let items: [ToDoListItem]
+    let isComplete: Bool
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(title)
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundColor(.primary)
+                .padding(.bottom, 5)
+            
+            ForEach(items) { item in
+                HStack {
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text(item.title)
+                            .font(.system(size: 16))
+                            .foregroundColor(.primary)
+                        
+                        Text(isComplete ? "Completed" : "Incomplete")
+                            .font(.system(size: 14))
+                            .foregroundColor(isComplete ? .green : .red)
+                    }
+                    
+                    Spacer()
+                }
+                .padding()
+                .background(Color.white)
+                .cornerRadius(10)
+                .shadow(radius: 3)
             }
         }
-        .onTapGesture {
-            isNavigating = true
-            showDailyRecap = false
-        }
-        .fullScreenCover(isPresented: $isNavigating) {
-            HomePageView(userId: contentModel.currentUserId)
-       }
-        
-//            .onAppear {
-//                let lastRecapDate = UserDefaults.standard.object(forKey: dateKey) as? Date ?? Date.distantPast
-//                let today = Calendar.current.startOfDay(for: Date())
-//                
-//                if lastRecapDate < today {
-//                    showDailyRecap = true
-//                    UserDefaults.standard.set(Date(), forKey: dateKey)
-//                } else {
-//                    showDailyRecap = false
-//                }
-//            }
+        .padding() // Added padding to the entire section view
     }
 }
 
