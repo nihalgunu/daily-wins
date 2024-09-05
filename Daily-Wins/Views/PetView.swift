@@ -4,7 +4,7 @@ import AVKit
 struct PetView: View {
     @EnvironmentObject var sharedData: SharedData
     
-    @State private var dogImage = "dog"
+    @State private var dogImage = "file"
     @State private var dogPosition = CGSize.zero
     @State private var showStore = false
     @State private var showInventory = false

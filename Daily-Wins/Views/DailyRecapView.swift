@@ -47,11 +47,11 @@ struct DailyRecapView: View {
             Spacer()
 
             // Dog image at the bottom of the view
-            Image("dog")
-                .resizable()
-                .scaledToFit()
-                .frame(height: 100) // Set a fixed height
-                .padding(.bottom, 20)
+//            Image("file")
+//                .resizable()
+//                .scaledToFit()
+//                .frame(height: 100) // Set a fixed height
+//                .padding(.bottom, 20)
             
             Button(action: {
                 isNavigating = true

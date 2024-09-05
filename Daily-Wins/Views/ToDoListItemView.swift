@@ -75,7 +75,7 @@ struct ToDoListItemView: View {
         .sheet(isPresented: $showSheet) {
             
         } content: {
-            MoreInfoView(HomePageModel: HomePageModel, currentDate: $currentDate, tasksTotal: $tasksTotal, tasksFinished: $tasksFinished, initialGoal: item.title, initialDescription: item.description, initialTracking: item.tracking, initialReminder: item.reminder, initialProgress: item.progress, item: item)
+            MoreInfoView(HomePageModel: HomePageModel, currentDate: $currentDate, tasksTotal: $tasksTotal, tasksFinished: $tasksFinished, initialGoal: item.title, initialDescription: item.description, initialTracking: item.tracking, initialReminder: item.reminder, initialProgress: item.progress, initialSelectedUnit: item.unit, initialUseCustom: item.useCustom, item: item)
                 .environmentObject(NewItemModel)
                 .environmentObject(HomePageModel)
                 .environmentObject(fullCalendarViewModel)

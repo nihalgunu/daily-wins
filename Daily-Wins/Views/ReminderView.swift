@@ -24,19 +24,27 @@ struct ReminderView: View {
                 Text("Reminder")
                     .font(.headline)
                 
-                Button {  
+                Button {
                     viewModel.reminder.append(Date().timeIntervalSince1970)
                 } label: {
                     Image(systemName: "plus")
+                        .foregroundColor(.blue)
+                        .contentShape(Rectangle())
                 }
-                Spacer()
             }
-            .padding(.trailing, 20)
+            //.padding()
             
-            ScrollView {
+            ScrollView(.horizontal, showsIndicators: false) {
                 LazyVGrid(columns: columns) {
                     ForEach(viewModel.reminder.indices, id: \.self) { index in
-                        DatePicker("", selection: Binding(
+                        Button(action: {
+                            viewModel.reminder.remove(at: index)
+                        }) {
+                            Image(systemName: "minus.circle")
+                                .foregroundColor(.red)
+                        }
+                        
+                        DatePicker("reminder", selection: Binding(
                             get: {
                                 Date(timeIntervalSince1970: viewModel.reminder[index])
                             },
@@ -44,20 +52,13 @@ struct ReminderView: View {
                                 viewModel.reminder[index] = newValue.timeIntervalSince1970
                             }
                         ), displayedComponents: .hourAndMinute)
-                        .frame(height: 50)
                         .labelsHidden()
-                        
-                        Button(action: {
-                            viewModel.reminder.remove(at: index)
-                        }) {
-                            Image(systemName: "minus.circle")
-                                .foregroundColor(.red)
-                        }
+                        .padding(.vertical, 5)
+                        .cornerRadius(8)
                     }
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
+            .padding(.vertical)
         }
     }
 }

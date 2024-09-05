@@ -14,17 +14,26 @@ struct MoreInfoView: View {
     
     let initialGoal: String
     let initialDescription: String
+    
     let initialTracking: Int
     let initialReminder: [TimeInterval]
+    
     let initialProgress: Int
+    let initialSelectedUnit: String
+    let initialUseCustom: Bool
     
     var distance = ["steps", "meters", "kilometers", "miles"]
     var time = ["seconds", "minutes", "hours"]
     var amount = ["mililiters", "liters", "ounces", "miligrams","grams"]
     
-    var pickerSections = ["Distance", "Time", "Amount", "Custom"]
+    var pickerSections = ["Distance", "Time", "Amount", "Selected Custom"]
+    
     var sectionItems: [[String]] {
-        return [distance, time, amount]
+        var items = [distance, time, amount]
+        if initialUseCustom {
+            items.append([initialSelectedUnit])
+        }
+        return items
     }
     
     var item: ToDoListItem
@@ -77,7 +86,6 @@ struct MoreInfoView: View {
                                 Image(systemName: "plus")
                                     .foregroundColor(.blue)
                             }
-                            .padding(.horizontal)
                         }
                         
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -101,16 +109,18 @@ struct MoreInfoView: View {
                                     ), displayedComponents: .hourAndMinute)
                                     .labelsHidden()
                                     .padding(.vertical, 5)
-                                    .background(Color(.systemGray6))
                                     .cornerRadius(8)
                                 }
                             }
                         }
                         .padding(.vertical)
                     }
+                    .onAppear {
+                        NewItemModel.reminder = initialReminder
+                    }
                     .padding(.horizontal)
                     
-                    // Tracking
+                    // Progress Tracking
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Tracking")
                             .font(.headline)
@@ -129,7 +139,8 @@ struct MoreInfoView: View {
                                 }
                             
                             Text("/")
-                            
+                          
+                    // Total Tracking
                             TextField("Goal Value", value: $NewItemModel.tracking, formatter: numberFormatter)
                                 .padding()
                                 .background(Color(.systemGray6))
@@ -138,9 +149,9 @@ struct MoreInfoView: View {
                                     NewItemModel.tracking = initialTracking
                                 }
                             
-                            Picker("", selection: $NewItemModel.selectedUnit) {
+                            Picker("Unit", selection: $NewItemModel.selectedUnit) {
                                 Section {
-                                    Text("count")
+                                    Text("count").tag("count")
                                 } header: {
                                     Text("Count")
                                 }
@@ -148,21 +159,26 @@ struct MoreInfoView: View {
                                 ForEach(0..<sectionItems.count, id: \.self) { i in
                                     Section {
                                         ForEach(sectionItems[i], id: \.self) { item in
-                                            Text(item)
+                                            Text(item).tag(item)
                                         }
                                     } header: {
                                         Text(pickerSections[i])
                                     }
                                 }
+                     //Custom Unit Tracking
                                 Section {
                                     Text("custom").tag("custom")
                                 } header: {
-                                    Text("Custom")
+                                    Text("Create Custom")
                                 }
                             }
+                            .labelsHidden()
                             .pickerStyle(MenuPickerStyle())
                             .onChange(of: NewItemModel.selectedUnit) { oldValue, newValue in
                                 NewItemModel.useCustomUnit = (newValue == "custom")
+                            }
+                            .onAppear {
+                                NewItemModel.selectedUnit = initialSelectedUnit
                             }
                         }
                         if NewItemModel.useCustomUnit {
@@ -195,6 +211,13 @@ struct MoreInfoView: View {
                         } else {
                             NewItemModel.showAlert = true
                         }
+                    }
+                    .onDisappear {
+                        print("MoreInfoView: ", NewItemModel.customUnit)
+                    }
+                    .onAppear {
+                        print("MoreInfoView: ", NewItemModel.customUnit)
+
                     }
                     .padding()
                     .font(.headline)
@@ -239,9 +262,6 @@ struct MoreInfoView: View {
                             .foregroundColor(.primary)
                     }
                 }
-            }
-            .onAppear {
-                
             }
             .onDisappear {
                 fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)

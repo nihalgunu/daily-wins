@@ -45,6 +45,7 @@ struct EditItemView: View {
                             .font(.headline)
                         TextField("Win", text: $viewModel.title)
                             .onAppear {
+                                print("ViewModel title: ", viewModel.title)
                                 viewModel.title = initialGoal
                             }
                     }
@@ -67,10 +68,14 @@ struct EditItemView: View {
                                 .font(.headline)
                             
                             Button {
+                                print("Button pressed")
                                 viewModel.reminder.append(Date().timeIntervalSince1970)
+                                print("edit item view here")
+                                print("Edit Item View Reminder Count: ", viewModel.reminder.count)
                             } label: {
                                 Image(systemName: "plus")
                             }
+                            
                             Spacer()
                         }
                         .padding(.trailing, 20)
@@ -86,7 +91,7 @@ struct EditItemView: View {
                                             .foregroundColor(.red)
                                     }
                                     
-                                    DatePicker("", selection: Binding(
+                                    DatePicker("reminder", selection: Binding(
                                         get: {
                                             Date(timeIntervalSince1970: viewModel.reminder[index])
                                         },
@@ -118,9 +123,9 @@ struct EditItemView: View {
                                     viewModel.tracking = initialTracking
                                 }
                                                         
-                            Picker("", selection: $viewModel.selectedUnit) {
+                            Picker("Units", selection: $viewModel.selectedUnit) {
                                 Section {
-                                    Text("count")
+                                    Text("count").tag("count")
                                 } header: {
                                     Text("Count")
                                 }
@@ -128,7 +133,7 @@ struct EditItemView: View {
                                 ForEach(0..<sectionItems.count, id: \.self) { i in
                                     Section {
                                         ForEach(sectionItems[i], id: \.self) { item in
-                                            Text(item)
+                                            Text(item).tag(item)
                                         }
                                     } header: {
                                         Text(pickerSections[i])
@@ -140,6 +145,7 @@ struct EditItemView: View {
                                     Text("custom")
                                 }
                             }
+                            .labelsHidden()
                             .onChange(of: viewModel.selectedUnit) { oldValue, newValue in
                                 viewModel.useCustomUnit = (newValue == "custom")
                             }

@@ -50,6 +50,7 @@ struct NewItemView: View {
                             .font(.headline)
                         TextField("Optional", text: $viewModel.description)
                     }
+                    
                     // Reminder
                     ReminderView()
                         .environmentObject(viewModel)
@@ -63,9 +64,9 @@ struct NewItemView: View {
                             TextField("Goal Value", value: $viewModel.tracking, formatter: numberFormatter)
                                 .padding()
                                                         
-                            Picker("", selection: $viewModel.selectedUnit) {
+                            Picker("Unit", selection: $viewModel.selectedUnit) {
                                 Section {
-                                    Text("count")
+                                    Text("count").tag("count")
                                 } header: {
                                     Text("Count")
                                 }
@@ -73,7 +74,7 @@ struct NewItemView: View {
                                 ForEach(0..<sectionItems.count, id: \.self) { i in
                                     Section {
                                         ForEach(sectionItems[i], id: \.self) { item in
-                                            Text(item)
+                                            Text(item).tag(item)
                                         }
                                     } header: {
                                         Text(pickerSections[i])
@@ -85,6 +86,7 @@ struct NewItemView: View {
                                     Text("custom")
                                 }
                             }
+                            .labelsHidden()
                             .onChange(of: viewModel.selectedUnit) { oldValue, newValue in
                                 viewModel.useCustomUnit = (newValue == "custom")
                             }
@@ -98,6 +100,7 @@ struct NewItemView: View {
                     // Button
                     TLButton(title: "Save", background: .pink) {
                         if viewModel.canSave {
+                            
                             viewModel.save()
                             presentationMode.wrappedValue.dismiss()
                             
@@ -120,6 +123,9 @@ struct NewItemView: View {
                     }
                 }
             }
+        }
+        .onDisappear {
+            print("selected Unit:", "\(viewModel.$selectedUnit)")
         }
     }
 }

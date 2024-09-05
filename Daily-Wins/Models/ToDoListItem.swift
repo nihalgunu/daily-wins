@@ -16,6 +16,8 @@ struct ToDoListItem: Codable, Identifiable, Equatable {
     var progress: Int
     var isDone: Bool
     var unit: String
+    var useCustom: Bool
+    //var customUnit: String
     
     mutating func setDone(_ state: Bool) {
         isDone = state
@@ -30,7 +32,8 @@ struct ToDoListItem: Codable, Identifiable, Equatable {
             "reminder": reminder,
             "progress": progress,
             "isDone": isDone,
-            "unit": unit
+            "unit": unit,
+            "useCustom": useCustom
         ]
     }
 }
