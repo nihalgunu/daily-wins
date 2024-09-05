@@ -4,18 +4,18 @@ struct StoreView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var sharedData: SharedData
     @State private var storeItems = [
-        StoreItem(name: "Toy 1", price: 10, likeness: 2),
-        StoreItem(name: "Toy 2", price: 15, likeness: 3),
-        StoreItem(name: "Toy 3", price: 20, likeness: 5),
-        StoreItem(name: "Toy 4", price: 25, likeness: 7),
-        StoreItem(name: "Toy 5", price: 30, likeness: 10)
+        StoreItem(name: "Ball", price: 10, likeness: 2),
+        StoreItem(name: "Chewable", price: 15, likeness: 3),
+        StoreItem(name: "Bone", price: 20, likeness: 5),
+        StoreItem(name: "Doll", price: 25, likeness: 7),
+        StoreItem(name: "Dog House", price: 30, likeness: 10)
     ]
     @State private var foodItems = [
-        FoodItem(name: "Food 1", price: 10, satiation: 2),
-        FoodItem(name: "Food 2", price: 15, satiation: 3),
-        FoodItem(name: "Food 3", price: 20, satiation: 5),
-        FoodItem(name: "Food 4", price: 25, satiation: 7),
-        FoodItem(name: "Food 5", price: 30, satiation: 10)
+        FoodItem(name: "Cheese", price: 10, satiation: 2),
+        FoodItem(name: "Fruit", price: 15, satiation: 3),
+        FoodItem(name: "Carrot", price: 20, satiation: 5),
+        FoodItem(name: "Chicken Leg", price: 25, satiation: 7),
+        FoodItem(name: "Chocolate", price: 30, satiation: 10)
     ]
     @State private var showAlert = false
     @State private var alertMessage = ""
