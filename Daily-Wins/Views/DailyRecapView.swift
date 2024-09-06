@@ -31,13 +31,25 @@ struct DailyRecapView: View {
                     let completedItems = sortedItems.filter { $0.isDone }
                     let incompleteItems = sortedItems.filter { !$0.isDone }
                     
-                    if !completedItems.isEmpty {
-                        SectionView(title: "Yesterday's Wins", items: completedItems, isComplete: true)
-                            .padding(.vertical, 10)  // Padding added to Wins Completed section
-                    }
-                    
-                    if !incompleteItems.isEmpty {
-                        SectionView(title: "Yesterday's Misses", items: incompleteItems, isComplete: false)
+                    if items.isEmpty {
+                        Text("You have no tasks set!")
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(.gray)
+                            .padding(.vertical, 20)
+                        
+                        Text("It's a great time to set some tasks for the day!")
+                            .font(.system(size: 16))
+                            .foregroundColor(.secondary)
+                            .padding(.bottom, 20)
+                    } else {
+                        if !completedItems.isEmpty {
+                            SectionView(title: "Yesterday's Wins", items: completedItems, isComplete: true)
+                                .padding(.vertical, 10)
+                        }
+                        
+                        if !incompleteItems.isEmpty {
+                            SectionView(title: "Yesterday's Misses", items: incompleteItems, isComplete: false)
+                        }
                     }
                 }
                 .padding(.horizontal, 20)
@@ -46,13 +58,6 @@ struct DailyRecapView: View {
             
             Spacer()
 
-            // Dog image at the bottom of the view
-//            Image("file")
-//                .resizable()
-//                .scaledToFit()
-//                .frame(height: 100) // Set a fixed height
-//                .padding(.bottom, 20)
-            
             Button(action: {
                 isNavigating = true
                 showDailyRecap = false
@@ -111,7 +116,7 @@ struct SectionView: View {
                 .shadow(radius: 3)
             }
         }
-        .padding() // Added padding to the entire section view
+        .padding()
     }
 }
 
