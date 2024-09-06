@@ -18,7 +18,7 @@ struct PresetView: View {
     @State private var Health2 = ["Less Alchohol", "Less Sugar", "Less Junk Food", "Less Smoking", "Less Caffeine"]
     @State private var ScreenTime = ["Less Video Games", "Less Social Media", "Less TV"]
     @State private var selectedSegment = 0
-        
+            
     var body: some View {
         NavigationView {
             ScrollView {
@@ -46,7 +46,8 @@ struct PresetView: View {
             .navigationTitle("Daily Wins")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: NewItemView(initialGoal: "")                    .environmentObject(HomePageModel)) {
+                    NavigationLink(destination: NewItemView(initialGoal: "")                    
+                        .environmentObject(HomePageModel)) {
                         Image(systemName: "plus.circle")
                             .imageScale(.large)
                             .foregroundColor(.blue)

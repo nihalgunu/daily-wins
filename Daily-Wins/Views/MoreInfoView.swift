@@ -32,11 +32,7 @@ struct MoreInfoView: View {
     var pickerSections = ["Distance", "Time", "Amount"]
     
     var sectionItems: [[String]] {
-        var items = [distance, time, amount]
-//        if NewItemModel.useCustomUnit {
-//            items.append([customUnitInput])
-//        }
-        return items
+        return [distance, time, amount]
     }
     
     var item: ToDoListItem
@@ -129,25 +125,32 @@ struct MoreInfoView: View {
                             .font(.headline)
                             .bold()
                             .foregroundColor(.primary)
+                            //.padding(.horizontal, -20)
                         
                         HStack {
                             TextField("Enter number", value: $NewItemModel.progress, formatter: numberFormatter)
                                 .keyboardType(.numberPad)
                                 .multilineTextAlignment(.trailing)
-                                .padding()
-                                .background(Color(.systemGray6))
+                                .padding(.trailing, 10)
+                                .frame(width: 100)
                                 .cornerRadius(8)
                                 .onAppear {
                                     NewItemModel.progress = initialProgress
                                 }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.horizontal, -40)
                             
                             Text("/")
+                                .frame(width: 10)
+                                .padding(.horizontal, -40)
                           
                     // Total Tracking
                             TextField("Goal Value", value: $NewItemModel.tracking, formatter: numberFormatter)
-                                .padding()
-                                .background(Color(.systemGray6))
+                                //.padding()
+                                .padding(.trailing, 10)
+                                .frame(width: 100)
                                 .cornerRadius(8)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                                 .onAppear {
                                     NewItemModel.tracking = initialTracking
                         
@@ -176,7 +179,7 @@ struct MoreInfoView: View {
                                         Text(pickerSections[i])
                                     }
                                 }
-                                if !combined.contains(NewItemModel.selectedUnit) {
+                                if !combined.contains(NewItemModel.selectedUnit) && NewItemModel.selectedUnit != "count" {
                                     Section {
                                         Text(NewItemModel.selectedUnit).tag(NewItemModel.selectedUnit)
                                     } header: {
@@ -189,21 +192,15 @@ struct MoreInfoView: View {
                                 } header: {
                                     Text("Create Custom")
                                 }
-                        //Custom Unit Tracking
-//                                .onChange(of: NewItemModel.selectedUnit) {
-//                                    NewItemModel.useCustomUnit = (NewItemModel.selectedUnit == "custom")
-//                                    print("here testing rn:", NewItemModel.selectedUnit)
-//                                    print("here testing rn: ", NewItemModel.useCustomUnit)
-//                                }
                             }
-                            .onAppear {
-
-                            }
-                            .onDisappear {
-                            }
+                            //.padding(.horizontal, -60)
                             .labelsHidden()
                             .pickerStyle(MenuPickerStyle())
                         }
+                        //.padding(.horizontal, -40)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(12)
                         .onChange(of: NewItemModel.selectedUnit) {
                             if !combined.contains(NewItemModel.selectedUnit) {
                                 NewItemModel.useCustomUnit = true
@@ -216,24 +213,15 @@ struct MoreInfoView: View {
                         .onAppear {
                             if !combined.contains(NewItemModel.selectedUnit) {
                                 NewItemModel.useCustomUnit = false
-                                print("ON APPEAR HERE: ", NewItemModel.useCustomUnit)
                             }
                         }
                         
                         if NewItemModel.useCustomUnit && (combined.contains(NewItemModel.selectedUnit) || NewItemModel.selectedUnit == "custom") {
                             TextField("Enter custom unit", text: $customUnit)
-                                .onAppear {
-                                    print("ONE APPEAR HERE 2: ", NewItemModel.useCustomUnit)
-                                }
                         }
                     }
-
-                    .padding()
-                    .background(Color(.systemGray5))
-                    .cornerRadius(12)
-                    .padding(.horizontal)
-                    
-
+                    .padding(.horizontal) // <-- Add this for alignment
+                    .padding(.vertical, 10)
                     
                     // Save Button
                     TLButton(title: "Save Changes", background: .blue) { // Changed background to blue
@@ -323,6 +311,8 @@ struct MoreInfoView: View {
     private var numberFormatter: NumberFormatter {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
+        //formatter.maximumIntegerDigits = 0 // No limit for integer digits
+        //formatter.maximumFractionDigits = 0
         return formatter
     }
 }
