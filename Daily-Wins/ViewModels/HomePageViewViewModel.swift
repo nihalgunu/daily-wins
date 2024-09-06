@@ -24,12 +24,7 @@ class HomePageViewViewModel: ObservableObject {
         loadItems()
     }
     
-    func getItems() {
-        print("get Items function: ", items.count)
-    }
-    
     func checkForDailyUpdate() {
-        print("here")
         let lastUpdateDate = UserDefaults.standard.object(forKey: dateKey2) as? Date ?? Date.distantPast
         if !calendar.isDateInToday(lastUpdateDate) {
             for index in items.indices {
@@ -92,7 +87,6 @@ class HomePageViewViewModel: ObservableObject {
                 }
             }
         print("HomePage data loaded successfully!")
-        print("Number of Items after HomePage data is loaded: ", items.count)
     }
 
     

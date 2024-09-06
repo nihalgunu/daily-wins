@@ -167,7 +167,6 @@ struct HomePageView: View {
                 }
                 .onAppear {
                     //viewModel.loadItems()
-                    viewModel.getItems()
                     viewModel.checkForDailyUpdate()
                     updateTasksCount()
                     currentDate = Date()
@@ -184,8 +183,6 @@ struct HomePageView: View {
                             tasksFinished += 1
                         }
                     }
-                    print("Tasks Total: \(tasksTotal)")
-                    print("Tasks Finished: \(tasksFinished)")
                 }
                 .onChange(of: currentMonth) {
                     currentDate = getCurrentMonth()

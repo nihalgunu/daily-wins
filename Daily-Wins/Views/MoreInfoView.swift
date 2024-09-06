@@ -25,14 +25,17 @@ struct MoreInfoView: View {
     var distance = ["steps", "meters", "kilometers", "miles"]
     var time = ["seconds", "minutes", "hours"]
     var amount = ["mililiters", "liters", "ounces", "miligrams","grams"]
+    var combined: [[String]] {
+        return [distance, time, amount]
+    }
     
     var pickerSections = ["Distance", "Time", "Amount", "Selected Custom"]
     
     var sectionItems: [[String]] {
         var items = [distance, time, amount]
-        if initialUseCustom {
-            items.append([initialSelectedUnit])
-        }
+//        if NewItemModel.useCustomUnit {
+//            items.append([initialSelectedUnit])
+//        }
         return items
     }
     
@@ -54,6 +57,10 @@ struct MoreInfoView: View {
                         .padding(.top, 20)
                         .onAppear {
                             NewItemModel.title = item.title
+
+                            print("here", initialUseCustom)
+                            print(NewItemModel.selectedUnit)
+                            print(NewItemModel.customUnit)
                         }
                     
                     // Description
@@ -147,6 +154,22 @@ struct MoreInfoView: View {
                                 .cornerRadius(8)
                                 .onAppear {
                                     NewItemModel.tracking = initialTracking
+                                    
+                                    NewItemModel.useCustomUnit = initialUseCustom
+                                    if initialUseCustom {
+                                        NewItemModel.customUnit = initialSelectedUnit
+                                        NewItemModel.selectedUnit = ""
+                                    } else {
+                                        NewItemModel.selectedUnit = initialSelectedUnit
+                                        NewItemModel.customUnit = ""
+                                    }
+                                    
+                                    //NewItemModel.selectedUnit = initialSelectedUnit
+                                    print(initialUseCustom)
+                                    print(NewItemModel.useCustomUnit)
+                                    print(initialSelectedUnit)
+                                    print(NewItemModel.selectedUnit)
+                                    print(NewItemModel.customUnit)
                                 }
                             
                             Picker("Unit", selection: $NewItemModel.selectedUnit) {
@@ -166,11 +189,24 @@ struct MoreInfoView: View {
                                     }
                                 }
                      //Custom Unit Tracking
+                                if !NewItemModel.customUnit.isEmpty {
+                                    Section {
+                                        Text(NewItemModel.customUnit).tag(NewItemModel.customUnit)
+                                    } header: {
+                                        Text("Create Unit")
+                                    }
+                                }
                                 Section {
                                     Text("custom").tag("custom")
                                 } header: {
                                     Text("Create Custom")
                                 }
+                            }
+                            .onAppear {
+                            }
+                            .onDisappear {
+                            }
+                            .onChange(of: NewItemModel.selectedUnit) {
                             }
                             .labelsHidden()
                             .pickerStyle(MenuPickerStyle())
@@ -178,7 +214,7 @@ struct MoreInfoView: View {
                                 NewItemModel.useCustomUnit = (newValue == "custom")
                             }
                             .onAppear {
-                                NewItemModel.selectedUnit = initialSelectedUnit
+                                
                             }
                         }
                         if NewItemModel.useCustomUnit {
@@ -213,11 +249,11 @@ struct MoreInfoView: View {
                         }
                     }
                     .onDisappear {
-                        print("MoreInfoView: ", NewItemModel.customUnit)
                     }
                     .onAppear {
-                        print("MoreInfoView: ", NewItemModel.customUnit)
-
+//                        if (sectionItems.joined().count > 12) {
+//                            NewItemModel.useCustomUnit = item.useCustom
+//                        }
                     }
                     .padding()
                     .font(.headline)
