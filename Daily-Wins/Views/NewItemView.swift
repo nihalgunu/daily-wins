@@ -64,35 +64,13 @@ struct NewItemView: View {
                             TextField("Goal Value", value: $viewModel.tracking, formatter: numberFormatter)
                                 .padding()
                                                         
-                            Picker("Unit", selection: $viewModel.selectedUnit) {
-                                Section {
-                                    Text("count").tag("count")
-                                } header: {
-                                    Text("Count")
+                            UnitPickerView(selectedUnit: $viewModel.selectedUnit)
+                                .onChange(of: viewModel.selectedUnit) { oldValue, newValue in
+                                   viewModel.useCustomUnit = (newValue == "custom")
                                 }
-                                
-                                ForEach(0..<sectionItems.count, id: \.self) { i in
-                                    Section {
-                                        ForEach(sectionItems[i], id: \.self) { item in
-                                            Text(item).tag(item)
-                                        }
-                                    } header: {
-                                        Text(pickerSections[i])
-                                    }
-                                }
-                                Section {
-                                    Text("custom").tag("custom")
-                                } header: {
-                                    Text("custom")
-                                }
-                            }
-                            .labelsHidden()
-                            .onChange(of: viewModel.selectedUnit) { oldValue, newValue in
-                                viewModel.useCustomUnit = (newValue == "custom")
-                            }
                         }
                         if viewModel.useCustomUnit {
-                            TextField("Enter custom unit", text: $viewModel.customUnit)
+                            TextField("Enter custom unit", text: $viewModel.selectedUnit)
                                 .padding()
                         }
                     }
@@ -125,21 +103,46 @@ struct NewItemView: View {
             }
         }
         .onDisappear {
-            print("selected Unit:", "\(viewModel.$selectedUnit)")
         }
     }
 }
 
-private func formattedDate(from timeInterval: TimeInterval) -> String {
-        let date = Date(timeIntervalSince1970: timeInterval)
-        return dateFormatter.string(from: date)
+struct UnitPickerView: View {
+    @Binding var selectedUnit: String
+    var distance = ["steps", "meters", "kilometers", "miles"]
+    var time = ["seconds", "minutes", "hours"]
+    var amount = ["mililiters", "liters", "ounces", "miligrams","grams"]
+    
+    var pickerSections = ["Distance", "Time", "Amount", "Custom"]
+    var sectionItems: [[String]] {
+        return [distance, time, amount]
     }
-
-private let dateFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.timeStyle = .short
-    return formatter
-}()
+    
+    var body: some View {
+        Picker("Unit", selection: $selectedUnit) {
+            Section {
+                Text("count").tag("count")
+            } header: {
+                Text("Count")
+            }
+            
+            ForEach(0..<sectionItems.count, id: \.self) { i in
+                Section {
+                    ForEach(sectionItems[i], id: \.self) { item in
+                        Text(item).tag(item)
+                    }
+                } header: {
+                    Text(pickerSections[i])
+                }
+            }
+            Section {
+                Text("custom").tag("custom")
+            } header: {
+                Text("Custom")
+            }
+        }
+    }
+}
 
 struct NewItemView_Previews: PreviewProvider {
     @State static var previewNewItemPresented = false

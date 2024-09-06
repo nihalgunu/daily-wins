@@ -18,7 +18,7 @@ class NewItemViewViewModel: ObservableObject {
     
     @Published var showAlert: Bool = false
     @Published var selectedUnit: String = "count"
-    @Published var customUnit: String = ""
+    //@Published var customUnit: String = ""
     @Published var useCustomUnit: Bool = false
     
     init() {}
@@ -35,8 +35,8 @@ class NewItemViewViewModel: ObservableObject {
         
         // Create a model
         let newId = UUID().uuidString
-        let finalUnit = useCustomUnit ? customUnit : selectedUnit
-        let newItem = ToDoListItem(id: newId, title: title, description: description, tracking: tracking, reminder: reminder, progress: progress, isDone: isDone, unit: finalUnit, useCustom: useCustomUnit)
+        //let finalUnit = useCustomUnit ? customUnit : selectedUnit
+        let newItem = ToDoListItem(id: newId, title: title, description: description, tracking: tracking, reminder: reminder, progress: progress, isDone: isDone, unit: selectedUnit, useCustom: useCustomUnit)
         
         // Save the model
         let db = Firestore.firestore()

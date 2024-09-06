@@ -22,19 +22,19 @@ struct MoreInfoView: View {
     let initialSelectedUnit: String
     let initialUseCustom: Bool
     
+    @State var customUnit = String()
+    
     var distance = ["steps", "meters", "kilometers", "miles"]
     var time = ["seconds", "minutes", "hours"]
     var amount = ["mililiters", "liters", "ounces", "miligrams","grams"]
-    var combined: [[String]] {
-        return [distance, time, amount]
-    }
+    var combined = ["steps", "meters", "kilometers", "miles", "seconds", "minutes", "hours", "mililiters", "liters", "ounces", "miligrams","grams"]
     
-    var pickerSections = ["Distance", "Time", "Amount", "Selected Custom"]
+    var pickerSections = ["Distance", "Time", "Amount"]
     
     var sectionItems: [[String]] {
         var items = [distance, time, amount]
 //        if NewItemModel.useCustomUnit {
-//            items.append([initialSelectedUnit])
+//            items.append([customUnitInput])
 //        }
         return items
     }
@@ -57,10 +57,6 @@ struct MoreInfoView: View {
                         .padding(.top, 20)
                         .onAppear {
                             NewItemModel.title = item.title
-
-                            print("here", initialUseCustom)
-                            print(NewItemModel.selectedUnit)
-                            print(NewItemModel.customUnit)
                         }
                     
                     // Description
@@ -154,22 +150,14 @@ struct MoreInfoView: View {
                                 .cornerRadius(8)
                                 .onAppear {
                                     NewItemModel.tracking = initialTracking
-                                    
+                        
                                     NewItemModel.useCustomUnit = initialUseCustom
-                                    if initialUseCustom {
-                                        NewItemModel.customUnit = initialSelectedUnit
-                                        NewItemModel.selectedUnit = ""
-                                    } else {
-                                        NewItemModel.selectedUnit = initialSelectedUnit
-                                        NewItemModel.customUnit = ""
-                                    }
+                                    NewItemModel.selectedUnit = initialSelectedUnit
                                     
-                                    //NewItemModel.selectedUnit = initialSelectedUnit
                                     print(initialUseCustom)
                                     print(NewItemModel.useCustomUnit)
                                     print(initialSelectedUnit)
                                     print(NewItemModel.selectedUnit)
-                                    print(NewItemModel.customUnit)
                                 }
                             
                             Picker("Unit", selection: $NewItemModel.selectedUnit) {
@@ -188,51 +176,72 @@ struct MoreInfoView: View {
                                         Text(pickerSections[i])
                                     }
                                 }
-                     //Custom Unit Tracking
-                                if !NewItemModel.customUnit.isEmpty {
+                                if !combined.contains(NewItemModel.selectedUnit) {
                                     Section {
-                                        Text(NewItemModel.customUnit).tag(NewItemModel.customUnit)
+                                        Text(NewItemModel.selectedUnit).tag(NewItemModel.selectedUnit)
                                     } header: {
-                                        Text("Create Unit")
+                                        Text("Custom Unit")
                                     }
                                 }
+
                                 Section {
                                     Text("custom").tag("custom")
                                 } header: {
                                     Text("Create Custom")
                                 }
+                        //Custom Unit Tracking
+//                                .onChange(of: NewItemModel.selectedUnit) {
+//                                    NewItemModel.useCustomUnit = (NewItemModel.selectedUnit == "custom")
+//                                    print("here testing rn:", NewItemModel.selectedUnit)
+//                                    print("here testing rn: ", NewItemModel.useCustomUnit)
+//                                }
                             }
                             .onAppear {
+
                             }
                             .onDisappear {
                             }
-                            .onChange(of: NewItemModel.selectedUnit) {
-                            }
                             .labelsHidden()
                             .pickerStyle(MenuPickerStyle())
-                            .onChange(of: NewItemModel.selectedUnit) { oldValue, newValue in
-                                NewItemModel.useCustomUnit = (newValue == "custom")
+                        }
+                        .onChange(of: NewItemModel.selectedUnit) {
+                            if !combined.contains(NewItemModel.selectedUnit) {
+                                NewItemModel.useCustomUnit = true
+                            } else {
+                                NewItemModel.useCustomUnit = false
                             }
-                            .onAppear {
-                                
+                            print(NewItemModel.useCustomUnit)
+                        }
+                        
+                        .onAppear {
+                            if !combined.contains(NewItemModel.selectedUnit) {
+                                NewItemModel.useCustomUnit = false
+                                print("ON APPEAR HERE: ", NewItemModel.useCustomUnit)
                             }
                         }
-                        if NewItemModel.useCustomUnit {
-                            TextField("Enter custom unit", text: $NewItemModel.customUnit)
-                                .padding()
-                                .background(Color(.systemGray6))
-                                .cornerRadius(8)
+                        
+                        if NewItemModel.useCustomUnit && (combined.contains(NewItemModel.selectedUnit) || NewItemModel.selectedUnit == "custom") {
+                            TextField("Enter custom unit", text: $customUnit)
+                                .onAppear {
+                                    print("ONE APPEAR HERE 2: ", NewItemModel.useCustomUnit)
+                                }
                         }
                     }
+
                     .padding()
                     .background(Color(.systemGray5))
                     .cornerRadius(12)
                     .padding(.horizontal)
                     
+
+                    
                     // Save Button
                     TLButton(title: "Save Changes", background: .blue) { // Changed background to blue
                         if NewItemModel.canSave {
                             NewItemModel.isDone = item.isDone
+                            if NewItemModel.useCustomUnit && customUnit != "" {
+                                NewItemModel.selectedUnit = customUnit
+                            }
                             NewItemModel.save()
                             dismiss()
                             HomePageModel.delete(id: item.id)
@@ -249,11 +258,10 @@ struct MoreInfoView: View {
                         }
                     }
                     .onDisappear {
+                        print("HERE AFTER:", NewItemModel.useCustomUnit)
                     }
                     .onAppear {
-//                        if (sectionItems.joined().count > 12) {
-//                            NewItemModel.useCustomUnit = item.useCustom
-//                        }
+                        
                     }
                     .padding()
                     .font(.headline)
