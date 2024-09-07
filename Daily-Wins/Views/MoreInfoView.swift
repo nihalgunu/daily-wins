@@ -22,7 +22,23 @@ struct MoreInfoView: View {
     @State private var currentProgress: Int
     @State private var goalValue: Int
     
+    var distance = ["steps", "meters", "kilometers", "miles"]
+    var time = ["seconds", "minutes", "hours"]
+    var amount = ["mililiters", "liters", "ounces", "miligrams","grams"]
+    var combined = ["steps", "meters", "kilometers", "miles", "seconds", "minutes", "hours", "mililiters", "liters", "ounces", "miligrams","grams"]
+    
+    var pickerSections = ["Distance", "Time", "Amount"]
+    
+    var sectionItems: [[String]] {
+        return [distance, time, amount]
+    }
+    
     var item: ToDoListItem
+    
+    private let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
     
     init(HomePageModel: HomePageViewViewModel, currentDate: Binding<Date>, tasksTotal: Binding<Int>, tasksFinished: Binding<Int>, initialGoal: String, initialDescription: String, initialTracking: Int, initialReminder: [TimeInterval], initialProgress: Int, initialSelectedUnit: String, initialUseCustom: Bool, item: ToDoListItem) {
         _HomePageModel = StateObject(wrappedValue: HomePageModel)
@@ -38,7 +54,6 @@ struct MoreInfoView: View {
         self.initialUseCustom = initialUseCustom
         self.item = item
         
-        // Initialize the @State properties
         _currentProgress = State(initialValue: initialProgress)
         _goalValue = State(initialValue: initialTracking)
     }
@@ -52,7 +67,9 @@ struct MoreInfoView: View {
                         .font(.title)
                         .fontWeight(.bold)
                         .padding(.top, 20)
-                        .onAppear { NewItemModel.title = item.title }
+                        .onAppear {
+                            NewItemModel.title = item.title
+                        }
                     
                     // Description
                     VStack(alignment: .leading, spacing: 10) {
@@ -61,10 +78,57 @@ struct MoreInfoView: View {
                             .foregroundColor(.primary)
                         
                         TextField("Optional", text: $NewItemModel.description)
+                            .onAppear {
+                                NewItemModel.description = initialDescription
+                            }
                             .padding()
                             .background(Color(.systemGray6))
                             .cornerRadius(10)
-                            .onAppear { NewItemModel.description = initialDescription }
+                    }
+                    
+                    // Reminders
+                    VStack(alignment: .leading, spacing: 10) {
+                        HStack {
+                            Text("Reminders")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            Spacer()
+                            Button {
+                                NewItemModel.reminder.append(Date().timeIntervalSince1970)
+                            } label: {
+                                Image(systemName: "plus.circle.fill")
+                                    .foregroundColor(.blue)
+                            }
+                        }
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyVGrid(columns: columns) {
+                                ForEach(NewItemModel.reminder.indices, id: \.self) { index in
+                                    Button(action: {
+                                        NewItemModel.reminder.remove(at: index)
+                                    }) {
+                                        Image(systemName: "minus.circle.fill")
+                                            .foregroundColor(.red)
+                                    }
+                                    
+                                    DatePicker("", selection: Binding(
+                                        get: {
+                                            Date(timeIntervalSince1970: NewItemModel.reminder[index])
+                                        },
+                                        set: { newValue in
+                                            NewItemModel.reminder[index] = newValue.timeIntervalSince1970
+                                        }
+                                    ), displayedComponents: .hourAndMinute)
+                                    .labelsHidden()
+                                    .padding(.vertical, 5)
+                                    .cornerRadius(8)
+                                }
+                            }
+                        }
+                        .padding(.vertical)
+                    }
+                    .onAppear {
+                        NewItemModel.reminder = initialReminder
                     }
                     
                     // Progress Tracking
@@ -96,78 +160,80 @@ struct MoreInfoView: View {
                             .clipped()
                             
                             Picker("Unit", selection: $NewItemModel.selectedUnit) {
-                                Text("count").tag("count")
-                                ForEach(["km", "steps", "mins"], id: \.self) { unit in
-                                    Text(unit).tag(unit)
+                                Section {
+                                    Text("count").tag("count")
+                                } header: {
+                                    Text("Count")
                                 }
-                                Text("custom").tag("custom")
+                                
+                                ForEach(0..<sectionItems.count, id: \.self) { i in
+                                    Section {
+                                        ForEach(sectionItems[i], id: \.self) { item in
+                                            Text(item).tag(item)
+                                        }
+                                    } header: {
+                                        Text(pickerSections[i])
+                                    }
+                                }
+                                if !combined.contains(NewItemModel.selectedUnit) && NewItemModel.selectedUnit != "count" {
+                                    Section {
+                                        Text(NewItemModel.selectedUnit).tag(NewItemModel.selectedUnit)
+                                    } header: {
+                                        Text("Custom Unit")
+                                    }
+                                }
+
+                                Section {
+                                    Text("custom").tag("custom")
+                                } header: {
+                                    Text("Create Custom")
+                                }
                             }
                             .pickerStyle(MenuPickerStyle())
+                        }
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(10)
+                        .onChange(of: NewItemModel.selectedUnit) {
+                            if !combined.contains(NewItemModel.selectedUnit) {
+                                NewItemModel.useCustomUnit = true
+                            } else {
+                                NewItemModel.useCustomUnit = false
+                            }
                         }
                         .onAppear {
                             currentProgress = initialProgress
                             goalValue = initialTracking
                             NewItemModel.selectedUnit = initialSelectedUnit
+                            NewItemModel.useCustomUnit = initialUseCustom
                         }
                         
-                        if NewItemModel.selectedUnit == "custom" {
+                        if NewItemModel.useCustomUnit && (combined.contains(NewItemModel.selectedUnit) || NewItemModel.selectedUnit == "custom") {
                             TextField("Enter custom unit", text: $customUnit)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
                     }
                     
-                    // Reminders
-                    VStack(alignment: .leading, spacing: 10) {
-                        HStack {
-                            Text("Reminders")
-                                .font(.headline)
-                                .foregroundColor(.primary)
-                            Spacer()
-                            Button(action: { NewItemModel.reminder.append(Date().timeIntervalSince1970) }) {
-                                Image(systemName: "plus.circle.fill")
-                                    .foregroundColor(.blue)
-                            }
-                        }
-                        
-                        ForEach(NewItemModel.reminder.indices, id: \.self) { index in
-                            HStack {
-                                DatePicker("", selection: Binding(
-                                    get: { Date(timeIntervalSince1970: NewItemModel.reminder[index]) },
-                                    set: { NewItemModel.reminder[index] = $0.timeIntervalSince1970 }
-                                ), displayedComponents: .hourAndMinute)
-                                .labelsHidden()
-                                
-                                Spacer()
-                                
-                                Button(action: { NewItemModel.reminder.remove(at: index) }) {
-                                    Image(systemName: "minus.circle.fill")
-                                        .foregroundColor(.red)
-                                }
-                            }
-                            .padding(.vertical, 5)
-                        }
-                    }
-                    .onAppear { NewItemModel.reminder = initialReminder }
-                    
                     // Save Button
                     Button(action: {
                         if NewItemModel.canSave {
                             NewItemModel.isDone = item.isDone
-                            if NewItemModel.selectedUnit == "custom" && !customUnit.isEmpty {
+                            if NewItemModel.useCustomUnit && customUnit != "" {
                                 NewItemModel.selectedUnit = customUnit
                             }
                             NewItemModel.progress = currentProgress
                             NewItemModel.tracking = goalValue
                             NewItemModel.save()
+                            dismiss()
                             HomePageModel.delete(id: item.id)
-                            for reminderTime in NewItemModel.reminder {
+                            
+                            for index in 0..<NewItemModel.reminder.count {
                                 NotificationManager.shared.scheduleNotification(
                                     title: "Daily Wins",
                                     body: "Complete your win!",
-                                    date: Date(timeIntervalSince1970: reminderTime)
+                                    date: Date(timeIntervalSince1970: NewItemModel.reminder[index])
                                 )
                             }
-                            dismiss()
                         } else {
                             NewItemModel.showAlert = true
                         }
