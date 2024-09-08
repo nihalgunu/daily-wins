@@ -66,22 +66,6 @@ struct HomePageView: View {
             .environmentObject(fullCalendarViewModel)
             .background(Color(UIColor.white).cornerRadius(10))
     }
-    
-//    var fullCalendarView: some View {
-//        FullCalendarView(
-//            currentMonth: $currentMonth,
-//            currentDate: $currentDate,
-//            finalMonth: $finalMonth,
-//            tasksTotal: $tasksTotal,
-//            tasksFinished: $tasksFinished,
-//            count: $count,
-//            extraDate: extraDate(),
-//            extractDate: extractDate()
-//        )
-//        .environmentObject(viewModel)
-//        .environmentObject(userViewModel)
-//        .environmentObject(fullCalendarViewModel)
-//    }
 
     var body: some View {
         ZStack {
@@ -95,16 +79,12 @@ struct HomePageView: View {
                     
                     // Navigate to FullCalendarView
                     NavigationLink(destination: fullCalendarView) {
-//                        WeeklyCalendarView(currentMonth: $currentMonth,
-//                                           currentDate: $currentDate,
-//                                           finalMonth: $finalMonth,
-//                                           tasksTotal: $tasksTotal,
-//                                           tasksFinished: $tasksFinished,
-//                                           extraDate: extraDate(),
-//                                           extractDate: extractDate2())
                         weeklyCalendarView
                             .background(Color(UIColor.white)
                             .cornerRadius(10))
+                            .onAppear {
+                                fullCalendarViewModel.loadProgress()
+                            }
                     }
                     .padding(.horizontal)
                     Spacer()

@@ -253,6 +253,8 @@ struct MoreInfoView: View {
                     // Delete Button
                     Button(action: {
                         withAnimation {
+                            fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
+                            fullCalendarViewModel.loadProgress()
                             HomePageModel.delete(id: item.id)
                             dismiss()
                         }
@@ -277,6 +279,7 @@ struct MoreInfoView: View {
         }
         .onDisappear {
             fullCalendarViewModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
+            fullCalendarViewModel.loadProgress()
         }
     }
 }

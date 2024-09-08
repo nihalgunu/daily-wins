@@ -111,6 +111,10 @@ struct WeeklyCalendarView: View {
                                    .rotationEffect(Angle(degrees: 90.0))
                            }
                         }
+                        .onAppear {
+                            fullCalendarViewModel.loadProgress()
+                        }
+                        
                         Text("\(value.day)")
                             .font(.body.bold())
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
