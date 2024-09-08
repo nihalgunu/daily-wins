@@ -22,10 +22,10 @@ struct MoreInfoView: View {
     @State private var currentProgress: Int
     @State private var goalValue: Int
     
-    var distance = ["steps", "meters", "kilometers", "miles"]
-    var time = ["seconds", "minutes", "hours"]
-    var amount = ["mililiters", "liters", "ounces", "miligrams","grams"]
-    var combined = ["steps", "meters", "kilometers", "miles", "seconds", "minutes", "hours", "mililiters", "liters", "ounces", "miligrams","grams"]
+    var distance = ["steps", "m", "km", "mi"]
+    var time = ["sec", "min", "hr"]
+    var amount = ["ml", "l", "oz", "mg","g"]
+    var combined = ["steps", "m", "km", "mi", "sec", "min", "hr", "ml", "l", "oz", "mg","g"]
     
     var pickerSections = ["Distance", "Time", "Amount"]
     
@@ -144,7 +144,7 @@ struct MoreInfoView: View {
                                 }
                             }
                             .pickerStyle(WheelPickerStyle())
-                            .frame(width: 100, height: 100)
+                            .frame(width: 100, height: 50)
                             .clipped()
                             
                             Text("/")
@@ -156,7 +156,7 @@ struct MoreInfoView: View {
                                 }
                             }
                             .pickerStyle(WheelPickerStyle())
-                            .frame(width: 100, height: 100)
+                            .frame(width: 100, height: 50)
                             .clipped()
                             
                             Picker("Unit", selection: $NewItemModel.selectedUnit) {
