@@ -77,7 +77,7 @@ struct HomePageView: View {
                     
                     Spacer().frame(height: 10)
                     
-                    // Navigate to FullCalendarView
+                // Navigate to FullCalendarView
                     NavigationLink(destination: fullCalendarView) {
                         weeklyCalendarView
                             .background(Color(UIColor.white)
@@ -97,8 +97,10 @@ struct HomePageView: View {
 
                         Spacer()
                         
-                        // Navigate to PresetView
-                        NavigationLink(destination: PresetView().environmentObject(viewModel)) {
+                // Navigate to PresetView
+                        NavigationLink(destination: PresetView(currentDate: $currentDate, tasksTotal: $tasksTotal, tasksFinished: $tasksFinished)
+                            .environmentObject(viewModel)
+                            .environmentObject(fullCalendarViewModel)) {
                             Image(systemName: "plus")
                                 .font(.title2)
                                 .foregroundColor(.blue)
@@ -106,7 +108,7 @@ struct HomePageView: View {
                     }
                    .padding(.horizontal)
                     
-                    // Navigate to ToDoListItemView
+                // Navigate to ToDoListItemView
                     ScrollView {
                         VStack(spacing: 10) {
                             if items.isEmpty {
@@ -146,7 +148,6 @@ struct HomePageView: View {
                     }
                 }
                 .onAppear {
-                    //viewModel.loadItems()
                     viewModel.checkForDailyUpdate()
                     updateTasksCount()
                     currentDate = Date()

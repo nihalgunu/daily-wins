@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PresetView: View {
     @EnvironmentObject var HomePageModel: HomePageViewViewModel
+    @EnvironmentObject var fullCalendarModel: FullCalendarViewViewModel
 
     @State private var newItemPresented = false
     @State private var Exercises = ["Walk", "Run", "Swim", "Stretch", "Lift Weights"]
@@ -18,6 +19,10 @@ struct PresetView: View {
     @State private var Health2 = ["Less Alchohol", "Less Sugar", "Less Junk Food", "Less Smoking", "Less Caffeine"]
     @State private var ScreenTime = ["Less Video Games", "Less Social Media", "Less TV"]
     @State private var selectedSegment = 0
+    
+    @Binding var currentDate: Date
+    @Binding var tasksTotal: Int
+    @Binding var tasksFinished: Int
             
     var body: some View {
         NavigationView {
@@ -30,14 +35,22 @@ struct PresetView: View {
                                     .pickerStyle(SegmentedPickerStyle())
                                     .padding()
                     if selectedSegment == 0 {
-                        CategoryView(categoryName: "Exercise", items: $Exercises).environmentObject(HomePageModel)
-                        CategoryView(categoryName: "Health", items: $Health).environmentObject(HomePageModel)
-                        CategoryView(categoryName: "Cleaning", items: $Chores).environmentObject(HomePageModel)
-                        CategoryView(categoryName: "Productivity", items: $Productivity).environmentObject(HomePageModel)
+                        CategoryView(categoryName: "Exercise", items: $Exercises, currentDate: $currentDate, tasksTotal: $tasksTotal, tasksFinished: $tasksFinished)
+                            .environmentObject(HomePageModel)
+                            .environmentObject(fullCalendarModel)
+                        CategoryView(categoryName: "Health", items: $Health, currentDate: $currentDate, tasksTotal: $tasksTotal, tasksFinished: $tasksFinished)
+                            .environmentObject(HomePageModel)
+                            .environmentObject(fullCalendarModel)
+                        CategoryView(categoryName: "Cleaning", items: $Chores, currentDate: $currentDate, tasksTotal: $tasksTotal, tasksFinished: $tasksFinished)
+                            .environmentObject(HomePageModel)
+                            .environmentObject(fullCalendarModel)
+                        CategoryView(categoryName: "Productivity", items: $Productivity, currentDate: $currentDate, tasksTotal: $tasksTotal, tasksFinished: $tasksFinished)
+                            .environmentObject(HomePageModel)
+                            .environmentObject(fullCalendarModel)
                     }
                     else {
-                        CategoryView(categoryName: "Health", items: $Health2).environmentObject(HomePageModel)
-                        CategoryView(categoryName: "Screen Time", items: $ScreenTime).environmentObject(HomePageModel)
+                        CategoryView(categoryName: "Health", items: $Health2, currentDate: $currentDate, tasksTotal: $tasksTotal, tasksFinished: $tasksFinished).environmentObject(HomePageModel)
+                        CategoryView(categoryName: "Screen Time", items: $ScreenTime, currentDate: $currentDate, tasksTotal: $tasksTotal, tasksFinished: $tasksFinished).environmentObject(HomePageModel)
                     }
                 }
                 .padding()
@@ -46,8 +59,9 @@ struct PresetView: View {
             .navigationTitle("Daily Wins")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: NewItemView(initialGoal: "")                    
-                        .environmentObject(HomePageModel)) {
+                    NavigationLink(destination: NewItemView(currentDate: $currentDate, tasksTotal: $tasksTotal, tasksFinished: $tasksFinished, initialGoal: "")
+                        .environmentObject(HomePageModel)
+                        .environmentObject(fullCalendarModel)) {
                         Image(systemName: "plus.circle")
                             .imageScale(.large)
                             .foregroundColor(.blue)
@@ -61,8 +75,13 @@ struct PresetView: View {
 struct CategoryView: View {
     var categoryName: String
     @EnvironmentObject var HomePageModel: HomePageViewViewModel
+    @EnvironmentObject var fullCalendarModel: FullCalendarViewViewModel
     
     @Binding var items: [String]
+    
+    @Binding var currentDate: Date
+    @Binding var tasksTotal: Int
+    @Binding var tasksFinished: Int
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -70,7 +89,9 @@ struct CategoryView: View {
                 .font(.title2)
                 .bold()
             ForEach(items, id: \.self) { i in
-                NavigationLink(destination: NewItemView(initialGoal: i).environmentObject(HomePageModel)) {
+                NavigationLink(destination: NewItemView(currentDate: $currentDate, tasksTotal: $tasksTotal, tasksFinished: $tasksFinished, initialGoal: i)
+                    .environmentObject(HomePageModel)
+                    .environmentObject(fullCalendarModel)) {
                     Text(i)
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -86,5 +107,9 @@ struct CategoryView: View {
 #Preview {
     @State var previewItem = ToDoListItem(id: "1", title: "Sample Task", description: "", tracking: 0, reminder: [Date().timeIntervalSince1970], progress: 0, isDone: false, unit: "count", useCustom: false)
     
-    return PresetView()
+    @State var previewCD = Date()
+    @State var previewTT = 5
+    @State var previewTF = 5
+    
+    return PresetView(currentDate: $previewCD, tasksTotal: $previewTT, tasksFinished: $previewTF)
 }

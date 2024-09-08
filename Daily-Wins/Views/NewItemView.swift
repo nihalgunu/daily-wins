@@ -10,9 +10,13 @@ import SwiftUI
 struct NewItemView: View {
     @StateObject var viewModel = NewItemViewViewModel()
     @EnvironmentObject var HomePageModel: HomePageViewViewModel
+    @EnvironmentObject var fullCalendarModel: FullCalendarViewViewModel
     
-    //@Binding var customUnit: String
     @State var customUnit = String()
+    
+    @Binding var currentDate: Date
+    @Binding var tasksTotal: Int
+    @Binding var tasksFinished: Int
     
     let initialGoal: String
     
@@ -95,6 +99,9 @@ struct NewItemView: View {
                         if viewModel.useCustomUnit && customUnit != "" {
                             viewModel.selectedUnit = customUnit
                         }
+                        tasksTotal += 1
+                        fullCalendarModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
+                        fullCalendarModel.loadProgress()
                         viewModel.save()
                         presentationMode.wrappedValue.dismiss()
                         
@@ -108,6 +115,10 @@ struct NewItemView: View {
                     } else {
                         viewModel.showAlert = true
                     }
+                }
+                .onDisappear {
+                    fullCalendarModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)
+                    fullCalendarModel.loadProgress()
                 }
                 .padding()
                 .frame(width: 450)
@@ -176,7 +187,11 @@ struct NewItemView_Previews: PreviewProvider {
     @State static var previewNavigationPath = NavigationPath()
     @State static var previewCustomUnit = ""
     
+    @State static var previewCD = Date()
+    @State static var previewTT = 5
+    @State static var previewTF = 5
+    
     static var previews: some View {
-        NewItemView(initialGoal: "test")
+        NewItemView(currentDate: $previewCD, tasksTotal: $previewTT, tasksFinished: $previewTF, initialGoal: "test")
     }
 }
