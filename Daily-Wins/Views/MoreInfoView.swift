@@ -18,9 +18,9 @@ struct MoreInfoView: View {
     let initialSelectedUnit: String
     let initialUseCustom: Bool
     
-    @State var customUnit = String()
-    @State private var currentProgress: Int
-    @State private var goalValue: Int
+    @State private var customUnit = String()
+    @State private var currentProgressText: String
+    @State private var goalValueText: String
     
     var distance = ["steps", "m", "km", "mi"]
     var time = ["sec", "min", "hr"]
@@ -54,8 +54,8 @@ struct MoreInfoView: View {
         self.initialUseCustom = initialUseCustom
         self.item = item
         
-        _currentProgress = State(initialValue: initialProgress)
-        _goalValue = State(initialValue: initialTracking)
+        _currentProgressText = State(initialValue: String(initialProgress))
+        _goalValueText = State(initialValue: String(initialTracking))
     }
     
     var body: some View {
@@ -138,26 +138,18 @@ struct MoreInfoView: View {
                             .foregroundColor(.primary)
                         
                         HStack {
-                            Picker("Current", selection: $currentProgress) {
-                                ForEach(0...1000, id: \.self) { value in
-                                    Text("\(value)").tag(value)
-                                }
-                            }
-                            .pickerStyle(WheelPickerStyle())
-                            .frame(width: 100, height: 50)
-                            .clipped()
+                            TextField("Current", text: $currentProgressText)
+                                .keyboardType(.numberPad)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(width: 100)
                             
                             Text("/")
                                 .font(.title2)
                             
-                            Picker("Goal", selection: $goalValue) {
-                                ForEach(1...1000, id: \.self) { value in
-                                    Text("\(value)").tag(value)
-                                }
-                            }
-                            .pickerStyle(WheelPickerStyle())
-                            .frame(width: 100, height: 50)
-                            .clipped()
+                            TextField("Goal", text: $goalValueText)
+                                .keyboardType(.numberPad)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(width: 100)
                             
                             Picker("Unit", selection: $NewItemModel.selectedUnit) {
                                 Section {
@@ -202,8 +194,6 @@ struct MoreInfoView: View {
                             }
                         }
                         .onAppear {
-                            currentProgress = initialProgress
-                            goalValue = initialTracking
                             NewItemModel.selectedUnit = initialSelectedUnit
                             NewItemModel.useCustomUnit = initialUseCustom
                         }
@@ -221,8 +211,8 @@ struct MoreInfoView: View {
                             if NewItemModel.useCustomUnit && customUnit != "" {
                                 NewItemModel.selectedUnit = customUnit
                             }
-                            NewItemModel.progress = currentProgress
-                            NewItemModel.tracking = goalValue
+                            NewItemModel.progress = Int(currentProgressText) ?? 0
+                            NewItemModel.tracking = Int(goalValueText) ?? 1
                             NewItemModel.save()
                             dismiss()
                             HomePageModel.delete(id: item.id)
