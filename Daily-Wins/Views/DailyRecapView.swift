@@ -75,6 +75,17 @@ struct DailyRecapView: View {
                 .padding(.horizontal, 20)
                 .shadow(radius: 4)
             }
+            .onAppear {
+                let lastRecapDate = UserDefaults.standard.object(forKey: dateKey) as? Date ?? Date.distantPast
+                let today = Calendar.current.startOfDay(for: Date())
+
+                if lastRecapDate < today {
+                    showDailyRecap = true
+                    UserDefaults.standard.set(Date(), forKey: dateKey)
+                } else {
+                    showDailyRecap = false
+                }
+            }
             .fullScreenCover(isPresented: $isNavigating) {
                 HomePageView(userId: contentModel.currentUserId)
             }
