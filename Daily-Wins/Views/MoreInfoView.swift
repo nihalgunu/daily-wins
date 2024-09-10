@@ -24,7 +24,7 @@ struct MoreInfoView: View {
     
     var distance = ["steps", "m", "mi"]
     var time = ["min", "hr"]
-    var amount = ["l", "oz","g"]
+    var amount = ["l", "g"]
     var combined = ["steps", "m", "mi", "min", "hr", "l", "oz", "g"]
     
     var pickerSections = ["Distance", "Time", "Amount"]
