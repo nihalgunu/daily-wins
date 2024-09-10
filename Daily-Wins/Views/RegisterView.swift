@@ -1,76 +1,71 @@
-//
-//  RegisterView.swift
-//  Daily-Wins
-//
-//  Created by Eric Kim on 6/24/24.
-//
-
 import SwiftUI
 
 struct RegisterView: View {
     @StateObject var viewModel = RegisterViewViewModel()
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
-        VStack {
+        VStack(spacing: 20) {
             // Header
-            HStack {
-                Text("Register")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .foregroundColor(.primary)
-            }
-            .padding()
-            .background(Color.blue.opacity(0.2).colorInvert().colorMultiply(Color.blue))
-            .cornerRadius(10)
-            .padding(.top, 50)
-
+            Text("Create Account")
+                .font(.system(size: 30, weight: .bold, design: .rounded))
+                .foregroundColor(.blue)
+                .padding(.top, 50)
+            
+            // Image
+            Image("file")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 150, height: 150)
+                .clipShape(Circle()) // Optional, if you want the image to be circular
+                .padding(.bottom, 20)
+            
             Spacer()
             
             // Registration Form
-            VStack(spacing: 16) {
+            VStack(spacing: 15) {
                 TextField("Full Name", text: $viewModel.name)
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .cornerRadius(8)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
                 
                 TextField("Email Address", text: $viewModel.email)
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .cornerRadius(8)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
                     .autocapitalization(.none)
                     .autocorrectionDisabled()
                 
                 SecureField("Password", text: $viewModel.password)
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .cornerRadius(8)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
                 
                 if !viewModel.errorMsg.isEmpty {
                     Text(viewModel.errorMsg)
                         .foregroundColor(.red)
-                        .padding(.horizontal)
-                        .multilineTextAlignment(.center)
-                        .background(Color.white.opacity(0.7))
-                        .cornerRadius(8)
-                        .padding(.bottom, 10)
+                        .font(.caption)
                 }
                 
-                TLButton(title: "Create Account", background: .green) {
+                Button(action: {
                     viewModel.register()
+                }) {
+                    Text("Create Account")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(10)
                 }
-                .padding(.top, 20)
-                .frame(width: 200, height: 50) // Consistent button size
-                .cornerRadius(8)
             }
-            .padding(.horizontal, 32)
-
+            .padding(.horizontal)
+            
             Spacer()
+            
+            Button(action: {
+                presentationMode.wrappedValue.dismiss()
+            }) {
+                Text("Already have an account? Log In")
+                    .foregroundColor(.blue)
+            }
+            .padding(.bottom, 20)
         }
         .padding()
-        .background(Color(.systemBackground).edgesIgnoringSafeArea(.all))
+        .background(Color(.systemBackground))
+        .navigationBarBackButtonHidden(true)
     }
-}
-
-#Preview {
-    RegisterView()
 }
