@@ -31,6 +31,11 @@ struct NewItemView: View {
         return formatter
     }
     
+    private let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -62,9 +67,51 @@ struct NewItemView: View {
                             .cornerRadius(10)
                     }
                     
-                    // Reminder
-                    ReminderView()
-                        .environmentObject(viewModel)
+                    // Reminders
+                    VStack(alignment: .leading, spacing: 10) {
+                        HStack {
+                            Text("Reminders")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            Spacer()
+                            Button {
+                                viewModel.reminder.append(Date().timeIntervalSince1970)
+                            } label: {
+                                Image(systemName: "plus.circle.fill")
+                                    .foregroundColor(.blue)
+                            }
+                        }
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyVGrid(columns: columns) {
+                                ForEach(viewModel.reminder.indices, id: \.self) { index in
+                                    Button(action: {
+                                        viewModel.reminder.remove(at: index)
+                                    }) {
+                                        Image(systemName: "minus.circle.fill")
+                                            .foregroundColor(.red)
+                                    }
+                                    
+                                    DatePicker("", selection: Binding(
+                                        get: {
+                                            Date(timeIntervalSince1970: viewModel.reminder[index])
+                                        },
+                                        set: { newValue in
+                                            viewModel.reminder[index] = newValue.timeIntervalSince1970
+                                        }
+                                    ), displayedComponents: .hourAndMinute)
+                                    .labelsHidden()
+                                    .padding(.vertical, 5)
+                                    .cornerRadius(8)
+                                }
+                            }
+                        }
+                        .padding(.vertical)
+                    }
+                    .padding()
+                    .background(Color(UIColor.systemBackground))
+                    .cornerRadius(10)
+                    .shadow(color: .gray, radius: 1, x: 0, y: 1)
                     
                     // Tracking
                     VStack(alignment: .leading, spacing: 10) {
@@ -137,7 +184,6 @@ struct NewItemView: View {
                 .padding(.vertical, 20)
             }
             .navigationBarTitleDisplayMode(.inline)
-            // Removed the back button from here
         }
         .onDisappear {
             fullCalendarModel.saveProgress(date: currentDate, tasksTotal: tasksTotal, tasksFinished: tasksFinished)

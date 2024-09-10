@@ -130,6 +130,10 @@ struct MoreInfoView: View {
                     .onAppear {
                         NewItemModel.reminder = initialReminder
                     }
+                    .padding()
+                    .background(Color(UIColor.systemBackground))
+                    .cornerRadius(10)
+                    .shadow(color: .gray, radius: 1, x: 0, y: 1)
                     
                     // Progress Tracking
                     VStack(alignment: .leading, spacing: 10) {
