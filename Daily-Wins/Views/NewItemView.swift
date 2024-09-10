@@ -20,10 +20,10 @@ struct NewItemView: View {
     
     let initialGoal: String
     
-    var distance = ["steps", "meters", "kilometers", "miles"]
-    var time = ["seconds", "minutes", "hours"]
-    var amount = ["mililiters", "liters", "ounces", "miligrams","grams"]
-    var combined = ["steps", "meters", "kilometers", "miles", "seconds", "minutes", "hours", "mililiters", "liters", "ounces", "miligrams","grams"]
+    var distance = ["steps", "m", "mi"]
+    var time = ["min", "hr"]
+    var amount = ["l", "oz","g"]
+    var combined = ["steps", "m", "mi", "min", "hr", "l", "oz", "g"]
     
     var pickerSections = ["Distance", "Time", "Amount", "Custom"]
     var sectionItems: [[String]] {
@@ -136,10 +136,10 @@ struct UnitPickerView: View {
     
     //@State var customUnit = String()
 
-    var distance = ["steps", "meters", "kilometers", "miles"]
-    var time = ["seconds", "minutes", "hours"]
-    var amount = ["mililiters", "liters", "ounces", "miligrams","grams"]
-    var combined = ["steps", "meters", "kilometers", "miles", "seconds", "minutes", "hours", "mililiters", "liters", "ounces", "miligrams","grams"]
+    var distance = ["steps", "m", "mi"]
+    var time = ["min", "hr"]
+    var amount = ["l", "g"]
+    var combined = ["steps", "m", "mi", "min", "hr", "l", "g"]
     
     var pickerSections = ["Distance", "Time", "Amount", "Custom"]
     var sectionItems: [[String]] {

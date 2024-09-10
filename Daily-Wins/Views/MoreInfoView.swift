@@ -22,10 +22,10 @@ struct MoreInfoView: View {
     @State private var currentProgressText: String
     @State private var goalValueText: String
     
-    var distance = ["steps", "m", "km", "mi"]
-    var time = ["sec", "min", "hr"]
-    var amount = ["ml", "l", "oz", "mg","g"]
-    var combined = ["steps", "m", "km", "mi", "sec", "min", "hr", "ml", "l", "oz", "mg","g"]
+    var distance = ["steps", "m", "mi"]
+    var time = ["min", "hr"]
+    var amount = ["l", "oz","g"]
+    var combined = ["steps", "m", "mi", "min", "hr", "l", "oz", "g"]
     
     var pickerSections = ["Distance", "Time", "Amount"]
     
